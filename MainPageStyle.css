@@ -1,0 +1,67 @@
+.mySlides {display: none}
+
+
+img {
+vertical-align: middle;
+width: 100vw; 
+height: 400px;
+}
+
+.slideshow-container {
+    width: 100vw;
+    position: relative;
+    margin: 0;
+  }
+
+  .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 15px;
+    margin-top: -150px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 3px 3px;
+    user-select: none;
+  }
+
+.next {
+right: 0;
+border-radius: 3px 0 0 3px; }
+
+.prev {
+    left: 0;
+    border-radius: 3px 0 0 3px; }
+
+.prev:hover, .next:hover {
+    background-color: #fff;
+}
+
+
+.numbertext{
+    color: #fff;
+    font-size: 8px;
+    padding: 0px 20px;
+    position: absolute;
+    bottom: 8px;
+    right: 0px;
+}
+
+.text{
+  color: #fff;
+  bottom: 10px;
+  left: 20px;
+  position: absolute;
+}
+
+.text-title{
+  color: #fff;
+  bottom: 40px;
+  left: 10px;
+  position: absolute;
+}
+
+  
