@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail</title>
+    <link rel="stylesheet" href="Styles1.css">
+</head>
+<body>
+
+<!-- Navbar will be loaded here -->
+<div id="navbar"></div>
+
+<!-- Add the script to load the navbar -->
+<script>
+    fetch('navbar.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('navbar').innerHTML = data;
+        });
+</script>
+
+<div class="product-detail">
+    <div class="product-image">
+        <img src="product.jpg" alt="Product Image" id="mainImage">
+    </div>
+    <div class="product-info">
+        <h1 class="product-title">Product Title</h1>
+        <p class="product-description">This is a detailed description of the product.</p>
+        <p class="product-price">$99.99</p>
+        <button class="btn" id="addToCartBtn">Add to Cart</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
