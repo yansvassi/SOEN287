@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="style.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -59,9 +58,11 @@
     ul {
       list-style: none;
       padding: 0;
+      background-color: rgba(255, 255, 255, 0);
+
     }
 
-    ul li {
+    ul li  {
       background-color: #f9f9f9;
       padding: 10px;
       margin: 10px 0;
@@ -99,6 +100,8 @@
   </style>
 </head>
 <body>
+<div id="navbar"></div>
+
 
 <div class="container">
   <h1>Welcome, Admin</h1>
@@ -185,15 +188,19 @@
     window.location.href = 'admin-login.html';
   });
 </script>
-<div id="footer"></div>
-
 <script>
-  // Load the footer dynamically
+  fetch('navbar.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('navbar').innerHTML = data;
+          });
+
   fetch('footer.html')
           .then(response => response.text())
           .then(data => {
             document.getElementById('footer').innerHTML = data;
           });
 </script>
+<div id="footer"></div>
 </body>
 </html>
