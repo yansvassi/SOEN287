@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Login</title>
-  <link rel="stylesheet" href="style.css">
   <style>
     body {
       display: flex;
@@ -24,6 +23,8 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       width: 300px;
       text-align: center;
+      margin: 0 auto;
+      max-width: 100%;
     }
 
     .login-container h2 {
@@ -32,9 +33,9 @@
     }
 
     .login-container input {
-      width: 100%;
+      width: calc(100% - 20px);
       padding: 10px;
-      margin: 10px 0;
+      margin: 10px auto;
       border: 1px solid #ccc;
       border-radius: 15px;
     }
