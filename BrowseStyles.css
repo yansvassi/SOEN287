@@ -107,7 +107,6 @@ body, html {
   background-color: #345f82;
   color: white;
   border: none;
-  padding: 10px 20px;
   border-radius: 50px; /* Rounded button */
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -121,9 +120,12 @@ body, html {
 .learn-more {
   display: inline-block;
   width: 100%;
-  padding: 12px 0;
   font-size: 16px;
   font-weight: 600;
+}
+
+a .learn-more {
+  padding: 10px 20px;
 }
 
 h3 {
@@ -176,4 +178,3 @@ h3 {
 }
 
 
-/* rem instead of px */
