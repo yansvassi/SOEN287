@@ -4,10 +4,13 @@
 <head>
   <!---------------------------Page style---------------------------->
   <link rel="stylesheet"
-        href="BrowseStyles.css">
+        href="/Users/yanavassilyev/BrowseStyles.css">
   <!---------------------------Navbar style---------------------------->
   <link rel="stylesheet"
-        href="navStyles.css">
+        href="/Users/yanavassilyev/Downloads/navStyles.css">
+  <!---------------------------Navbar style---------------------------->
+  <link rel="stylesheet"
+        href="/Users/yanavassilyev/footerStyles.css">
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible"
@@ -42,6 +45,9 @@
   <!--------------------------------------------------- Product Display ----------------------------------------------------------->
   <div class="container">
     <div class="product_box">
+      <img src="https://cdn.pixabay.com/photo/2022/01/11/21/48/edit-6931553_640.png"
+           width="50px"
+           class="edit_symbol images">
       <br>
       <a href="#link to view product"
          class="product-name">Product 1</a>
@@ -55,11 +61,12 @@
         <li>Wow! we also do this</li>
         <li>This too</li>
       </ul>
-      <a href="product-detail.html" class="learn-more btn">
-        <button class="learn-more btn">Edit</button>
-      </a>
+      <button class="learn-more btn">Learn more</button>
   </div>
   <div class="product_box">
+    <img src="https://cdn.pixabay.com/photo/2022/01/11/21/48/edit-6931553_640.png"
+         width="50px"
+         class="edit_symbol images">
     <br>
     <a href="#link to view product"
        class="product-name">Product 2</a>
@@ -73,11 +80,12 @@
       <li>Wow! we also do this</li>
       <li>This too</li>
     </ul>
-    <a href="product-detail.html" class="learn-more btn">
-      <button class="learn-more btn">Edit</button>
-    </a>
+    <button class="learn-more btn">Learn more</button>
 </div>
     <div class="product_box">
+      <img src="https://cdn.pixabay.com/photo/2022/01/11/21/48/edit-6931553_640.png"
+           width="50px"
+           class="edit_symbol images">
       <br>
       <a href="#link to view product"
          class="product-name">Product 3</a>
@@ -91,38 +99,46 @@
         <li>Wow! we also do this</li>
         <li>This too</li>
       </ul>
-      <a href="product-detail.html" class="learn-more btn">
-        <button class="learn-more btn">Edit</button>
-      </a>
+      <button class="learn-more btn">Learn more</button>
   </div>
-  </div>
-  <div class="add-product-container">
-    <button class="btn add-product-btn">+ Add Product</button>
   </div>
   <!----------------------------- Footer ----------------------------------->
-  <div id="footer-container"></div>
-  <script>
-    // JavaScript to load the navbar.html into the current document
-    document.addEventListener("DOMContentLoaded", function() {
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('footer-container').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading footer:', error));
-    });
-    </script>
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <h3>Contact Us</h3>
+        <p>+1 (844) 326-6005</p>
+        <p><a href="mailto:email@example.com">Email Us</a></p>
+        <p>Mon-Fri 9am-3pm PT</p>
+      </div>
+      <div class="footer-column">
+        <h3>Customers</h3>
+        <ul>
+          <li><a href="#">Start a Return</a></li>
+          <li><a href="#">Return Policy</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Catalogs and Mailers</a></li>
+          <li><a href="#">Do Not Sell My Info</a></li>
+          <li><a href="#">About Group Gifting</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Accessibility</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-credits">
+      <p>&copy; YourCompanyName</p>
+    </div>
+  </footer>
 
-  <script>
-    window.addEventListener("scroll", function () {
-      var nav = document.querySelector(".nav");
-      if (window.scrollY > 70) { // Adjust the scroll threshold to your preference
-        nav.style.background = 'linear-gradient(to bottom, #70a3c5, transparent, 100%)';
-      } else {
-        nav.style.backgroundColor = "transparent"; // Reset to transparent at the top
-      }
-    });
-  </script>
 </body>
 
 </html>

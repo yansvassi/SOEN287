@@ -17,7 +17,7 @@ body{
     margin: 0;
 }
 
-.wrapper{
+.nav-wrapper{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -171,7 +171,7 @@ header{
     }
 }
 @media only screen and (max-width: 540px) {
-    .wrapper{
+    .nav-wrapper{
         min-height: 100vh;
     }
 }
