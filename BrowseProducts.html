@@ -8,9 +8,6 @@
   <!---------------------------Navbar style---------------------------->
   <link rel="stylesheet"
         href="navStyles.css">
-  <!---------------------------Navbar style---------------------------->
-  <link rel="stylesheet"
-        href="footerStyles.css">
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible"
@@ -97,35 +94,18 @@
     <button class="btn add-product-btn">+ Add Product</button>
   </div>
   <!----------------------------- Footer ----------------------------------->
-  <footer class="footer">
-    <div class="footer-container">
-      <div class="footer-column">
-        <h3>Contact Us</h3>
-        <p>+1 (844) 326-6005</p>
-        <p><a href="mailto:email@example.com">Email Us</a></p>
-        <p>Mon-Fri 9am-3pm PT</p>
-      </div>
-      <div class="footer-column">
-        <h3>Customers</h3>
-        <ul>
-          <li><a href="#">FAQ</a></li>
-          <li><a href="#">Catalogs</a></li>
-          <li><a href="#">Do Not Sell My Info</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <h3>Company</h3>
-        <ul>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-credits">
-      <p>&copy; YourCompanyName</p>
-    </div>
-  </footer>
+  <div id="footer-container"></div>
+  <script>
+    // JavaScript to load the navbar.html into the current document
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+    });
+    </script>
 
   <script>
     window.addEventListener("scroll", function () {
