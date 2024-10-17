@@ -1,28 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Specifies the chanracter encoding for the HTML document-->
+    <!-- Specifies the character encoding for the HTML document -->
     <meta charset="UTF-8">
-    <!-- to esnure it is compatible with older versions of Interet Explorer -->
+    <!-- To ensure it is compatible with older versions of Internet Explorer -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- This is vital for mobiel devices, to match the viewport width to math the device -->
+    <!-- This is vital for mobile devices, to match the viewport width to match the device -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Many icons used in the file is from Boxicons -->
+    <!-- Many icons used in the file are from Boxicons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <!-- Link to the CSS file names mpstyle.css -->
+    <!-- Link to the CSS file named mpstyle.css -->
     <link rel="stylesheet" href="mpstyle.css">
-    <!-- defines the title of the web page -->
-    <title> Login Page </title>
+    <!-- Defines the title of the web page -->
+    <title>Login Page</title>
 </head>
-
-<!-- A great portion of this code is derived from: 
-    Ludiflex - https://www.ludiflex.com/how-to-create-a-website-with-modern-login-and-register-form-html-css-javascript/-->
-
 
 <body>
 
-<!----------------------------- The Navigation Bar ----------------------------------->  
- <div class="wrapper">
+<!----------------------------- The Navigation Bar ----------------------------------->
+<div class="wrapper">
     <nav class="nav">
         <div class="nav-logo">
             <p>LOGO .</p>
@@ -44,11 +40,10 @@
         </div>
     </nav>
 
-<!----------------------------- Form box ----------------------------------->    
+    <!----------------------------- Form Box ----------------------------------->
     <div class="form-box">
-        
-        <!------------------- login form -------------------------->
 
+        <!------------------- Login Form -------------------------->
         <div class="login-container" id="login">
             <div class="top">
                 <span>Don't have an account? <a href="#" onclick="register()">Register</a></span>
@@ -76,7 +71,7 @@
             </div>
         </div>
 
-        <!------------------- registration form -------------------------->
+        <!------------------- Registration Form -------------------------->
         <div class="register-container" id="register">
             <div class="top">
                 <span>Have an account? <a href="#" onclick="login()">Login</a></span>
@@ -114,24 +109,18 @@
             </div>
         </div>
     </div>
-</div>   
+</div>
 
-<!-- Java script porition -->
+<!-- JavaScript functions -->
 <script>
-   
-   function myMenuFunction() {
-    var i = document.getElementById("navMenu");
-
-    if(i.className === "nav-menu") {
-        i.className += " responsive";
-    } else {
-        i.className = "nav-menu";
+    function myMenuFunction() {
+        var i = document.getElementById("navMenu");
+        if(i.className === "nav-menu") {
+            i.className += " responsive";
+        } else {
+            i.className = "nav-menu";
+        }
     }
-   }
- 
-</script>
-
-<script>
 
     var a = document.getElementById("loginBtn");
     var b = document.getElementById("registerBtn");
@@ -155,9 +144,7 @@
         x.style.opacity = 0;
         y.style.opacity = 1;
     }
-
 </script>
 
 </body>
 </html>
-

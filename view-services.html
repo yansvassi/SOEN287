@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Services Availed</title>
+  <link rel="stylesheet" href="Styles1.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      max-width: 800px;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Services Availed by Customers</h2>
+<table>
+  <thead>
+  <tr>
+    <th>Customer Name</th>
+    <th>Service</th>
+    <th>Date</th>
+  </tr>
+  </thead>
+  <tbody id="availedServicesTable"></tbody>
+</table>
+
+<button id="backToDashboard">Back to Dashboard</button>
+
+<script>
+  const availedServices = [
+    { customer: 'person1', service: 'Regular Interior Cleaning', date: '2024-01-12' },
+    { customer: 'person2', service: 'Comprehensive Cleaning', date: '2024-01-14' }
+  ];
+
+  const availedServicesTable = document.getElementById('availedServicesTable');
+
+  function displayAvailedServices() {
+    availedServices.forEach(service => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${service.customer}</td>
+        <td>${service.service}</td>
+        <td>${service.date}</td>
+      `;
+      availedServicesTable.appendChild(row);
+    });
+  }
+
+  displayAvailedServices();
+
+  const backToDashboardBtn = document.getElementById('backToDashboard');
+  backToDashboardBtn.addEventListener('click', function() {
+    window.location.href = 'dashboard.html';
+  });
+</script>
+</body>
+</html>

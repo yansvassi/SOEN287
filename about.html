@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us</title>
+  <link rel="stylesheet" href="aboutStyles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .about-container {
+      width: 80%;
+      max-width: 1000px;
+      background-color: #fff;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .about-section {
+      margin-top: 20px;
+    }
+
+    .about-section p {
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .team-section {
+      margin-top: 40px;
+    }
+
+    .team-section h2 {
+      color: #333;
+      text-align: center;
+    }
+
+    .team-members {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .team-member {
+      background-color: #f9f9f9;
+      padding: 20px;
+      margin: 10px;
+      border-radius: 8px;
+      text-align: center;
+      width: 250px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .team-member img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    .team-member h3 {
+      margin: 10px 0 5px;
+      color: #333;
+    }
+
+    .team-member p {
+      color: #777;
+      font-size: 14px;
+    }
+
+    .team-member a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .team-member a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div id="navbar"></div>
+
+<div class="about-container">
+  <h1>About Us</h1>
+
+  <div class="about-section">
+    <p>Welcome to our SOEN 287 Group Project website.</p>
+
+  <div class="team-section">
+    <h2>Meet Our Team</h2>
+    <div class="team-members">
+      <div class="team-member">
+        <img src="https://image4/100" alt="Team Member 1">
+        <h3>Yana</h3>
+        <p>Developer</p>
+        <p><a href="mailto:Yana@example.com">Yana@example.com</a></p>
+      </div>
+      <div class="team-member">
+        <img src="https://image3/100" alt="Team Member 2">
+        <h3>Lucas</h3>
+        <p>Developer</p>
+        <p><a href="mailto:Lucas@example.com">Lucas@example.com</a></p>
+      </div>
+      <div class="team-member">
+        <img src="https://image2/100" alt="Team Member 3">
+        <h3>Tiana</h3>
+        <p>Developer</p>
+        <p><a href="mailto:Tiana@example.com">Tiana@example.com</a></p>
+      </div>
+      <div class="team-member">
+        <img src="https:/image1/100" alt="Team Member 4">
+        <h3>Daniel</h3>
+        <p>Developer</p>
+        <p><a href="mailto:Daniel@example.com">Daniel@example.com</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  fetch('navbar.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('navbar').innerHTML = data;
+          });
+
+  fetch('footer.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('footer').innerHTML = data;
+          });
+</script>
+  <div id="footer"></div>
+</body>
+
+
+</html>
