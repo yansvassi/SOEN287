@@ -15,12 +15,13 @@ body{
     overflow-x: hidden;
     margin: 0;
 }
+
 .wrapper{
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh-100px);
-    padding-top: 95px;
+    min-height: 100vh; 
+    padding-top: 0;
 
 }
 .nav{
@@ -86,6 +87,7 @@ body{
     justify-content: center;
     width: 512px;
     height: 420px;
+    margin: auto; /* Add this to center it */
     overflow: hidden;
     z-index: 2;
 }
