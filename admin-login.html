@@ -13,7 +13,7 @@
       height: 100vh;
       background-color: #f0f2f5;
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
     }
 
     .login-container {
@@ -29,7 +29,7 @@
 
     .login-container h2 {
       margin-bottom: 20px;
-      color: #333;
+      color: #0f253d;
     }
 
     .login-container input {
@@ -43,7 +43,7 @@
     .login-container button {
       width: 100%;
       padding: 10px;
-      background-color: #007bff;
+      background-color: #345e81;
       color: #fff;
       border: none;
       border-radius: 4px;
@@ -52,7 +52,7 @@
     }
 
     .login-container button:hover {
-      background-color: #0056b3;
+      background-color: #163d60;
     }
 
     #loginError {
@@ -62,6 +62,7 @@
   </style>
 </head>
 <body>
+<div id="navbar"></div>
 <div class="login-container">
   <h2>Admin Login</h2>
   <form id="loginForm">
@@ -71,6 +72,7 @@
   </form>
   <p id="loginError"></p>
 </div>
+
 
 <script>
   const loginForm = document.getElementById('loginForm');
@@ -88,7 +90,21 @@
     } else {
       document.getElementById('loginError').innerText = 'Invalid login credentials';
     }
-  });
+  })
+
+  fetch('navbar.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('navbar').innerHTML = data;
+          });
+
+  fetch('footer.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('footer').innerHTML = data;
+          });
 </script>
+<div id="footer"></div>
+
 </body>
 </html>
