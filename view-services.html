@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>View Services Availed</title>
-  <link rel="stylesheet" href="BrowseStyles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Include jsPDF -->
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
       background-color: #f0f2f5;
       margin: 0;
       padding: 20px;
@@ -17,7 +17,7 @@
     }
 
     h2 {
-      color: #333;
+      color: #0f253d;
       margin-bottom: 20px;
     }
 
@@ -31,7 +31,7 @@
     }
 
     table, th, td {
-      border: 1px solid #ccc;
+      border: 1px solid #d7e2ea;
     }
 
     th, td {
@@ -40,17 +40,17 @@
     }
 
     th {
-      background-color: #007bff;
+      background-color: #345e81;
       color: #fff;
     }
 
     tr:nth-child(even) {
-      background-color: #f9f9f9;
+      background-color: #fff;
     }
 
     button {
       padding: 10px 20px;
-      background-color: #007bff;
+      background-color: #4a7b9b;
       color: #fff;
       border: none;
       border-radius: 4px;
@@ -59,19 +59,36 @@
     }
 
     button:hover {
-      background-color: #0056b3;
+      background-color: #264e65;
+    }
+
+    #searchBar {
+      margin-bottom: 20px;
+      padding: 10px;
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
     }
   </style>
 </head>
 <body>
+<div id="navbar"></div>
 
 <h2>Services Availed by Customers</h2>
+
+<!-- Search Bar -->
+<input type="text" id="searchBar" placeholder="Search...">
+
 <table>
   <thead>
   <tr>
     <th>Customer Name</th>
     <th>Service</th>
     <th>Date</th>
+    <th>Status</th>
+    <th>Cost</th>
+    <th>Invoice (PDF)</th>
   </tr>
   </thead>
   <tbody id="availedServicesTable"></tbody>
@@ -80,31 +97,83 @@
 <button id="backToDashboard">Back to Dashboard</button>
 
 <script>
+  // Example services data
   const availedServices = [
-    { customer: 'person1', service: 'Regular Interior Cleaning', date: '2024-01-12' },
-    { customer: 'person2', service: 'Comprehensive Cleaning', date: '2024-01-14' }
+    { customer: 'John Doe', service: 'Regular Interior Cleaning', date: '2024-01-12', status: 'Completed', cost: '$100', pdf: 'invoice1.pdf' },
+    { customer: 'Jane Smith', service: 'Comprehensive Cleaning', date: '2024-01-14', status: 'Cancelled', cost: '$150', pdf: 'invoice2.pdf' },
+    { customer: 'Robert Brown', service: 'Deep Carpet Cleaning', date: '2024-01-16', status: 'Pending', cost: '$200', pdf: 'invoice3.pdf' }
   ];
 
   const availedServicesTable = document.getElementById('availedServicesTable');
+  const searchBar = document.getElementById('searchBar');
 
-  function displayAvailedServices() {
-    availedServices.forEach(service => {
+  function displayAvailedServices(services) {
+    availedServicesTable.innerHTML = '';
+    services.forEach((service, index) => {
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${service.customer}</td>
         <td>${service.service}</td>
         <td>${service.date}</td>
+        <td>${service.status}</td>
+        <td>${service.cost}</td>
+        <td><button onclick="generatePDF(${index})">View Invoice</button></td>
       `;
       availedServicesTable.appendChild(row);
     });
   }
 
-  displayAvailedServices();
+  displayAvailedServices(availedServices);
+
+  // Search filter
+  searchBar.addEventListener('input', function() {
+    const searchTerm = searchBar.value.toLowerCase();
+    const filteredServices = availedServices.filter(service =>
+            service.customer.toLowerCase().includes(searchTerm) ||
+            service.service.toLowerCase().includes(searchTerm) ||
+            service.status.toLowerCase().includes(searchTerm)
+    );
+    displayAvailedServices(filteredServices);
+  });
 
   const backToDashboardBtn = document.getElementById('backToDashboard');
   backToDashboardBtn.addEventListener('click', function() {
     window.location.href = 'dashboard.html';
   });
+
+  fetch('navbar.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('navbar').innerHTML = data;
+          });
+
+  fetch('footer.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('footer').innerHTML = data;
+          });
+
+  function generatePDF(index) {
+    const service = availedServices[index];
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text('Service Invoice', 10, 10);
+
+    doc.setFontSize(12);
+    doc.text(`Customer: ${service.customer}`, 10, 30);
+    doc.text(`Service: ${service.service}`, 10, 40);
+    doc.text(`Date: ${service.date}`, 10, 50);
+    doc.text(`Status: ${service.status}`, 10, 60);
+    doc.text(`Cost: ${service.cost}`, 10, 70);
+
+    doc.save(`${service.customer}_Invoice.pdf`);
+  }
+
 </script>
+
+<div id="footer"></div>
+
 </body>
 </html>
