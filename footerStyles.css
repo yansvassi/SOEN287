@@ -1,70 +1,75 @@
+/* Footer */
 .footer {
-    background-color: #0f253d; /* Light background color similar to your example */
-    padding: 40px 0;
-    text-align: center;
-    color: rgb(189, 214, 235);
-    width: 100%;
-  }
-  
+  background-color: #0f253d;
+  padding: 40px 0;
+  color: rgb(189, 214, 235);
+  width: 100vw; /* Ensure full width */
+  position: relative;
+  left: 0;
+  right: 0;
+  text-align: center; /* Center the text in the footer */
+}
+
+.footer-container {
+  display: flex;
+  justify-content: center; /* Center the columns horizontally */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-column {
+  flex: 1;
+  margin: 0 40px;
+  text-align: center; /* Center text inside each column */
+}
+
+.footer-column h3 {
+  font-size: 18px;
+  color: #9cb8ce;
+  margin-bottom: 10px;
+}
+
+.footer-column p, .footer-column a {
+  font-size: 14px;
+  color: #9cb8ce;
+  text-decoration: none;
+  margin-bottom: 5px;
+}
+
+.footer-column a:hover {
+  text-decoration: underline;
+}
+
+.footer-column ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 10px;
+}
+
+.footer-credits {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #888;
+}
+
+.footer-credits p {
+  margin: 0;
+}
+
+@media only screen and (max-width: 768px) {
   .footer-container {
-    display: flex;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
+    flex-direction: column;
+    align-items: center;
   }
-  
+
   .footer-column {
-    flex: 1;
-    margin: 0 40px;
-  }
-  
-  .footer-column h3 {
-    font-size: 18px;
-    color: #9cb8ce;
-    margin-bottom: 10px;
-    padding-left: 0rem;
-  }
-  
-  .footer-column p, .footer-column a {
-    font-size: 14px;
-    color: #9cb8ce;
-    text-decoration: none;
-    margin-bottom: 5px;
-  }
-  
-  .footer-column a:hover {
-    text-decoration: underline;
-  }
-  
-  .footer-column ul {
-    list-style-type: none;
-    padding-left: 0;
-  }
-  
-  .footer-column ul li {
-    margin-bottom: 10px;
-  }
-  
-  .footer-credits {
+    margin-bottom: 20px;
     text-align: center;
-    margin-top: 20px;
-    font-size: 14px;
-    color: #888;
   }
-  
-  .footer-credits p {
-    margin: 0;
-  }
-  
-  @media only screen and (max-width: 768px) {
-    .footer-container {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .footer-column {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-  }
-  
+}
