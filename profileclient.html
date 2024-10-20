@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Specifies the chanracter encoding for the HTML document-->
+    <meta charset="UTF-8">
+    <!-- to esnure it is compatible with older versions of Interet Explorer -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- This is vital for mobiel devices, to match the viewport width to math the device -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Many icons used in the file is from Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Link to the CSS file names mpstyle.css -->
+    <link rel="stylesheet" href="mpstyle.css">
+    <!-- Link to the CSS file names mpstyle.css -->
+    <link rel="stylesheet" href="footerStyles.css">
+    <!-- Link to the CSS file names mpstyle.css -->
+    <link rel="stylesheet" href="profile.css">
+    <!-- Link to javascript named navbarscroll.js -->
+    <script src = "navbarscroll.js"> </script>
+    <!-- Link to the CSS file names mpstyle.css -->
+    <link rel="stylesheet" href="MainPageStyle.css">
+    <!-- defines the title of the web page -->
+    <title> Client Profilel </title>
+
+</head>
+<body>
+
+    <!----------------------------- The Navigation Bar ----------------------------------->  
+
+    <div class="nav-wrapper">
+        <nav class="nav" id = "nav1">
+          <div class="nav-logo">
+            <p>LOGO .</p>
+          </div>
+          <div class="nav-menu" id="navMenu">
+            <ul>
+              <li><a href="Home.html" class="link active">Home</a></li>
+              <li><a href="BrowseProducts.html" class="link">Services</a></li>
+              <li><a href="about.html" class="link">About</a></li>
+              <li><a href="contact.html" class="link">Contact</a></li>
+            </ul>
+          </div>
+          <div class="nav-profile">
+            <p>
+                <a href="#">
+                    <i class='bx bxs-cart'></i>
+                </a>
+            </p>
+    
+            <div class = "profile-picture">
+                <a href="#">
+                <img src="img_avatar2.png" alt="Avatar">
+            </a>
+    
+    
+            </div>
+            
+          </div>
+      </div>
+      <div class="nav-menu-btn">
+        <i class="bx bx-menu" onclick="myMenuFunction()"></i>
+      </div>
+    </nav>
+  </div>
+
+      <!----------------------------- Questions ----------------------------------->  
+
+      <div class = "frontimage-container"> 
+        <img class ="front-page" src="Website-Background.jpg">
+        <div class = "text-title"> <h1> Edit Profile </h1></div> 
+
+</div>
+
+        <div class = questions-container>
+            <div class = imgprofile-container>
+                    <img src="img_avatar2.png" alt="Avatar">
+                    <div class = "btn"> 
+                        <button type = "button" onclick = "">
+                        Change Photo </button>
+                        </div>
+                    <div class = "questions">
+                        <h2>Personal Information</h2> <br>
+                    <label for = "fname"> First Name: </label> <br>
+                    <input type="text" id = "fname" name="fname"> <br>
+                    <label for = "lname"> Last Name: </label> <br>
+                    <input type="text" id = "lname" name="lname"> <br>
+                    <label for = "fname"> Email Adress: </label> <br>
+                    <input type="text" id = "fname" name="fname"> <br>
+                    <label for = "address"> Street Address: </label> <br>
+                    <input type="text" id = "address" name="address"> <br>
+                    <label for = "city"> City: </label> <br>
+                    <input type="text" id = "city" name="city"> <br>
+                    <label for = "pt"> Province/territory: </label> <br>
+                    <input type="text" id = "pt" name="pt"> <br>
+                    <label for = "pc"> Postal Code: </label> <br>
+                    <input type="text" id = "pc" name="pc"> <br>
+                    <label for = "pn"> Phone Number: </label> <br>
+                    <input type="text" id = "pn" name="pn">
+
+                    </div>
+
+                    <div class = "payment">
+                        <h2>Add Payment Method</h2> <br>
+                    <label for = "pt"> Card number: </label> <br>
+                    <input type="text" id = "pt" name="pt"> <br>
+                    <label for = "pc"> Expiry date: </label> <br>
+                    <input type="text" id = "pc" name="pc"> <br>
+                    <label for = "pn"> Name on card: </label> <br>
+                    <input type="text" id = "pn" name="pn">
+
+                    </div>
+
+                    <div class="btn save-btn">
+                        <button type="button" onclick="">
+                            Save Changes
+                        </button>
+                    </div>
+
+            </div>
+
+        </div>
+
+
+  <!----------------------------- Footer ----------------------------------->  
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <h3><a href="contact.html">Contact Us</a></h3>
+        <p>+1 (844) 326-6005</p>
+        <p><a href="mailto:email@example.com">Email Us</a></p>
+        <p>Mon-Fri 9am-3pm PT</p>
+      </div>
+      <div class="footer-column">
+        <h3>Customers</h3>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Catalogs</a></li>
+          <li><a href="#">Do Not Sell My Info</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-credits">
+      <p>&copy; YourCompanyName</p>
+    </div>
+
+</body>

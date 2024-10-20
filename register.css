@@ -102,32 +102,30 @@ body{
     color: #fff;
     text-align: center;
    padding-bottom: 10px;
-  
-
 }
 
 .BA-label {
     margin-right: 70px;
 }
 
-
-
-.login-container{
-    position: absolute;
-    left: 4px;
-    width: 500px;
-    display: flex;
-    flex-direction: column;
-    transition: .5s ease-in-out;
-}
+/* Switch login-container and register-container styles */
 .register-container{
     position: absolute;
-    right: -530px;
+    left: 4px; /* Previously used for login */
     width: 500px;
     display: flex;
     flex-direction: column;
     transition: .5s ease-in-out;
 }
+.login-container{
+    position: absolute;
+    right: -530px; /* Previously used for register */
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    transition: .5s ease-in-out;
+}
+
 .top span{
     color: #fff;
     font-size: small;
