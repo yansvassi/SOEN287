@@ -15,88 +15,186 @@
     <link rel="stylesheet" href="MainPageStyle.css">
     <!-- Link to the html file names mpstyle.css -->
     <link rel="stylesheet" href="mainpage.html">
+    <link rel="stylesheet"
+  href="footerStyles.css">
     <!-- defines the title of the web page -->
-    <title> Login Page </title>
+    <title> Home Page </title>
+
 </head>
 
 <body>
 
 <!----------------------------- The Navigation Bar ----------------------------------->  
 
-<div id="navbar-container"></div>
-<script>
-  // JavaScript to load the navbar.html into the current document
-  document.addEventListener("DOMContentLoaded", function() {
-      fetch('navbar.html')
-          .then(response => response.text())
-          .then(data => {
-              document.getElementById('navbar-container').innerHTML = data;
-          })
-          .catch(error => console.error('Error loading navbar:', error));
-  });
+<div class="nav-wrapper">
+    <nav class="nav">
+      <div class="nav-logo">
+        <p>LOGO .</p>
+      </div>
+      <div class="nav-menu" id="navMenu">
+        <ul>
+          <li><a href="Home.html" class="link active">Home</a></li>
+          <li><a href="BrowseProducts.html" class="link">Services</a></li>
+          <li><a href="about.html" class="link">About</a></li>
+          <li><a href="contact.html" class="link">Contact</a></li>
+        </ul>
+      </div>
+      <div class="nav-button">
+        <button id="loginBtn" onclick="login();" class="btn white-btn">Sign In</button>
+        <button id="registerBtn" onclick="register();" class="btn">Sign Up</button>
+      </div>
+      <div class="nav-menu-btn">
+        <i class="bx bx-menu" onclick="myMenuFunction()"></i>
+      </div>
+    </nav>
+  </div>
 
-  </script>
+  <!-- Front Page Image -->
 
-<!---- SLIDE SHOW ------>
+<div class = "frontimage-container"> 
+        <img class ="front-page" src="HomePage.webp">
+        <div class = "text-title"> <h1> Welcome to this company </h1></div> 
+        <div class = "text"> Add a slogan. </div>
+</div>
 
-<!-- Big portion of the code was taken from: https://www.w3schools.com/howto/howto_js_slideshow.asp -->
 
-<div class = "slideshow-container"> 
-    <div class="mySlides fade">
-        <div class = "numbertext"> 1 / 3 </div>
-        <img src="im1.avif">
-        <div class = "text-title"> <h2> Crazy Title Text 1</h2></div> 
-        <div class = "text"> This amazing product will make you simp </div>
-       
+<!-- Add Text and Image -->
+<div class="welcome-container">
+    <div class="welcome-text">
+        <h1>Quality, Consistency, Personalization</h1> 
+        <p>Established in Montreal, Quebec in 2022. Shine’s 3 core values drive our one mission: To deliver a personalized experience to each and every one of our customers.</p>
+        <div class = "tape1"> </div>
     </div>
-    <div class="mySlides fade">
-        <div class = "numbertext"> 2 / 3 </div>
-        <img src="im2.jpeg" >
-        <div class = "text-title"> <h2> Crazy Title Text 2</h2></div>
-        <div class = "text"> This amazing product will make you simp </div>
-      
-    </div>
-    <div class="mySlides fade">
-        <div class = "numbertext"> 3 / 3 </div>
-        <img src="im3.jpeg" >
-        <div class = "text-title"> <h2> Crazy Title Text 3</h2></div>
-        <div class = "text"> This amazing product will make you simp </div>
-       
+    <div class="welcome-image">
+        <img src="Welcomeimage1.jpg" alt="Welcome Image">
+        
     </div>
 </div>
 
-<a class = "prev"
-    onclick="plusSlides (-1)"> <i class='bx bx-skip-previous'></i> </a>
-<a class = "next"
-    onclick="plusSlides(1)"> <i class='bx bx-skip-next' ></i> </a> 
+<!-- Product Section -->
 
+<div class="container">
+    <div class = "text-box">
+        <h1> Result-Focus Something Services </h1>
+        <p> Each services has been designed carrefully to deliver the outcome you're looking for </p>
+        
+    </div>
+    <div class="product_box">
+      <br>
+      <a href="#link to view product"
+         class="product-name">Product 1</a>
+      <p></p>
+      <p class="product-price">
+        $XX
+      </p>
+      <ul class="service-details">
+        <li>We do this</li>
+        <li>And even this</li>
+        <li>Wow! we also do this</li>
+        <li>This too</li>
+      </ul>
+      <a href="product-detail.html" class="learn-more btn">
+        <button class="learn-more btn">Add to cart</button>
+      </a>
+  </div>
 
-<!-- Funciton for slideshow -->
-  <script>
-        let slideIndex = 1;
-        showSlides(slideIndex);
-        
-        function plusSlides(n) {
-          showSlides(slideIndex += n);
-        }
-        
-        function currentSlide(n) {
-          showSlides(slideIndex = n);
-        }
-        
-        function showSlides(n) {
-          let i;
-          let slides = document.getElementsByClassName("mySlides");
-          
-          if (n > slides.length) {slideIndex = 1}    
-          if (n < 1) {slideIndex = slides.length}
-          for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";  
-          }
-          slides[slideIndex-1].style.display = "block";  
-          dots[slideIndex-1].className += " active";
-        }
-        </script>
+  <!-- Product Services -->
+  <div class="product_box">
+    <br>
+    <a href="#link to view product"
+       class="product-name">Product 2</a>
+    <p></p>
+    <p class="product-price">
+      $XX
+    </p>
+    <ul class="service-details">
+      <li>We do this</li>
+      <li>And even this</li>
+      <li>Wow! we also do this</li>
+      <li>This too</li>
+    </ul>
+    <a href="product-detail.html" class="learn-more btn">
+      <button class="learn-more btn">Add to cart </button>
+    </a>
+</div>
+    <div class="product_box">
+      <br>
+      <a href="#link to view product"
+         class="product-name">Product 3</a>
+      <p></p>
+      <p class="product-price">
+        $XX
+      </p>
+      <ul class="service-details">
+        <li>We do this</li>
+        <li>And even this</li>
+        <li>Wow! we also do this</li>
+        <li>This too</li>
+      </ul>
+      <a href="product-detail.html" class="learn-more btn">
+        <button class="learn-more btn">Add to cart</button>
+      </a>
+  </div>
+  </div>
+
+  <!----------------------------- Satisfaction ----------------------------------->  
+
+  <div class="Satisfaction-text"> 
+    <h1>We’ve got you covered</h1>
+    <div class="item">
+        <i class='bx bx-home'></i>
+        <p><b>Experienced Staff</b> – all teams are highly experienced & trained on our checklists and protocols</p>
+    </div>
+    <div class="item">
+        <i class='bx bx-hard-hat'></i>
+        <p><b>Fully Equipped</b> – we come fully equipped with all products and equipment</p>
+    </div>
+    <div class="item">
+        <i class='bx bx-list-check'></i>
+        <p><b>Premium Quality</b> – our 76-point checklist delivers the same premium cleaning every single time</p>
+    </div>
+    <div class="item">
+        <i class='bx bxs-check-shield'></i>
+        <p><b>Guaranteed Satisfaction</b> – all packages are backed by our guarantee of quality</p>
+    </div>
+    <div class="item">
+        <i class='bx bxs-objects-vertical-bottom'></i>
+        <p><b>Insured & Vetted</b> – all team members have been police checked, thoroughly vetted, and insured.</p>
+    </div>
+</div>
+
+  <!----------------------------- Footer ----------------------------------->  
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <h3><a href="contact.html">Contact Us</a></h3>
+        <p>+1 (844) 326-6005</p>
+        <p><a href="mailto:email@example.com">Email Us</a></p>
+        <p>Mon-Fri 9am-3pm PT</p>
+      </div>
+      <div class="footer-column">
+        <h3>Customers</h3>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Catalogs</a></li>
+          <li><a href="#">Do Not Sell My Info</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-credits">
+      <p>&copy; YourCompanyName</p>
+    </div>
+  
+
 
 <!-- Java script porition -->
 <script>
