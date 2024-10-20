@@ -86,10 +86,10 @@ filter: brightness(70%);
 .container {
   display: flex;
   justify-content: center;
-  align-items: flex-start; 
+  align-items: flex-start;
   gap: 20px;
   padding: 40px;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
 }
 
 body, html {
