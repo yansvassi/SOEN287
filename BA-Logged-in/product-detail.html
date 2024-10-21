@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Detail</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style >
+    <style>
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
@@ -13,7 +13,7 @@
         }
 
         .container {
-            max-width: 800px ;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -25,6 +25,7 @@
             padding: 20px;
             margin: 20px 0;
             text-align: center;
+            margin-top: 120px; /* Add margin-top to push content below the navbar */
         }
 
         .product-title {
@@ -48,7 +49,7 @@
         }
 
         .btn {
-            background-color: #153e5c;  /* Original button background */
+            background-color: #153e5c;
             color: #fff;
             border: none;
             padding: 10px 20px;
@@ -74,26 +75,26 @@
         }
 
         .edit-input {
-            width: 100%;
+            width: 40rem;
             padding: 12px 15px;
             margin: 10px 0;
             font-size: 1.1rem;
             border: 2px solid #153e5c;
-            border-radius: 8px; /* Rounded corners */
-            background-color: #f0f4f8; /* Light background color */
-            color: #333; /* Text color */
+            border-radius: 8px;
+            background-color: #f0f4f8;
+            color: #333;
             outline: none;
             transition: border-color 0.3s ease;
         }
 
         .edit-input:focus {
-            border-color: #0a2940; /* Change border color on focus */
+            border-color: #0a2940;
         }
 
         /* Customize the textarea */
         .edit-input textarea {
-            resize: vertical; /* Allow vertical resizing */
-            min-height: 120px; /* Minimum height for the textarea */
+            resize: vertical;
+            min-height: 120px;
         }
 
         @media (max-width: 600px) {
@@ -115,59 +116,54 @@
             }
         }
     </style>
-
-    </stylescoped>
 </head>
 <body>
 
-<!-- Navbar -->
-<div id="navbar"></div>
+<!-- Placeholder for the logged-in navbar -->
+<div id="logged-in-navbar-BA"></div>
 
+<!-- JavaScript to load the logged-in navbar -->
 <script>
-    fetch('navbar.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('navbar').innerHTML = data;
-        });
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('../BA-Logged-in/BALoggedInNav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('logged-in-navbar-BA').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading logged-in navbar:', error));
+    });
 </script>
 
-<div class="product-detail">
-        <div class="container">
-            <div class="product-detail">
-                <div class="product-info">
-                    <h1 class="product-title" id="productTitle">Product Title</h1>
-                    <p class="product-description" id="productDescription">This is a detailed description of the product.</p>
-                    <p class="product-price" id="productPrice">$99.99</p>
-                    <div class="btn-group">
-                        <button class="btn" id="editProductBtn">Edit</button>
-                        <button class="btn" id="saveProductBtn">Save</button>
-                        <button class="btn" id="cancelEditBtn">Cancel</button>
-                    </div>
-                </div>
+<div class="container">
+    <div class="product-detail">
+        <div class="product-info">
+            <h1 class="product-title" id="productTitle">Product Title</h1>
+            <p class="product-description" id="productDescription">This is a detailed description of the product.</p>
+            <p class="product-price" id="productPrice">$99.99</p>
+            <div class="btn-group">
+                <button class="btn" id="editProductBtn">Edit</button>
+                <button class="btn" id="saveProductBtn">Save</button>
+                <button class="btn" id="cancelEditBtn">Cancel</button>
             </div>
         </div>
+    </div>
+</div>
 
-        <!-- Footer -->
+<!-- Footer -->
+<div id="footer"></div>
 
+<!-- Load Footer -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('../footer.html') // Adjusted the path for the footer
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+    });
+</script>
 
-        <script src="script.js"></script>
-
-        <!-- Script to load navbar and footer -->
-        <script>
-            // Load the navbar
-            fetch('navbar.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('navbar').innerHTML = data;
-                });
-
-            // Load the footer
-            fetch('footer.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('footer').innerHTML = data;
-                });
-        </script>
-    <div id="footer"></div>
+<script src="../script.js"></script>
 </body>
 </html>

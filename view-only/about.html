@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Us</title>
-  <link rel="stylesheet" href="aboutStyles.css">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -105,36 +104,36 @@
   <div class="about-section">
     <p>Welcome to our SOEN 287 Group Project website.</p>
 
-  <div class="team-section">
-    <h2>Meet Our Team</h2>
-    <div class="team-members">
-      <div class="team-member">
-        <img src="\Screenshot 2024-10-17 150251.png" alt="Team Member 1">
-        <h3>Yana</h3>
-        <p>Developer</p>
-        <p><a href="mailto:yana.vassilyev@gmail.com">yana.vassilyev@gmail.com</a></p>
-      </div>
-      <div class="team-member">
-        <img src="\Screenshot 2024-10-17 150251.png" alt="Team Member 2">
-        <h3>Lucas</h3>
-        <p>Developer</p>
-        <p><a href="mailto:lucas.pentlandhyde@gmail.com">lucas.pentlandhyde@gmail.com</a></p>
-      </div>
-      <div class="team-member">
-        <img src="\Screenshot 2024-10-17 150251.png" alt="Team Member 3">
-        <h3>Jorane-Tiana</h3>
-        <p>Developer</p>
-        <p><a href="mailto:jorane1234@gmail.com">joranetiana.robert@mail.utoronto.ca</a></p>
-      </div>
-      <div class="team-member">
-        <img src="\Screenshot 2024-10-17 150251.png" alt="Team Member 4">
-        <h3>Daniel</h3>
-        <p>Developer</p>
-        <p><a href="mailto:daniel05.ayass@gmail.com">daniel05.ayass@gmail.com</a></p>
+    <div class="team-section">
+      <h2>Meet Our Team</h2>
+      <div class="team-members">
+        <div class="team-member">
+          <img src="\Screenshot 2024-10-17 150251.png" alt="Team Member 1">
+          <h3>Yana</h3>
+          <p>Developer</p>
+          <p><a href="mailto:yana.vassilyev@gmail.com">yana.vassilyev@gmail.com</a></p>
+        </div>
+        <div class="team-member">
+          <img src="\Screenshot 2024-10-17 150251.png" alt="Team Member 2">
+          <h3>Lucas</h3>
+          <p>Developer</p>
+          <p><a href="mailto:lucas.pentlandhyde@gmail.com">lucas.pentlandhyde@gmail.com</a></p>
+        </div>
+        <div class="team-member">
+          <img src="\Screenshot 2024-10-17 150251.png" alt="Team Member 3">
+          <h3>Jorane-Tiana</h3>
+          <p>Developer</p>
+          <p><a href="mailto:jorane1234@gmail.com">joranetiana.robert@mail.utoronto.ca</a></p>
+        </div>
+        <div class="team-member">
+          <img src="\Screenshot 2024-10-17 150251.png" alt="Team Member 4">
+          <h3>Daniel</h3>
+          <p>Developer</p>
+          <p><a href="mailto:daniel05.ayass@gmail.com">daniel05.ayass@gmail.com</a></p>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>
 
 
@@ -145,13 +144,13 @@
             document.getElementById('navbar').innerHTML = data;
           });
 
-  fetch('footer.html')
+  fetch('../footer.html')  // Adjusted path for the footer
           .then(response => response.text())
           .then(data => {
             document.getElementById('footer').innerHTML = data;
           });
 </script>
-  <div id="footer"></div>
+<div id="footer"></div>
 </body>
 
 

@@ -1,4 +1,3 @@
-<!-- dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,19 +10,38 @@
       background-color: #f0f2f5;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    .nav-wrapper {
+      width: 100%;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+      background-color: #0f253d;
+      position: relative;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
+      padding: 15px 20px;
+      box-sizing: border-box;
     }
 
     .container {
       width: 80%;
       max-width: 1200px;
-      background-color: rgb(255, 255, 255);
-      padding: 20px;
+      background-color: #fff;
+      padding: 40px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin-top: 20px;
+      margin: 150px auto 20px auto;
+      box-sizing: border-box;
     }
 
     h1, h2 {
@@ -60,10 +78,9 @@
       list-style: none;
       padding: 0;
       background-color: rgba(255, 255, 255, 0);
-
     }
 
-    ul li  {
+    ul li {
       padding: 10px;
       margin: 10px 0;
       display: flex;
@@ -100,8 +117,25 @@
   </style>
 </head>
 <body>
-<div id="navbar"></div>
 
+<!-- Placeholder for the logged-in navbar -->
+<div class="nav-wrapper">
+  <nav class="nav" id="logged-in-navbar-BA">
+    <!-- The navbar content will be loaded here -->
+  </nav>
+</div>
+
+<!-- JavaScript to load the logged-in navbar -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../BA-Logged-in/BALoggedInNav.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('logged-in-navbar-BA').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading logged-in navbar:', error));
+  });
+</script>
 
 <div class="container">
   <h1>Welcome, Admin</h1>
@@ -124,9 +158,8 @@
 </div>
 
 <script>
-  if (!localStorage.getItem('adminLoggedIn')) {
-    window.location.href = 'admin-login.html';
-  }
+  // Removed login check
+  // Now the page will load without requiring the user to be logged in
 
   const serviceList = document.getElementById('serviceList');
   const unpaidBillsList = document.getElementById('unpaidBillsList');
@@ -184,23 +217,23 @@
 
   const logoutBtn = document.getElementById('logoutBtn');
   logoutBtn.addEventListener('click', function() {
-    localStorage.removeItem('adminLoggedIn');
-    window.location.href = 'admin-login.html';
+    alert('Logged out');
   });
 </script>
-<script>
-  fetch('navbar.html')
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById('navbar').innerHTML = data;
-          });
 
-  fetch('footer.html')
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById('footer').innerHTML = data;
-          });
+<!-- Load Footer -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../footer.html') // Adjusted path for the footer
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('footer').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+  });
 </script>
+
 <div id="footer"></div>
+
 </body>
 </html>

@@ -10,13 +10,13 @@
     <!-- Many icons used in the file is from Boxicons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- Link to the CSS file names mpstyle.css -->
-    <link rel="stylesheet" href="mpstyle.css">
+    <link rel="stylesheet" href="../mpstyle.css">
     <!-- Link to the CSS file names mpstyle.css -->
-    <link rel="stylesheet" href="footerStyles.css">
+    <link rel="stylesheet" href="../footerStyles.css">
     <!-- Link to javascript named navbarscroll.js -->
-    <script src = "navbarscroll.js"> </script>
+    <script src = "../navbarscroll.js"> </script>
     <!-- Link to the CSS file names mpstyle.css -->
-    <link rel="stylesheet" href="MainPageStyle.css">
+    <link rel="stylesheet" href="../MainPageStyle.css">
     <!-- defines the title of the web page -->
     <title> Home Page </title>
 
@@ -25,35 +25,28 @@
 
 <body>
 
-<!----------------------------- The Navigation Bar ----------------------------------->  
+<!----------------------------- The Navigation Bar ----------------------------------->
 
-<div class="nav-wrapper">
-    <nav class="nav" id = "nav1">
-      <div class="nav-logo">
-        <p>LOGO .</p>
-      </div>
-      <div class="nav-menu" id="navMenu">
-        <ul>
-          <li><a href="Home.html" class="link active">Home</a></li>
-          <li><a href="BrowseProducts.html" class="link">Services</a></li>
-          <li><a href="about.html" class="link">About</a></li>
-          <li><a href="contact.html" class="link">Contact</a></li>
-        </ul>
-      </div>
-      <div class="nav-button">
-        <button id="loginBtn" onclick="window.location.href='login.html';" class="btn white-btn">Sign In</button>
-        <button id="registerBtn" onclick="window.location.href='register.html';" class="btn">Sign Up</button>
-      </div>
-      <div class="nav-menu-btn">
-        <i class="bx bx-menu" onclick="myMenuFunction()"></i>
-      </div>
-    </nav>
-  </div>
+<!-- Placeholder for the logged-in navbar -->
+<div id="logged-in-navbar"></div>
+
+<!-- JavaScript to load the logged-in navbar -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('../User-Logged-in/loggedInNav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('logged-in-navbar').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading logged-in navbar:', error));
+    });
+</script>
+
 
   <!-- Front Page Image -->
 
 <div class = "frontimage-container"> 
-        <img class ="front-page" src="HomePage.webp">
+        <img class ="front-page" src="../images/HomePage.webp">
         <div class = "text-title"> <h1> Welcome to this company </h1></div> 
         <div class = "text"> Add a slogan. </div>
 </div>
@@ -67,7 +60,7 @@
         <div class = "tape1"> </div>
     </div>
     <div class="welcome-image">
-        <img src="Welcomeimage1.jpg" alt="Welcome Image">
+        <img src="../images/Welcomeimage1.jpg" alt="Welcome Image">
         
     </div>
 </div>
@@ -94,7 +87,7 @@
         <li>Wow! we also do this</li>
         <li>This too</li>
       </ul>
-      <a href="product-detail.html" class="learn-more btn">
+      <a href="../BA-Logged-in/product-detail.html" class="learn-more btn">
         <button class="learn-more btn">Add to cart</button>
       </a>
   </div>
@@ -114,7 +107,7 @@
       <li>Wow! we also do this</li>
       <li>This too</li>
     </ul>
-    <a href="product-detail.html" class="learn-more btn">
+    <a href="../BA-Logged-in/product-detail.html" class="learn-more btn">
       <button class="learn-more btn">Add to cart </button>
     </a>
 </div>
@@ -132,7 +125,7 @@
         <li>Wow! we also do this</li>
         <li>This too</li>
       </ul>
-      <a href="product-detail.html" class="learn-more btn">
+      <a href="../BA-Logged-in/product-detail.html" class="learn-more btn">
         <button class="learn-more btn">Add to cart</button>
       </a>
   </div>
@@ -169,7 +162,7 @@
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-column">
-        <h3><a href="contact.html">Contact Us</a></h3>
+        <h3><a href="../view-only/contact.html">Contact Us</a></h3>
         <p>+1 (844) 326-6005</p>
         <p><a href="mailto:email@example.com">Email Us</a></p>
         <p>Mon-Fri 9am-3pm PT</p>
@@ -185,7 +178,7 @@
       <div class="footer-column">
         <h3>Company</h3>
         <ul>
-          <li><a href="about.html">About Us</a></li>
+          <li><a href="../view-only/about.html">About Us</a></li>
           <li><a href="#">Privacy Policy</a></li>
           <li><a href="#">Terms</a></li>
         </ul>
@@ -196,48 +189,6 @@
     </div>
   
 
-
-<!-- Java script porition -->
-<script>
-   
-    function myMenuFunction() {
-     var i = document.getElementById("navMenu");
- 
-     if(i.className === "nav-menu") {
-         i.className += " responsive";
-     } else {
-         i.className = "nav-menu";
-     }
-    }
-  
- </script>
- 
- <script>
- 
-     var a = document.getElementById("loginBtn");
-     var b = document.getElementById("registerBtn");
-     var x = document.getElementById("login");
-     var y = document.getElementById("register");
- 
-     function login() {
-         x.style.left = "4px";
-         y.style.right = "-520px";
-         a.className += " white-btn";
-         b.className = "btn";
-         x.style.opacity = 1;
-         y.style.opacity = 0;
-     }
- 
-     function register() {
-         x.style.left = "-510px";
-         y.style.right = "5px";
-         a.className = "btn";
-         b.className += " white-btn";
-         x.style.opacity = 0;
-         y.style.opacity = 1;
-     }
- 
- </script>
 
  </body>
  </html>

@@ -1,7 +1,7 @@
 /* POPPINS FONT */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-*{  
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -9,7 +9,7 @@
 }
 
 body{
-    background: url("Website-Background.jpg");
+    background: url("images/Website-Background.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;

@@ -10,13 +10,13 @@
     <!-- Many icons used in the file is from Boxicons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- Link to the CSS file names mpstyle.css -->
-    <link rel="stylesheet" href="mpstyle.css">
+    <link rel="stylesheet" href="../mpstyle.css">
     <!-- Link to the CSS file names mpstyle.css -->
-    <link rel="stylesheet" href="footerStyles.css">
+    <link rel="stylesheet" href="../footerStyles.css">
     <!-- Link to javascript named navbarscroll.js -->
-    <script src = "navbarscroll.js"> </script>
+    <script src = "../navbarscroll.js"> </script>
     <!-- Link to the CSS file names mpstyle.css -->
-    <link rel="stylesheet" href="MainPageStyle.css">
+    <link rel="stylesheet" href="../MainPageStyle.css">
     <!-- defines the title of the web page -->
     <title> Home Page </title>
 
@@ -35,26 +35,17 @@
       <div class="nav-menu" id="navMenu">
         <ul>
           <li><a href="Home.html" class="link active">Home</a></li>
-          <li><a href="BrowseProducts.html" class="link">Services</a></li>
+          <li><a href="../BA-Logged-in/BrowseProducts.html" class="link">Services</a></li>
           <li><a href="about.html" class="link">About</a></li>
           <li><a href="contact.html" class="link">Contact</a></li>
         </ul>
       </div>
-      <div class="nav-profile">
-        <p>
-            <a href="#">
-                <i class='bx bxs-cart'></i>
-            </a>
-        </p>
-
-        <div class = "profile-picture">
-            <a href="#">
-            <img src="img_avatar2.png" alt="Avatar">
-        </a>
-
-
-        </div>
-        
+      <div class="nav-button">
+        <button id="loginBtn" onclick="window.location.href='login.html';" class="btn white-btn">Sign In</button>
+        <button id="registerBtn" onclick="window.location.href='register.html';" class="btn">Sign Up</button>
+      </div>
+      <div class="nav-menu-btn">
+        <i class="bx bx-menu" onclick="myMenuFunction()"></i>
       </div>
     </nav>
   </div>
@@ -62,7 +53,7 @@
   <!-- Front Page Image -->
 
 <div class = "frontimage-container"> 
-        <img class ="front-page" src="HomePage.webp">
+        <img class ="front-page" src="../images/HomePage.webp">
         <div class = "text-title"> <h1> Welcome to this company </h1></div> 
         <div class = "text"> Add a slogan. </div>
 </div>
@@ -76,7 +67,7 @@
         <div class = "tape1"> </div>
     </div>
     <div class="welcome-image">
-        <img src="Welcomeimage1.jpg" alt="Welcome Image">
+        <img src="../images/Welcomeimage1.jpg" alt="Welcome Image">
         
     </div>
 </div>
@@ -103,7 +94,7 @@
         <li>Wow! we also do this</li>
         <li>This too</li>
       </ul>
-      <a href="product-detail.html" class="learn-more btn">
+      <a href="../BA-Logged-in/product-detail.html" class="learn-more btn">
         <button class="learn-more btn">Add to cart</button>
       </a>
   </div>
@@ -123,7 +114,7 @@
       <li>Wow! we also do this</li>
       <li>This too</li>
     </ul>
-    <a href="product-detail.html" class="learn-more btn">
+    <a href="../BA-Logged-in/product-detail.html" class="learn-more btn">
       <button class="learn-more btn">Add to cart </button>
     </a>
 </div>
@@ -141,7 +132,7 @@
         <li>Wow! we also do this</li>
         <li>This too</li>
       </ul>
-      <a href="product-detail.html" class="learn-more btn">
+      <a href="../BA-Logged-in/product-detail.html" class="learn-more btn">
         <button class="learn-more btn">Add to cart</button>
       </a>
   </div>
@@ -205,6 +196,48 @@
     </div>
   
 
+
+<!-- Java script porition -->
+<script>
+   
+    function myMenuFunction() {
+     var i = document.getElementById("navMenu");
+ 
+     if(i.className === "nav-menu") {
+         i.className += " responsive";
+     } else {
+         i.className = "nav-menu";
+     }
+    }
+  
+ </script>
+ 
+ <script>
+ 
+     var a = document.getElementById("loginBtn");
+     var b = document.getElementById("registerBtn");
+     var x = document.getElementById("login");
+     var y = document.getElementById("register");
+ 
+     function login() {
+         x.style.left = "4px";
+         y.style.right = "-520px";
+         a.className += " white-btn";
+         b.className = "btn";
+         x.style.opacity = 1;
+         y.style.opacity = 0;
+     }
+ 
+     function register() {
+         x.style.left = "-510px";
+         y.style.right = "5px";
+         a.className = "btn";
+         b.className += " white-btn";
+         x.style.opacity = 0;
+         y.style.opacity = 1;
+     }
+ 
+ </script>
 
  </body>
  </html>

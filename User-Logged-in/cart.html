@@ -4,33 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Bag</title>
-    <link rel="stylesheet" href="cartStyles.css">
-      <!---------------------------Page style---------------------------->
-  <link rel="stylesheet"
-  href="BrowseStyles.css">
-<!---------------------------Navbar style---------------------------->
-<link rel="stylesheet"
-  href="navStyles.css">
+    <link rel="stylesheet" href="../cartStyles.css">
+    <link rel="stylesheet" href="../BrowseStyles.css">
+    <link rel="stylesheet" href="../navStyles.css">
+    <!-- Add styles for the logged-in navbar -->
+    <link rel="stylesheet" href="../mpstyle.css">
+    <link rel="stylesheet" href="../footerStyles.css">
+    <link rel="stylesheet" href="../MainPageStyle.css">
+    <script src="../navbarscroll.js"></script>
 </head>
 <body>
-      <!----------------------------- The Navigation Bar ----------------------------------->
-  <div id="navbar-container"></div>
-  <script>
-    // JavaScript to load the navbar.html into the current document
+
+<!-- Placeholder for the logged-in navbar -->
+<div id="logged-in-navbar"></div>
+
+<!-- JavaScript to load the logged-in navbar -->
+<script>
     document.addEventListener("DOMContentLoaded", function() {
-        fetch('navbar.html')
+        fetch('../User-Logged-in/loggedInNav.html')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('navbar-container').innerHTML = data;
+                document.getElementById('logged-in-navbar').innerHTML = data;
             })
-            .catch(error => console.error('Error loading navbar:', error));
+            .catch(error => console.error('Error loading logged-in navbar:', error));
     });
+</script>
 
-    </script>
-
+<!-- Cart content -->
 <div class="cart-container">
     <h1>Your Bag (2 Items)</h1>
-    
+
     <div class="cart-item">
         <div class="item-details">
             <img src="" alt=""> <!---image here-->
@@ -72,22 +75,21 @@
     </div>
 
 </div>
-  <!----------------------------- Footer ----------------------------------->
-  <div id="footer-container"></div>
-  <script>
-    // JavaScript to load the navbar.html into the current document
+
+<!-- Footer -->
+<div id="footer-container"></div>
+<script>
     document.addEventListener("DOMContentLoaded", function() {
-        fetch('footer.html')
+        fetch('/footer.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('footer-container').innerHTML = data;
             })
             .catch(error => console.error('Error loading footer:', error));
     });
-    </script>
+</script>
 
-
-<script src="script.js"></script>
+<script src="../script.js"></script>
 
 </body>
 </html>

@@ -10,7 +10,7 @@
     <!-- Many icons used in the file are from Boxicons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- Link to the CSS file named mpstyle.css -->
-    <link rel="stylesheet" href="mpstyle.css">
+    <link rel="stylesheet" href="../mpstyle.css">
     <!-- Defines the title of the web page -->
     <title>Login Page</title>
 </head>
@@ -137,6 +137,13 @@
         y.style.opacity = 1;
     }
 </script>
-
+<script>
+    fetch('../footer.html')  // Adjusted path for the footer
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer').innerHTML = data;
+        });
+</script>
+<div id="footer"></div>
 </body>
 </html>

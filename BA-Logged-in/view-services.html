@@ -4,15 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>View Services Availed</title>
+
+  <!-- Include navbar and footer styles -->
+  <link rel="stylesheet" href="../mpstyle.css">
+  <link rel="stylesheet" href="../footerStyles.css">
+  <link rel="stylesheet" href="../MainPageStyle.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Include jsPDF -->
   <style>
+    /* General body settings */
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+    }
+
+    /* Wrap all content in a container */
+    .content-wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 20px;
+      margin-top: 120px;
     }
 
     h2 {
@@ -72,28 +84,45 @@
   </style>
 </head>
 <body>
-<div id="navbar"></div>
 
-<h2>Services Availed by Customers</h2>
+<!-- Placeholder for the logged-in navbar -->
+<div id="logged-in-navbar-BA"></div>
 
-<!-- Search Bar -->
-<input type="text" id="searchBar" placeholder="Search...">
+<!-- JavaScript to load the logged-in navbar -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../BA-Logged-in/BALoggedInNav.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('logged-in-navbar-BA').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading logged-in navbar:', error));
+  });
+</script>
 
-<table>
-  <thead>
-  <tr>
-    <th>Customer Name</th>
-    <th>Service</th>
-    <th>Date</th>
-    <th>Status</th>
-    <th>Cost</th>
-    <th>Invoice (PDF)</th>
-  </tr>
-  </thead>
-  <tbody id="availedServicesTable"></tbody>
-</table>
+<!-- Wrap the content in a container -->
+<div class="content-wrapper">
+  <h2>Services Availed by Customers</h2>
 
-<button id="backToDashboard">Back to Dashboard</button>
+  <!-- Search Bar -->
+  <input type="text" id="searchBar" placeholder="Search...">
+
+  <table>
+    <thead>
+    <tr>
+      <th>Customer Name</th>
+      <th>Service</th>
+      <th>Date</th>
+      <th>Status</th>
+      <th>Cost</th>
+      <th>Invoice (PDF)</th>
+    </tr>
+    </thead>
+    <tbody id="availedServicesTable"></tbody>
+  </table>
+
+  <button id="backToDashboard">Back to Dashboard</button>
+</div>
 
 <script>
   // Example services data
@@ -140,17 +169,14 @@
     window.location.href = 'dashboard.html';
   });
 
-  fetch('navbar.html')
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById('navbar').innerHTML = data;
-          });
-
-  fetch('footer.html')
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById('footer').innerHTML = data;
-          });
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../footer.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('footer').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+  });
 
   function generatePDF(index) {
     const service = availedServices[index];
@@ -169,7 +195,6 @@
 
     doc.save(`${service.customer}_Invoice.pdf`);
   }
-
 </script>
 
 <div id="footer"></div>

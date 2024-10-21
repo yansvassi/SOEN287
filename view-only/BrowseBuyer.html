@@ -103,41 +103,15 @@
   </div>
   </div>
   <!----------------------------- Footer ----------------------------------->
-  <footer class="footer">
-    <div class="footer-container">
-      <div class="footer-column">
-        <h3>Contact Us</h3>
-        <p>+1 (844) 326-6005</p>
-        <p><a href="mailto:email@example.com">Email Us</a></p>
-        <p>Mon-Fri 9am-3pm PT</p>
-      </div>
-      <div class="footer-column">
-        <h3>Customers</h3>
-        <ul>
-          <li><a href="#">Start a Return</a></li>
-          <li><a href="#">Return Policy</a></li>
-          <li><a href="#">FAQ</a></li>
-          <li><a href="#">Catalogs and Mailers</a></li>
-          <li><a href="#">Do Not Sell My Info</a></li>
-          <li><a href="#">About Group Gifting</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <h3>Company</h3>
-        <ul>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Sustainability</a></li>
-          <li><a href="#">Careers</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms</a></li>
-          <li><a href="#">Accessibility</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-credits">
-      <p>&copy; YourCompanyName</p>
-    </div>
-  </footer>
+  <script>
+
+    fetch('../footer.html')  // Adjusted path for the footer
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('footer').innerHTML = data;
+            });
+  </script>
+  <div id="footer"></div>
 
 </body>
 

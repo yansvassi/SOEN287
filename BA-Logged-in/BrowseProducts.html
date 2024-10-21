@@ -4,10 +4,10 @@
 <head>
   <!---------------------------Page style---------------------------->
   <link rel="stylesheet"
-        href="BrowseStyles.css">
+        href="../BrowseStyles.css">
   <!---------------------------Navbar style---------------------------->
   <link rel="stylesheet"
-        href="navStyles.css">
+        href="../navStyles.css">
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible"
@@ -19,20 +19,22 @@
 
 <body>
 
-  <!----------------------------- The Navigation Bar ----------------------------------->
-  <div id="navbar-container"></div>
-  <script>
-    // JavaScript to load the navbar.html into the current document
-    document.addEventListener("DOMContentLoaded", function() {
-        fetch('navbar.html')
+<!----------------------------- The Navigation Bar ----------------------------------->
+
+<!-- Placeholder for the logged-in navbar -->
+<div id="logged-in-navbar-BA"></div>
+
+<!-- JavaScript to load the logged-in navbar -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../BA-Logged-in/BALoggedInNav.html')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('navbar-container').innerHTML = data;
+              document.getElementById('logged-in-navbar-BA').innerHTML = data;
             })
-            .catch(error => console.error('Error loading navbar:', error));
-    });
-
-    </script>
+            .catch(error => console.error('Error loading logged-in navbar:', error));
+  });
+</script>
   <!------------ Banner ------------>
 
   <div class="banner">
@@ -102,18 +104,18 @@
   <!----------------------------- Footer ----------------------------------->
   <div id="footer-container"></div>
   <script>
-    // JavaScript to load the navbar.html into the current document
     document.addEventListener("DOMContentLoaded", function() {
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(data => {
+      fetch('../footer.html')  // Adjusted path to fetch the footer
+              .then(response => response.text())
+              .then(data => {
                 document.getElementById('footer-container').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading footer:', error));
+              })
+              .catch(error => console.error('Error loading footer:', error));
     });
-    </script>
+</script>
 
-  <script>
+
+<script>
     window.addEventListener("scroll", function () {
       var nav = document.querySelector(".nav");
       if (window.scrollY > 70) { // Adjust the scroll threshold to your preference

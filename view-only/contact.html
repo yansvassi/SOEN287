@@ -111,7 +111,7 @@
             document.getElementById('navbar').innerHTML = data;
           });
 
-  fetch('footer.html')
+  fetch('../footer.html')  // Adjusted path for the footer
           .then(response => response.text())
           .then(data => {
             document.getElementById('footer').innerHTML = data;
