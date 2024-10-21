@@ -81,6 +81,58 @@
       border: 1px solid #ccc;
       border-radius: 4px;
     }
+
+    /* Styling for the form layout */
+    #addRowForm {
+      background-color: #f5f5f5;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 20px;
+    }
+
+    .form-input label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #0f253d;
+    }
+
+    .form-input input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .form-input input:focus {
+      border-color: #4a7b9b;
+      outline: none;
+    }
+
+    #addServiceBtn {
+      width: 100%;
+      padding: 10px;
+      background-color: #4a7b9b;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    #addServiceBtn:hover {
+      background-color: #264e65;
+    }
   </style>
 </head>
 <body>
@@ -121,6 +173,34 @@
     <tbody id="availedServicesTable"></tbody>
   </table>
 
+  <!-- Add Row Form -->
+  <div id="addRowForm">
+    <h3>Add New Service</h3>
+    <div class="form-grid">
+      <div class="form-input">
+        <label for="customerName">Customer Name:</label>
+        <input type="text" id="customerName" placeholder="Enter Customer Name">
+      </div>
+      <div class="form-input">
+        <label for="serviceName">Service:</label>
+        <input type="text" id="serviceName" placeholder="Enter Service Name">
+      </div>
+      <div class="form-input">
+        <label for="serviceDate">Date:</label>
+        <input type="date" id="serviceDate">
+      </div>
+      <div class="form-input">
+        <label for="serviceStatus">Status:</label>
+        <input type="text" id="serviceStatus" placeholder="Enter Status">
+      </div>
+      <div class="form-input">
+        <label for="serviceCost">Cost:</label>
+        <input type="number" id="serviceCost" placeholder="Enter Cost">
+      </div>
+    </div>
+    <button id="addServiceBtn">Add Service</button>
+  </div>
+
   <button id="backToDashboard">Back to Dashboard</button>
 </div>
 
@@ -140,13 +220,13 @@
     services.forEach((service, index) => {
       const row = document.createElement('tr');
       row.innerHTML = `
-        <td>${service.customer}</td>
-        <td>${service.service}</td>
-        <td>${service.date}</td>
-        <td>${service.status}</td>
-        <td>${service.cost}</td>
-        <td><button onclick="generatePDF(${index})">View Invoice</button></td>
-      `;
+                <td>${service.customer}</td>
+                <td>${service.service}</td>
+                <td>${service.date}</td>
+                <td>${service.status}</td>
+                <td>${service.cost}</td>
+                <td><button onclick="generatePDF(${index})">View Invoice</button></td>
+            `;
       availedServicesTable.appendChild(row);
     });
   }
@@ -195,6 +275,30 @@
 
     doc.save(`${service.customer}_Invoice.pdf`);
   }
+
+  // Add Service Button
+  const addServiceBtn = document.getElementById('addServiceBtn');
+  addServiceBtn.addEventListener('click', function() {
+    const customerName = document.getElementById('customerName').value;
+    const serviceName = document.getElementById('serviceName').value;
+    const serviceDate = document.getElementById('serviceDate').value;
+    const serviceStatus = document.getElementById('serviceStatus').value;
+    const serviceCost = document.getElementById('serviceCost').value;
+
+    if (customerName && serviceName && serviceDate && serviceStatus && serviceCost) {
+      availedServices.push({
+        customer: customerName,
+        service: serviceName,
+        date: serviceDate,
+        status: serviceStatus,
+        cost: `$${serviceCost}`,
+        pdf: 'new_invoice.pdf' // Placeholder for new invoice
+      });
+      displayAvailedServices(availedServices);
+    } else {
+      alert('Please fill out all fields.');
+    }
+  });
 </script>
 
 <div id="footer"></div>
