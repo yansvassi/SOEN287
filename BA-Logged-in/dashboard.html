@@ -1,131 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+  <!---------------------------Page style---------------------------->
+  <link rel="stylesheet" href="../BrowseStyles.css">
+  <link rel="stylesheet" href="../navStyles.css">
+
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
+  <title>Browse</title>
+
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f0f2f5;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* Style for the Edit and Remove Buttons */
+    .btn-group .btn {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
     }
 
-    .nav-wrapper {
-      width: 100%;
+    .edit-product-btn {
+      background-color: #4CAF50; /* Green background for Edit */
+      color: white;
+    }
+
+    .remove-product-btn {
+      background-color: #f44336; /* Red background for Remove */
+      color: white;
+    }
+
+    /* Hover effects for both buttons */
+    .edit-product-btn:hover {
+      background-color: #45a049; /* Darker green on hover */
+    }
+
+    .remove-product-btn:hover {
+      background-color: #d32f2f; /* Darker red on hover */
+    }
+
+    /* Button layout */
+    .btn-group {
       display: flex;
-      justify-content: center;
-      background-color: #0f253d;
-      position: relative;
-      top: 0;
-      z-index: 1000;
+      gap: 10px;
     }
 
-    .nav {
-      width: 100%;
-      max-width: 1200px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 20px;
-      box-sizing: border-box;
-    }
-
-    .container {
-      width: 80%;
-      max-width: 1200px;
-      background-color: #fff;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin: 150px auto 20px auto;
-      box-sizing: border-box;
-    }
-
-    h1, h2 {
+    .btn-group .btn {
+      display: inline-block;
+      width: 100px;
       text-align: center;
-      color: #0f253d;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 20px;
-    }
-
-    form input, form button {
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    form button {
-      background-color: #345e81;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    form button:hover {
-      background-color: #204665;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      background-color: rgba(255, 255, 255, 0);
-    }
-
-    ul li {
-      padding: 10px;
-      margin: 10px 0;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    ul li button {
-      padding: 5px 10px;
-      background-color: #345e81;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    ul li button:hover {
-      background-color: #204665;
-    }
-
-    #logoutBtn {
-      padding: 10px 20px;
-      background-color: #0f253d;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 20px;
-    }
-
-    #logoutBtn:hover {
-      background-color: #021120;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
   </style>
 </head>
+
 <body>
 
-<!-- Placeholder for the logged-in navbar -->
-<div class="nav-wrapper">
-  <nav class="nav" id="logged-in-navbar-BA">
-    <!-- The navbar content will be loaded here -->
-  </nav>
-</div>
+<!-- The Navigation Bar -->
+<div id="logged-in-navbar-BA"></div>
 
-<!-- JavaScript to load the logged-in navbar -->
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     fetch('../BA-Logged-in/BALoggedInNav.html')
@@ -137,103 +73,141 @@
   });
 </script>
 
-<div class="container">
-  <h1>Welcome, Admin</h1>
-
-  <h2>Business Information</h2>
-  <form id="businessInfoForm">
-    <input type="text" id="businessName" placeholder="Business Name" required>
-    <input type="text" id="businessAddress" placeholder="Business Address" required>
-    <input type="file" id="businessLogo" accept="image/*">
-    <button type="submit">Update Information</button>
-  </form>
-
-  <h2>Confirm Service Execution</h2>
-  <ul id="serviceList"></ul>
-
-  <h2>Unpaid Bills</h2>
-  <ul id="unpaidBillsList"></ul>
-
-  <button id="logoutBtn">Logout</button>
+<!-- Banner -->
+<div class="banner">
+  <h1>Your Products</h1>
 </div>
 
-<script>
-  // Removed login check
-  // Now the page will load without requiring the user to be logged in
+<!-- Product Display -->
+<div class="container" id="product-container">
+  <div class="product_box" id="product1">
+    <br>
+    <a href="#" class="product-name">Product 1</a>
+    <p class="product-price">$XX</p>
+    <ul class="service-details">
+      <li>We do this</li>
+      <li>And even this</li>
+      <li>Wow! we also do this</li>
+      <li>This too</li>
+    </ul>
+    <div class="btn-group">
+      <button class="edit-product-btn btn">Edit</button>
+      <button class="remove-product-btn btn">Remove</button>
+    </div>
+  </div>
+</div>
 
-  const serviceList = document.getElementById('serviceList');
-  const unpaidBillsList = document.getElementById('unpaidBillsList');
+<!-- Add Product Button -->
+<div class="add-product-container">
+  <button class="btn add-product-btn" id="add-product-btn">+ Add Product</button>
+</div>
 
-  function displayServices() {
-    const services = JSON.parse(localStorage.getItem('services')) || [];
-    serviceList.innerHTML = '';
-    services.forEach((service, index) => {
-      const listItem = document.createElement('li');
-      listItem.innerHTML = `
-        ${service.name} - ${service.description}
-        <button onclick="confirmService(${index})">Confirm Execution</button>
-      `;
-      serviceList.appendChild(listItem);
-    });
-  }
-
-  function displayUnpaidBills() {
-    const unpaidBills = JSON.parse(localStorage.getItem('unpaidBills')) || [];
-    unpaidBillsList.innerHTML = '';
-    unpaidBills.forEach((bill, index) => {
-      const listItem = document.createElement('li');
-      listItem.innerHTML = `
-        ${bill.customerName} - $${bill.amount} due
-        <button onclick="sendReminder(${index})">Send Reminder</button>
-      `;
-      unpaidBillsList.appendChild(listItem);
-    });
-  }
-
-  function confirmService(index) {
-    let services = JSON.parse(localStorage.getItem('services'));
-    services[index].status = 'completed';
-    localStorage.setItem('services', JSON.stringify(services));
-    displayServices();
-  }
-
-  function sendReminder(index) {
-    const unpaidBills = JSON.parse(localStorage.getItem('unpaidBills'));
-    alert(`Reminder sent to ${unpaidBills[index].customerName}`);
-  }
-
-  displayServices();
-  displayUnpaidBills();
-
-  const businessInfoForm = document.getElementById('businessInfoForm');
-  businessInfoForm.addEventListener('submit', function(event) {
-    event.preventDefault();
-    const businessName = document.getElementById('businessName').value;
-    const businessAddress = document.getElementById('businessAddress').value;
-    const businessLogo = document.getElementById('businessLogo').files[0];
-
-    alert('Business information updated');
-  });
-
-  const logoutBtn = document.getElementById('logoutBtn');
-  logoutBtn.addEventListener('click', function() {
-    alert('Logged out');
-  });
-</script>
-
-<!-- Load Footer -->
+<!-- Footer -->
+<div id="footer-container"></div>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    fetch('../footer.html') // Adjusted path for the footer
+    fetch('../footer.html')
             .then(response => response.text())
             .then(data => {
-              document.getElementById('footer').innerHTML = data;
+              document.getElementById('footer-container').innerHTML = data;
             })
             .catch(error => console.error('Error loading footer:', error));
   });
 </script>
 
-<div id="footer"></div>
+<!-- JavaScript to Add, Edit, and Remove Product Cards -->
+<script>
+  let productCount = 1; // Start with the initial product number
+
+  // Function to add a new product card
+  document.getElementById('add-product-btn').addEventListener('click', function() {
+    productCount++; // Increment the product count
+
+    const container = document.getElementById('product-container');
+
+    // Create a new product card
+    const newProduct = document.createElement('div');
+    newProduct.classList.add('product_box');
+    newProduct.innerHTML = `
+      <br>
+      <a href="#" class="product-name">Product ${productCount}</a>
+      <p class="product-price">$XX</p>
+      <ul class="service-details">
+        <li>Service detail 1</li>
+        <li>Service detail 2</li>
+        <li>Service detail 3</li>
+        <li>Service detail 4</li>
+      </ul>
+      <div class="btn-group">
+        <button class="edit-product-btn btn">Edit</button>
+        <button class="remove-product-btn btn">Remove</button>
+      </div>
+    `;
+
+    // Add the new product card to the container
+    container.appendChild(newProduct);
+
+    // Attach event listeners to the new product card
+    attachEventListeners(newProduct);
+  });
+
+  // Function to toggle between view and edit mode with static 4 service details
+  function toggleEditMode(productBox, isEditing) {
+    const productName = productBox.querySelector('.product-name');
+    const productPrice = productBox.querySelector('.product-price');
+    const serviceDetails = productBox.querySelectorAll('.service-details li');
+
+    if (isEditing) {
+      // Switch to edit mode: replace content with input fields for 4 service details
+      const nameInput = `<input type="text" value="${productName.textContent}" class="edit-product-name">`;
+      const priceInput = `<input type="text" value="${productPrice.textContent}" class="edit-product-price">`;
+
+      // For service details, map them to input fields (one per each detail)
+      serviceDetails.forEach((li, index) => {
+        li.outerHTML = `<li><input type="text" value="${li.textContent}" class="edit-service-detail" data-index="${index}"></li>`;
+      });
+
+      productName.outerHTML = nameInput;
+      productPrice.outerHTML = priceInput;
+
+    } else {
+      // Switch back to view mode: save changes and replace input fields with text
+      const newProductName = productBox.querySelector('.edit-product-name').value;
+      const newProductPrice = productBox.querySelector('.edit-product-price').value;
+      const newServiceDetails = productBox.querySelectorAll('.edit-service-detail');
+
+      // Replace input fields with the new values
+      productBox.querySelector('.edit-product-name').outerHTML = `<a href="#" class="product-name">${newProductName}</a>`;
+      productBox.querySelector('.edit-product-price').outerHTML = `<p class="product-price">${newProductPrice}</p>`;
+
+      newServiceDetails.forEach((input, index) => {
+        const li = `<li>${input.value}</li>`;
+        productBox.querySelectorAll('.service-details')[0].children[index].outerHTML = li;
+      });
+    }
+  }
+
+  // Attach event listeners for edit and remove buttons
+  function attachEventListeners(productBox) {
+    const editButton = productBox.querySelector('.edit-product-btn');
+    const removeButton = productBox.querySelector('.remove-product-btn');
+    let isEditing = false;
+
+    editButton.addEventListener('click', function() {
+      toggleEditMode(productBox, !isEditing);
+      isEditing = !isEditing; // Toggle the editing state
+    });
+
+    removeButton.addEventListener('click', function() {
+      productBox.remove(); // Remove the product card
+    });
+  }
+
+  // Attach event listeners for the initial product card
+  document.querySelectorAll('.product_box').forEach(productBox => {
+    attachEventListeners(productBox);
+  });
+</script>
 
 </body>
 </html>
