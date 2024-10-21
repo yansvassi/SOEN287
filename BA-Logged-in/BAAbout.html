@@ -10,7 +10,6 @@
       background-color: #f0f2f5;
       margin: 0;
       padding: 0;
-      display: flex;
       flex-direction: column;
       align-items: center;
     }
@@ -23,6 +22,7 @@
       margin: 20px auto;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-top: 100px; /* Added margin-top to prevent overlap */
     }
 
     h1 {
@@ -96,7 +96,19 @@
 </head>
 <body>
 
-<div id="navbar"></div>
+<!-- The Navigation Bar -->
+<div id="logged-in-navbar-BA"></div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../BA-Logged-in/BALoggedInNav.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('logged-in-navbar-BA').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading logged-in navbar:', error));
+  });
+</script>
 
 <div class="about-container">
   <h1>About Us</h1>
@@ -136,22 +148,14 @@
   </div>
 </div>
 
-
 <script>
-  fetch('navbar.html')
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById('navbar').innerHTML = data;
-          });
-
-  fetch('../footer.html')  // Adjusted path for the footer
+  fetch('../footer.html')
           .then(response => response.text())
           .then(data => {
             document.getElementById('footer').innerHTML = data;
           });
 </script>
 <div id="footer"></div>
+
 </body>
-
-
 </html>

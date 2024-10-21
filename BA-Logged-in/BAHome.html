@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="../mpstyle.css">
+  <link rel="stylesheet" href="../footerStyles.css">
+  <script src="../navbarscroll.js"></script>
+  <link rel="stylesheet" href="../MainPageStyle.css">
+
+  <style>
+    /* Position the toggle button */
+    #toggleEditModeBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background-color: #4a7b9b;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    #toggleEditModeBtn:hover {
+      background-color: #264e65;
+    }
+
+    /* Visual cues for editable text and images */
+    .editable {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- The Navigation Bar -->
+<div id="logged-in-navbar-BA"></div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../BA-Logged-in/BALoggedInNav.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('logged-in-navbar-BA').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading logged-in navbar:', error));
+  });
+</script>
+
+<!-- Toggle Edit Mode Button -->
+<button id="toggleEditModeBtn">Enable Edit Mode</button>
+
+<!-- Hidden file input to upload images -->
+<input type="file" id="imageUploader" style="display:none" accept="image/*">
+
+<!-- Front Page Image -->
+<div class="frontimage-container">
+  <img class="front-page editable" id="frontImage" src="../images/HomePage.webp" alt="Front Image">
+  <div class="text-title editable" contenteditable="false" id="welcomeTitle"> <h1>Welcome to this company</h1></div>
+  <div class="text editable" contenteditable="false" id="welcomeSlogan">Add a slogan.</div>
+</div>
+
+<!-- Add Text and Image -->
+<div class="welcome-container">
+  <div class="welcome-text">
+    <h1 class="editable" contenteditable="false" id="coreValuesTitle">Quality, Consistency, Personalization</h1>
+    <p class="editable" contenteditable="false" id="coreValuesText">Established in Montreal, Quebec in 2022. Shine’s 3 core values drive our one mission: To deliver a personalized experience to each and every one of our customers.</p>
+  </div>
+  <div class="welcome-image">
+    <img src="../images/Welcomeimage1.jpg" class="editable" id="welcomeImage" alt="Welcome Image">
+  </div>
+</div>
+
+<!-- Product Section -->
+<div class="container">
+  <div class="text-box">
+    <h1 class="editable" contenteditable="false" id="productTitle">Result-Focus Something Services</h1>
+    <p class="editable" contenteditable="false" id="productDesc">Each service has been designed carefully to deliver the outcome you're looking for.</p>
+  </div>
+
+  <div class="product_box">
+    <a href="#" class="product-name editable" contenteditable="false" id="productName1">Product 1</a>
+    <p class="product-price editable" contenteditable="false" id="productPrice1">$XX</p>
+    <ul class="service-details">
+      <li class="editable" contenteditable="false">We do this</li>
+      <li class="editable" contenteditable="false">And even this</li>
+      <li class="editable" contenteditable="false">Wow! we also do this</li>
+      <li class="editable" contenteditable="false">This too</li>
+    </ul>
+  </div>
+
+  <div class="product_box">
+    <a href="#" class="product-name editable" contenteditable="false" id="productName2">Product 2</a>
+    <p class="product-price editable" contenteditable="false" id="productPrice2">$XX</p>
+    <ul class="service-details">
+      <li class="editable" contenteditable="false">We do this</li>
+      <li class="editable" contenteditable="false">And even this</li>
+      <li class="editable" contenteditable="false">Wow! we also do this</li>
+      <li class="editable" contenteditable="false">This too</li>
+    </ul>
+  </div>
+
+  <div class="product_box">
+    <a href="#" class="product-name editable" contenteditable="false" id="productName3">Product 3</a>
+    <p class="product-price editable" contenteditable="false" id="productPrice3">$XX</p>
+    <ul class="service-details">
+      <li class="editable" contenteditable="false">We do this</li>
+      <li class="editable" contenteditable="false">And even this</li>
+      <li class="editable" contenteditable="false">Wow! we also do this</li>
+      <li class="editable" contenteditable="false">This too</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Footer Section -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-column">
+      <p>Contact Us</p>
+      <p>Phone: (123) 456-7890</p>
+      <p>Email: email@example.com</p>
+    </div>
+    <div class="footer-column">
+      <p>Address</p>
+      <p>123 Business St, City, Province, A1A 1A1</p>
+    </div>
+    <div class="footer-column">
+      <p>Follow Us</p>
+      <a href="#">Facebook</a> | <a href="#">Twitter</a> | <a href="#">Instagram</a>
+    </div>
+  </div>
+</footer>
+
+<!-- JavaScript to Toggle Edit Mode, Save Changes, and Load from localStorage -->
+<script>
+  const editButton = document.getElementById("toggleEditModeBtn");
+  const imageUploader = document.getElementById("imageUploader");
+  let editMode = false;
+
+  // Load saved content from localStorage
+  function loadSavedContent() {
+    document.querySelectorAll("[contenteditable]").forEach((element) => {
+      const savedContent = localStorage.getItem(element.id);
+      if (savedContent) {
+        element.innerHTML = savedContent;
+      }
+    });
+
+    const savedFrontImage = localStorage.getItem('frontImage');
+    if (savedFrontImage) {
+      document.getElementById('frontImage').src = savedFrontImage;
+    }
+
+    const savedWelcomeImage = localStorage.getItem('welcomeImage');
+    if (savedWelcomeImage) {
+      document.getElementById('welcomeImage').src = savedWelcomeImage;
+    }
+  }
+
+  // Save changes to localStorage
+  function saveContent(element) {
+    localStorage.setItem(element.id, element.innerHTML);
+  }
+
+  function saveImage(id, src) {
+    localStorage.setItem(id, src);
+  }
+
+  // Initialize the page by loading any saved content
+  document.addEventListener("DOMContentLoaded", function() {
+    loadSavedContent();
+  });
+
+  // Function to toggle edit mode
+  editButton.addEventListener("click", () => {
+    editMode = !editMode;
+
+    document.querySelectorAll("[contenteditable]").forEach((element) => {
+      element.contentEditable = editMode ? "true" : "false";
+    });
+
+    document.querySelectorAll(".editable").forEach((element) => {
+      element.style.border = editMode ? "2px dashed #4a7b9b" : "none";
+      element.style.backgroundColor = editMode ? "#f0f8ff" : "transparent";
+
+      // Save changes when exiting edit mode
+      if (!editMode) {
+        saveContent(element);
+      }
+    });
+
+    editButton.textContent = editMode ? "Disable Edit Mode" : "Enable Edit Mode";
+  });
+
+  // Function to open file selector and replace images
+  function replaceImage(imageElement) {
+    if (editMode) {
+      imageUploader.click(); // Open file selector
+
+      imageUploader.onchange = function(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            imageElement.src = e.target.result;
+            saveImage(imageElement.id, e.target.result); // Save image to localStorage
+          };
+          reader.readAsDataURL(file); // Read the selected file
+        }
+      };
+    }
+  }
+
+  // Image click event to replace images
+  document.getElementById("frontImage").addEventListener("click", function() {
+    replaceImage(this);
+  });
+
+  document.getElementById("welcomeImage").addEventListener("click", function() {
+    replaceImage(this);
+  });
+</script>
+
+</body>
+</html>
