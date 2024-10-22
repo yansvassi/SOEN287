@@ -127,23 +127,17 @@ body, html {
   z-index: 1;
 }
 
-.edit_symbol {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  border-radius: 10px;
-}
-
 
 .product_box {
-  background-color: #7ca3c0c0; 
+  background-color: #d8e4edc0;
   border-radius: 12px; 
   box-shadow: 0px 4px 8px #212325; /* Soft shadow */
-  padding: 20px;
+  padding: 10px 20px;
   width: 250px;
   text-align: center;
   font-family: 'Poppins', sans-serif;
   margin: 40px;
+  transition: background-color 0.3s ease;
 }
 
 .product_box p {
@@ -189,7 +183,7 @@ body, html {
 }
 
 .btn:hover {
-  background-color: #0056b3;
+  background-color: #0f253d;
 }
 
 .learn-more {
@@ -247,7 +241,7 @@ h3 {
 }
 
 .add-product-btn:hover {
-  background-color: #218838; /* Darker green on hover */
+  background-color: #345f82; 
 }
 
 .text-box {

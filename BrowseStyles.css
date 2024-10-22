@@ -61,16 +61,6 @@ body, html {
   justify-content: center;
 } */
 
-.product_box {
-  background-color: #ccdce7c0; 
-  border-radius: 12px; 
-  box-shadow: 0px 4px 8px #212325; /* Soft shadow */
-  padding: 20px;
-  width: 250px;
-  text-align: center;
-  font-family: 'Poppins', sans-serif;
-}
-
 .product_box p {
   font-size: small;
 }
@@ -122,6 +112,13 @@ body, html {
   width: 100%;
   font-size: 16px;
   font-weight: 600;
+  background-color: #0f253d; 
+  color: white; 
+  padding: 10px 20px;
+  border-radius: 50px; /* Rounded button for consistency */
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 a .learn-more {
@@ -129,7 +126,6 @@ a .learn-more {
 }
 
 h3 {
-  padding-left: 2rem;
   height: 2rem;
 }
 
@@ -174,7 +170,7 @@ h3 {
 }
 
 .add-product-btn:hover {
-  background-color: #218838; /* Darker green on hover */
+  background-color: #0f253d; 
 }
 
 
