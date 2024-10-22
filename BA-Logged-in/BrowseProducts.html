@@ -43,6 +43,7 @@
   </div>
 
   <!--------------------------------------------------- Product Display ----------------------------------------------------------->
+  
   <div class="container">
     <div class="product_box">
       <br>
@@ -136,6 +137,28 @@
         nav.style.backgroundColor = "transparent"; // Reset to transparent at the top
       }
     });
+
+    function filterProducts() {
+    // Get the input value
+    let input = document.getElementById('searchInput').value.toLowerCase();
+
+    // Get all product containers
+    let products = document.querySelectorAll('.product_box');
+
+    // Loop through all product containers
+    products.forEach(product => {
+        // Get the product name
+        let productName = product.querySelector('.product-name').textContent.toLowerCase();
+
+        // Show or hide the product based on the search match
+        if (productName.includes(input)) {
+            product.style.display = "";  // Show product
+        } else {
+            product.style.display = "none";  // Hide product
+        }
+    });
+}
+
   </script>
 </body>
 

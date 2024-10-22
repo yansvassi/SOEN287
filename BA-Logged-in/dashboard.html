@@ -5,6 +5,8 @@
   <!---------------------------Page style---------------------------->
   <link rel="stylesheet" href="../BrowseStyles.css">
   <link rel="stylesheet" href="../navStyles.css">
+  <link rel="stylesheet" href="../MainPageStyle.css">
+
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,7 +18,7 @@
     .btn-group .btn {
       padding: 10px 15px;
       border: none;
-      border-radius: 5px;
+      border-radius: 50px;
       cursor: pointer;
       font-size: 16px;
       font-weight: 500;
@@ -26,11 +28,13 @@
     .edit-product-btn {
       background-color: #4CAF50; /* Green background for Edit */
       color: white;
+      border-radius: 50px;
     }
 
     .remove-product-btn {
       background-color: #f44336; /* Red background for Remove */
       color: white;
+      border-radius: 50px;
     }
 
     /* Hover effects for both buttons */
@@ -79,6 +83,34 @@
 </div>
 
 <!-- Product Display -->
+<div class="search-container">
+  <input type="text" id="searchInput" placeholder="Search Products..." onkeyup="filterProducts()">
+    <i class='bx bx-search'></i>
+</div>
+
+<script>
+  function filterProducts() {
+    // Get the input value
+    let input = document.getElementById('searchInput').value.toLowerCase();
+
+    // Get all product containers
+    let products = document.querySelectorAll('.product_box');
+
+    // Loop through all product containers
+    products.forEach(product => {
+        // Get the product name
+        let productName = product.querySelector('.product-name').textContent.toLowerCase();
+
+        // Show or hide the product based on the search match
+        if (productName.includes(input)) {
+            product.style.display = "";  // Show product
+        } else {
+            product.style.display = "none";  // Hide product
+        }
+    });
+}
+</script>
+
 <div class="container" id="product-container">
   <div class="product_box" id="product1">
     <br>
