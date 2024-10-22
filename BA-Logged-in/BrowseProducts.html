@@ -23,39 +23,19 @@
 <body>
 
   <!----------------------------- The Navigation Bar ----------------------------------->
-  <div class="wrapper">
-    <nav class="nav">
-      <div class="nav-logo">
-        <p>LOGO .</p>
-      </div>
-      <div class="nav-menu"
-           id="navMenu">
-        <ul>
-          <li><a href="#"
-               class="link active">Home</a></li>
-          <li><a href="#"
-               class="link">Services</a></li>
-          <li><a href="#"
-               class="link">About</a></li>
-          <li><a href="#"
-               class="link">Contact</a></li>
-        </ul>
-      </div>
-      <div class="nav-button">
-        <button class="btn white-btn"
-                id="loginBtn"
-                onclick="login()">Sign In</button>
-        <button class="btn"
-                id="registerBtn"
-                onclick="register()">Sign Up</button>
-      </div>
-      <div class="nav-menu-btn">
-        <i class="bx bx-menu"
-           onclick="myMenuFunction()"></i>
-      </div>
-    </nav>
-  </div>
+  <div id="navbar-container"></div>
+  <script>
+    // JavaScript to load the navbar.html into the current document
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading navbar:', error));
+    });
 
+    </script>
   <!------------ Banner ------------>
 
   <div class="banner">
