@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!---------------------------Page style---------------------------->
+  <link rel="stylesheet"
+        href="/Users/yanavassilyev/BrowseStyles.css">
+  <!---------------------------Navbar style---------------------------->
+  <link rel="stylesheet"
+        href="/Users/yanavassilyev/Downloads/navStyles.css">
+  <!---------------------------Navbar style---------------------------->
+  <link rel="stylesheet"
+        href="/Users/yanavassilyev/footerStyles.css">
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible"
+        content="IE=edge">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+  <title>Browse</title>
+</head>
+
+<body>
+
+  <!----------------------------- The Navigation Bar ----------------------------------->
+  <div class="wrapper">
+    <nav class="nav">
+      <div class="nav-logo">
+        <p>LOGO .</p>
+      </div>
+      <div class="nav-menu"
+           id="navMenu">
+        <ul>
+          <li><a href="#"
+               class="link active">Home</a></li>
+          <li><a href="#"
+               class="link">Services</a></li>
+          <li><a href="#"
+               class="link">About</a></li>
+          <li><a href="#"
+               class="link">Contact</a></li>
+        </ul>
+      </div>
+      <div class="nav-button">
+        <button class="btn white-btn"
+                id="loginBtn"
+                onclick="login()">Sign In</button>
+        <button class="btn"
+                id="registerBtn"
+                onclick="register()">Sign Up</button>
+      </div>
+      <div class="nav-menu-btn">
+        <i class="bx bx-menu"
+           onclick="myMenuFunction()"></i>
+      </div>
+    </nav>
+  </div>
+
+  <!------------ Banner ------------>
+
+  <div class="banner">
+    <h1>Your Products</h1>
+  </div>
+
+  <!--------------------------------------------------- Product Display ----------------------------------------------------------->
+  <div class="container">
+    <div class="product_box">
+      <br>
+      <a href="#link to view product"
+         class="product-name">Product 1</a>
+      <p></p>
+      <p class="product-price">
+        $XX
+      </p>
+      <ul class="service-details">
+        <li>We do this</li>
+        <li>And even this</li>
+        <li>Wow! we also do this</li>
+        <li>This too</li>
+      </ul>
+      <button class="learn-more btn">Edit</button>
+  </div>
+  <div class="product_box">
+    <br>
+    <a href="#link to view product"
+       class="product-name">Product 2</a>
+    <p></p>
+    <p class="product-price">
+      $XX
+    </p>
+    <ul class="service-details">
+      <li>We do this</li>
+      <li>And even this</li>
+      <li>Wow! we also do this</li>
+      <li>This too</li>
+    </ul>
+    <button class="learn-more btn">Edit</button>
+</div>
+    <div class="product_box">
+      <br>
+      <a href="#link to view product"
+         class="product-name">Product 3</a>
+      <p></p>
+      <p class="product-price">
+        $XX
+      </p>
+      <ul class="service-details">
+        <li>We do this</li>
+        <li>And even this</li>
+        <li>Wow! we also do this</li>
+        <li>This too</li>
+      </ul>
+      <button class="learn-more btn">Edit</button>
+  </div>
+  </div>
+  <div class="add-product-container">
+    <button class="btn add-product-btn">+ Add Product</button>
+  </div>
+  <!----------------------------- Footer ----------------------------------->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <h3>Contact Us</h3>
+        <p>+1 (844) 326-6005</p>
+        <p><a href="mailto:email@example.com">Email Us</a></p>
+        <p>Mon-Fri 9am-3pm PT</p>
+      </div>
+      <div class="footer-column">
+        <h3>Customers</h3>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Catalogs</a></li>
+          <li><a href="#">Do Not Sell My Info</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-credits">
+      <p>&copy; YourCompanyName</p>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener("scroll", function () {
+      var nav = document.querySelector(".nav");
+      if (window.scrollY > 70) { // Adjust the scroll threshold to your preference
+        nav.style.background = 'linear-gradient(to bottom, #70a3c5, transparent, 100%)';
+      } else {
+        nav.style.backgroundColor = "transparent"; // Reset to transparent at the top
+      }
+    });
+  </script>
+</body>
+
+</html>
