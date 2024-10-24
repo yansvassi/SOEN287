@@ -119,23 +119,17 @@
 </div>
 
 <!-- Footer Section -->
-<footer>
-  <div class="footer-container">
-    <div class="footer-column">
-      <p>Contact Us</p>
-      <p>Phone: (123) 456-7890</p>
-      <p>Email: email@example.com</p>
-    </div>
-    <div class="footer-column">
-      <p>Address</p>
-      <p>123 Business St, City, Province, A1A 1A1</p>
-    </div>
-    <div class="footer-column">
-      <p>Follow Us</p>
-      <a href="#">Facebook</a> | <a href="#">Twitter</a> | <a href="#">Instagram</a>
-    </div>
-  </div>
-</footer>
+<div id="footer-container"></div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../footer.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('footer-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+  });
+</script>
 
 <!-- JavaScript to Toggle Edit Mode, Save Changes, and Load from localStorage -->
 <script>
