@@ -127,6 +127,13 @@ body, html {
   z-index: 1;
 }
 
+.banner h1 {
+  position: absolute; /* Allow positioning at the bottom */
+  bottom: 0; /* Place at the bottom */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for perfect centering */ /* Adjust text color for contrast */
+}
+
 
 .product_box {
   background-color: #d8e4edc0;

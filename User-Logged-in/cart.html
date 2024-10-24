@@ -31,48 +31,72 @@
 </script>
 
 <!-- Cart content -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Retrieve the cart data from localStorage
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        const cartContainer = document.querySelector('.cart-container');
+        cartContainer.innerHTML = ''; // Clear the cart before adding items
+
+        cart.forEach((product, index) => {
+            const cartItem = `
+                <div class="cart-item" id="cart-item-${index}">
+                    <div class="item-details">
+                        <h3>${product.name}</h3>
+                    </div>
+                    <div class="item-price">$${product.price}</div>
+                    <div class="item-quantity">
+                        <button class="minus-btn" onclick="changeQuantity(${index}, -1)">-</button>
+                        <span class="quantity" id="quantity-${index}">${product.quantity}</span>
+                        <button class="plus-btn" onclick="changeQuantity(${index}, 1)">+</button>
+                    </div>
+                    <div class="item-total" id="total-${index}">$${(product.price * product.quantity).toFixed(2)}</div>
+                    <div class="item-remove">
+                        <button onclick="removeFromCart(${index})">&times;</button>
+                    </div>
+                </div>
+            `;
+            cartContainer.innerHTML += cartItem;
+        });
+    });
+
+    function changeQuantity(index, delta) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const product = cart[index];
+
+        if (product) {
+            product.quantity += delta;
+
+            // Prevent negative quantities
+            if (product.quantity <= 0) {
+                removeFromCart(index);
+            } else {
+                // Update the quantity in the DOM
+                document.getElementById(`quantity-${index}`).innerText = product.quantity;
+                // Update the total price in the DOM
+                document.getElementById(`total-${index}`).innerText = `$${(product.price * product.quantity).toFixed(2)}`;
+
+                // Save the updated cart back to localStorage
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+        }
+    }
+
+    function removeFromCart(index) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart.splice(index, 1);  // Remove the item at the given index
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        // Remove the cart item from the DOM
+        document.getElementById(`cart-item-${index}`).remove();
+    }
+</script>
+
+
+
 <div class="cart-container">
-    <h1>Your Bag (2 Items)</h1>
-
-    <div class="cart-item">
-        <div class="item-details">
-            <img src="" alt=""> <!---image here-->
-            <div class="item-info">
-                <h3>Service 1</h3>
-            </div>
-        </div>
-        <div class="item-price">$5.00</div>
-        <div class="item-quantity">
-            <button class="minus-btn" onclick="changeQuantity(this, -1)">-</button>
-            <span class="quantity">1</span>
-            <button class="plus-btn" onclick="changeQuantity(this, 1)">+</button>
-        </div>
-        <div class="item-total">$5.00</div>
-        <div class="item-remove">
-            <button>&times;</button>
-        </div>
-    </div>
-
-    <div class="cart-item">
-        <div class="item-details">
-            <img src="" alt=""> <!----if we want image for service-->
-            <div class="item-info">
-                <h3>Service 2</h3>
-                <p>Delivery Time: 12-16 weeks</p>
-                <p>Disclaimer: </p>
-            </div>
-        </div>
-        <div class="item-price">$189.00</div>
-        <div class="item-quantity">
-            <button class="minus-btn" onclick="changeQuantity(this, -1)">-</button>
-            <span class="quantity">1</span>
-            <button class="plus-btn" onclick="changeQuantity(this, 1)">+</button>
-        </div>
-        <div class="item-total">$189.00</div>
-        <div class="item-remove">
-            <button>&times;</button>
-        </div>
-    </div>
+    
 
 </div>
 

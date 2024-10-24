@@ -15,7 +15,7 @@
 
   <style>
 
-    .view-product-btn {
+    .view-product-btn, .buy-product-btn{
       padding: 10px 20px;
       border: none;
       border-radius: 50px;
@@ -23,6 +23,10 @@
       font-size: 16px;
       font-weight: 500;
       transition: all 0.3s ease;
+    }
+
+    .banner .products {
+        padding-bottom: 10px;
     }
 
   </style>
@@ -35,7 +39,7 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    fetch('../BA-Logged-in/BALoggedInNav.html')
+    fetch('../User-Logged-in/loggedInNav.html')
             .then(response => response.text())
             .then(data => {
               document.getElementById('logged-in-navbar-BA').innerHTML = data;
@@ -46,7 +50,7 @@
 
 <!-- Banner -->
 <div class="banner">
-  <h1>Products</h1>
+  <h1 class="products">Products</h1>
 </div>
 
 <!------------------------------------ Product Searchbar ------------------------------------>
@@ -91,9 +95,41 @@
       <li>Wow! we also do this</li>
       <li>This too</li>
     </ul>
-    <a href = "##">
+    <div class="btn-group">
+    <a href = "##"> <!---Will bring to view product page-->
       <button class="view-product-btn btn">View</button>
     </a>
+    <button class="buy-product-btn btn" onclick="addToCart('Product 1', 'XX')">Buy</button>
+    </div>
+
+    <script>
+        let cart = [];
+    
+        function addToCart(productName, productPrice) {
+            // Create a product object
+            const product = {
+                name: productName,
+                price: productPrice,
+                quantity: 1
+            };
+    
+            // Check if the item is already in the cart
+            const existingProduct = cart.find(item => item.name === productName);
+            if (existingProduct) {
+                existingProduct.quantity++;
+            } else {
+                cart.push(product);
+            }
+    
+            // Store cart in localStorage so it's persistent
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            alert(productName + ' has been added to your cart');
+        }
+    </script>
+    
+    
+</div>
   </div>
 </div>
 

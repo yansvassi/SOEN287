@@ -168,11 +168,12 @@ h3 {
 
 .search-container {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   position: relative;
   width: 400px; /* Adjust width as needed */
   margin: 20px auto; /* Centered on the page */
+  z-index: 4;
 }
 
 .search-container input {
