@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="../mpstyle.css">
   <link rel="stylesheet" href="../footerStyles.css">
   <link rel="stylesheet" href="../MainPageStyle.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Include jsPDF -->
   <style>
     /* General body settings */
     body {
@@ -86,17 +85,17 @@
 <body>
 
 <!-- Placeholder for the logged-in navbar -->
-<div id="logged-in-navbar-BA"></div>
+<div id="logged-in-navbar"></div>
 
 <!-- JavaScript to load the logged-in navbar -->
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    fetch('../BA-Logged-in/BALoggedInNav.html')
-            .then(response => response.text())
-            .then(data => {
-              document.getElementById('logged-in-navbar-BA').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading logged-in navbar:', error));
+    fetch('../User-Logged-in/loggedInNav.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('logged-in-navbar').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading logged-in navbar:', error));
   });
 </script>
 
@@ -163,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 const backToDashboardBtn = document.getElementById('backToDashboard');
 backToDashboardBtn.addEventListener('click', function() {
-  window.location.href = 'dashboard.html';
+  window.location.href = 'User-dashboard.html';
 });
 </script>
 
@@ -172,5 +171,3 @@ backToDashboardBtn.addEventListener('click', function() {
 </body>
 </html>
 
-</body>
-</html>
