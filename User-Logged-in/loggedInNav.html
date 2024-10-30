@@ -17,9 +17,93 @@
   <script src = "../navbarscroll.js"> </script>
   <!-- Link to the CSS file names mpstyle.css -->
   <link rel="stylesheet" href="../MainPageStyle.css">
+  <script src = "../navbarscroll.js"> </script>
   <!-- defines the title of the web page -->
     <title>Nav Logged In User</title>
 </head>
+<style>
+  .edit-icon {
+      font-size: 24px;
+      color: white;
+  }
+
+ 
+  
+  
+  .nav-logo p {
+      color: white;
+      font-size: 24px;
+      margin: 0;
+  }
+  
+  .nav-menu ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+  }
+  
+  .nav-menu ul li {
+      margin-right: 20px;
+  }
+  
+  .nav-menu ul li a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 10px;
+  }
+  
+  .nav-profile {
+      display: flex;
+      align-items: center;
+  }
+
+  .dropdown {
+      position: relative;
+      display: inline-block;
+  }
+
+  .dropbtn {
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      background-color: inherit;
+      border: none;
+      padding: 0;
+      margin-right: 10px;
+  }
+  
+  .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 10px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+      border-radius: 5px;
+  }
+  
+  .dropdown-content a {
+      color: black;
+      text-align: center;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      text-align: left;
+  }
+
+
+  .dropdown-content {
+      background-color: #f1f1f1;
+  }
+
+  /* Show dropdown content when hovering over dropdown */
+  .profile-picture:hover .dropdown-content,
+  .dropbtn:hover + .dropdown-content {
+      display: block;
+  }
+</style>
 <body>
 <!-- loggedInNav.html -->
 <div class="nav-wrapper">
@@ -41,11 +125,16 @@
           <i class='bx bxs-cart'></i>
         </a>
       </p>
-      <div class="profile-picture">
-        <a href="../User-Logged-in/profileclient.html">
-          <img src="../images/img_avatar2.png" alt="Avatar">
-        </a>
-      </div>
+      <div class="nav-profile">
+        <div class="profile-picture dropdown">
+            <img src="../images/img_avatar2.png" alt="Avatar" class="dropbtn">
+            <button class="dropbtn" style="display: none;"></button>
+            <div class="dropdown-content">
+                <a href="../BA-Logged-in/BA-profile.html">Profile Account</a>
+                <a href="../BA-Logged-in/view-services.html">My Services</a>
+            </div>
+        </div>
+    </div>
     </div>
     <div class="logout">
       <a href="../view-only/Home.html">
