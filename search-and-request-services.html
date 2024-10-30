@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!---------------------------Page style---------------------------->
+  <link rel="stylesheet" href="../BrowseStyles.css">
+  <link rel="stylesheet" href="../navStyles.css">
+  <link rel="stylesheet" href="../MainPageStyle.css">
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find your service</title>
+
+  <style>
+    .banner {
+      text-align: center;
+      padding: 40px 20px 20px; 
+    }
+
+    .search-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .search-bar {
+      display: block;
+      margin: 0 auto;
+      padding: 12px 20px; 
+      width: 80%;
+      max-width: 700px; 
+      border: 1px solid #eee9e9;
+      border-radius: 5px;
+    }
+
+    .add-to-cart {
+      display: inline-block;
+      padding: 8px 15px;
+      background-color: #1c5d88;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .add-to-cart:hover {
+      background-color: #2980b9;
+    }
+
+  </style>
+</head>
+
+<body>
+
+ <!-- Placeholder for the logged-in navbar -->
+<div id="logged-in-navbar"></div>
+
+<!-- JavaScript to load the logged-in navbar -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../User-Logged-in/loggedInNav.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('logged-in-navbar').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading logged-in navbar:', error));
+  });
+</script>
+
+  <!------------ Banner ------------>
+  <div class="banner">
+    <h1>Select or search for a service</h1>
+  </div>
+
+  <!------------ Search for a service ------------>
+  <div class="search-container">
+    <input type="text" id="searchBar" class="search-bar" placeholder="Search for a service" onkeyup="displayServices()">
+  </div>
+
+  <!--------------------------------------------------- Product Display ----------------------------------------------------------->
+  <div class="container">
+    <div class="product_box">
+      <br>
+      <a href="#link to view product" class="product-name">Product 1</a>
+      <p></p>
+      <p class="product-price">$XX</p>
+      <ul class="service-details">
+        <li>We do this</li>
+        <li>And even this</li>
+        <li>Wow! we also do this</li>
+        <li>This too</li>
+      </ul>
+      <a href="cart.html" class="add-to-cart btn">Add to Cart</a>
+    </div>
+    <div class="product_box">
+      <br>
+      <a href="#link to view product" class="product-name">Product 2</a>
+      <p></p>
+      <p class="product-price">$XX</p>
+      <ul class="service-details">
+        <li>We do this</li>
+        <li>And even this</li>
+        <li>Wow! we also do this</li>
+        <li>This too</li>
+      </ul>
+      <a href="cart.html" class="add-to-cart btn">Add to Cart</a>
+    </div>
+    <div class="product_box">
+      <br>
+      <a href="#link to view product" class="product-name">Product 3</a>
+      <p></p>
+      <p class="product-price">$XX</p>
+      <ul class="service-details">
+        <li>We do this</li>
+        <li>And even this</li>
+        <li>Wow! we also do this</li>
+        <li>This too</li>
+      </ul>
+      <a href="cart.html" class="add-to-cart btn">Add to Cart</a>
+    </div>
+  </div>
+
+  <!----------------------------- Footer ----------------------------------->
+  <div id="footer-container"></div>
+  <script>
+    // JavaScript to load the footer.html into the current document
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+    });
+  </script>
+
+  <script>
+    window.addEventListener("scroll", function () {
+      var nav = document.querySelector(".nav");
+      if (window.scrollY > 70) { // Adjust the scroll threshold to your preference
+        nav.style.background = 'linear-gradient(to bottom, #70a3c5, transparent, 100%)';
+      } else {
+        nav.style.backgroundColor = "transparent"; // Reset to transparent at the top
+      }
+    });
+
+    // JavaScript for finding services based on user input
+    function displayServices() {
+      const searchValue = document.getElementById('searchBar').value.toLowerCase();
+      const services = document.querySelectorAll('.product_box');
+
+      services.forEach(service => {
+        const serviceName = service.querySelector('.product-name').textContent.toLowerCase();
+
+        if (serviceName.includes(searchValue) || searchValue === "") {
+          service.style.display = 'block';
+        } else {
+          service.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

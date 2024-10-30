@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="../mpstyle.css">
   <link rel="stylesheet" href="../footerStyles.css">
   <link rel="stylesheet" href="../MainPageStyle.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Include jsPDF -->
+
   <style>
     /* General body settings */
     body {
@@ -112,6 +114,7 @@
       <th>Status</th>
       <th>Cost</th>
       <th>Cancel Service</th>
+      <th>Invoice(PDF)</th>
     </tr>
     </thead>
     <tbody id="availedServicesTable"></tbody>
@@ -140,20 +143,29 @@ function displayAvailedServices(services) {
       <td>${service.status}</td>
       <td>${service.cost}</td>
       <td><button onclick="cancelService(${index})">Cancel</button></td>
+      <td><button onclick="generatePDF(${index})">View Invoice</button></td>
+
     `;
 
     availedServicesTable.appendChild(row);
   });
 }
 
-// Cancel a service
-// Customers will not be able to cancel a service if it is already completed
+// Cancel a service, with extra conditions
 function cancelService(index) {
-  if (availedServices[index].status === 'Completed') {
+  const service = availedServices[index];
+
+  if (service.status === 'Completed') {
     alert('You cannot cancel this service as it is already completed');
-  } else {
-    availedServices[index].status = 'Cancelled'; 
-    displayAvailedServices(availedServices); 
+  } else if (service.status === 'Cancelled'){
+    alert('This service is already cancelled');
+  } else if (service.status === 'Pending'){
+    const confirmCancel = confirm('Are you sure you want to cancel this service?');
+    if(confirmCancel){
+      service.status = 'Cancelled'
+      displayAvailedServices(availedServices)
+    }
+
   }
 }
 
@@ -161,14 +173,44 @@ document.addEventListener('DOMContentLoaded', function() {
   displayAvailedServices(availedServices);
 });
 
+function generatePDF(index) {
+    const service = availedServices[index];
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text('Service Invoice', 10, 10);
+
+    doc.setFontSize(12);
+    doc.text(`Service: ${service.service}`, 10, 40);
+    doc.text(`Date: ${service.date}`, 10, 50);
+    doc.text(`Status: ${service.status}`, 10, 60);
+    doc.text(`Cost: ${service.cost}`, 10, 70);
+
+    doc.save(`${service.customer}_Invoice.pdf`);
+  }
+
 const backToDashboardBtn = document.getElementById('backToDashboard');
 backToDashboardBtn.addEventListener('click', function() {
   window.location.href = 'User-dashboard.html';
 });
 </script>
 
-<div id="footer"></div>
+<!----------------------------- Footer ----------------------------------->
+<div id="footer-container"></div>
+<script>
+  // JavaScript to load the footer.html into the current document
+  document.addEventListener("DOMContentLoaded", function() {
+      fetch('footer.html')
+          .then(response => response.text())
+          .then(data => {
+              document.getElementById('footer-container').innerHTML = data;
+          })
+          .catch(error => console.error('Error loading footer:', error));
+  });
+</script>
 
 </body>
 </html>
+
 
