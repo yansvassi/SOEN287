@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>View Services Availed</title>
+  <title>My Services</title>
 
   <!-- Include navbar and footer styles -->
   <link rel="stylesheet" href="../mpstyle.css">
   <link rel="stylesheet" href="../footerStyles.css">
   <link rel="stylesheet" href="../MainPageStyle.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Include jsPDF -->
   <style>
     /* General body settings */
     body {
@@ -81,74 +80,22 @@
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-
-    /* Styling for the form layout */
-    #addRowForm {
-      background-color: #f5f5f5;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-      width: 100%;
-      max-width: 800px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-gap: 20px;
-    }
-
-    .form-input label {
-      font-weight: bold;
-      margin-bottom: 5px;
-      color: #0f253d;
-    }
-
-    .form-input input {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
-      width: 100%;
-    }
-
-    .form-input input:focus {
-      border-color: #4a7b9b;
-      outline: none;
-    }
-
-    #addServiceBtn {
-      width: 100%;
-      padding: 10px;
-      background-color: #4a7b9b;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
-    #addServiceBtn:hover {
-      background-color: #264e65;
-    }
   </style>
 </head>
 <body>
 
 <!-- Placeholder for the logged-in navbar -->
-<div id="logged-in-navbar-BA"></div>
+<div id="logged-in-navbar"></div>
 
 <!-- JavaScript to load the logged-in navbar -->
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    fetch('../BA-Logged-in/BALoggedInNav.html')
-            .then(response => response.text())
-            .then(data => {
-              document.getElementById('logged-in-navbar-BA').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading logged-in navbar:', error));
+    fetch('../User-Logged-in/loggedInNav.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('logged-in-navbar').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading logged-in navbar:', error));
   });
 </script>
 
@@ -169,26 +116,6 @@
     <tbody id="availedServicesTable"></tbody>
   </table>
 
-  <!-- Add Row Form -->
-  <div id="addRowForm">
-    <h3>Add New Service</h3>
-    <div class="form-grid">
-      <div class="form-input">
-        <label for="serviceName">Service:</label>
-        <input type="text" id="serviceName" placeholder="Enter Service Name">
-      </div>
-      <div class="form-input">
-        <label for="serviceDate">Date:</label>
-        <input type="date" id="serviceDate">
-      </div>
-      <div class="form-input">
-        <label for="serviceCost">Cost:</label>
-        <input type="number" id="serviceCost" placeholder="Enter Cost">
-      </div>
-    </div>
-    <button id="addServiceBtn">Add Service</button>
-  </div>
-
   <button id="backToDashboard">Back to Dashboard</button>
 </div>
 
@@ -200,14 +127,12 @@ const availedServices = [
   { service: 'Deep Carpet Cleaning', date: '2024-01-16', status: 'Pending', cost: '$200' }
 ];
 
-// Function to display services in the table
 function displayAvailedServices(services) {
   const availedServicesTable = document.getElementById('availedServicesTable');
-  availedServicesTable.innerHTML = ''; // Clear table before adding new rows
+  availedServicesTable.innerHTML = ''; 
 
   services.forEach((service, index) => {
     const row = document.createElement('tr');
-
     row.innerHTML = `
       <td>${service.service}</td>
       <td>${service.date}</td>
@@ -220,41 +145,24 @@ function displayAvailedServices(services) {
   });
 }
 
-// Function to cancel a service
+// Cancel a service
+// Customers will not be able to cancel a service if it is already completed
 function cancelService(index) {
-  availedServices[index].status = 'Cancelled'; // Update status to "Cancelled"
-  displayAvailedServices(availedServices); // Re-render the table
+  if (availedServices[index].status === 'Completed') {
+    alert('You cannot cancel this service as it is already completed');
+  } else {
+    availedServices[index].status = 'Cancelled'; 
+    displayAvailedServices(availedServices); 
+  }
 }
 
-// Display services when page loads
 document.addEventListener('DOMContentLoaded', function() {
   displayAvailedServices(availedServices);
 });
 
-// Add Service Button
-const addServiceBtn = document.getElementById('addServiceBtn');
-addServiceBtn.addEventListener('click', function() {
-  const serviceName = document.getElementById('serviceName').value;
-  const serviceDate = document.getElementById('serviceDate').value;
-  const serviceCost = document.getElementById('serviceCost').value;
-
-  if (serviceName && serviceDate && serviceCost) {
-    availedServices.push({
-      service: serviceName,
-      date: serviceDate,
-      status: 'Pending', // New services will have "Pending" status by default
-      cost: `$${serviceCost}`
-    });
-    displayAvailedServices(availedServices); // Re-render the table with the new service
-  } else {
-    alert('Please fill out all fields.');
-  }
-});
-
-// Back to Dashboard Button
 const backToDashboardBtn = document.getElementById('backToDashboard');
 backToDashboardBtn.addEventListener('click', function() {
-  window.location.href = 'dashboard.html';
+  window.location.href = 'User-dashboard.html';
 });
 </script>
 
@@ -262,3 +170,4 @@ backToDashboardBtn.addEventListener('click', function() {
 
 </body>
 </html>
+
