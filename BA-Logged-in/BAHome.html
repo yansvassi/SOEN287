@@ -7,24 +7,28 @@
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="../mpstyle.css">
   <link rel="stylesheet" href="../footerStyles.css">
-  <script src="../navbarscroll.js"></script>
+  <script src = "../navbarscroll.js"> </script>
   <link rel="stylesheet" href="../MainPageStyle.css">
 
   <style>
     /* Position the toggle button */
     #toggleEditModeBtn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1000;
       background-color: #4a7b9b;
       color: white;
-      padding: 10px 20px;
+      padding: 5px 20px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 15px;
+      z-index: 1000;
     }
+
+
+    .edit-icon {
+    font-size: 24px; /* Adjust the size as needed */
+    color: white; /* Set the icon color to white */
+}
+
 
     #toggleEditModeBtn:hover {
       background-color: #264e65;
@@ -40,21 +44,41 @@
 <body>
 
 <!-- The Navigation Bar -->
-<div id="logged-in-navbar-BA"></div>
+<div class="nav-wrapper">
+  <nav class="nav">
+    <div class="nav-logo">
+      <p>LOGO .</p>
+    </div>
+    <div class="nav-menu" id="navMenu">
+      <ul>
+        <li><a href="../User-Logged-in/HomeLoggedin.html" class="link active">Home</a></li>
+        <li><a href="../User-Logged-in/User-dashboard.html" class="link">Services</a></li>
+        <li><a href="../User-Logged-in/aboutUser.html" class="link">About</a></li>
+        <li><a href="../User-Logged-in/contactUser.html" class="link">Contact</a></li>
+      </ul>
+    </div>
+    <div class="nav-profile">
+      <p>
+        <button id="toggleEditModeBtn"> Enable Edit Mode </button>
+      </p>
+      <div class="profile-picture">
+        <a href="../User-Logged-in/profileclient.html">
+          <img src="../images/img_avatar2.png" alt="Avatar">
+        </a>
+      </div>
+      <div class="logout">
+        <a href="../view-only/Home.html">
+          <i class='bx bx-log-out edit-icon'></i>
+        </a>
+      </div>
+    </div>
+    
+  </nav>
+</div>
+  </nav>
+</div>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    fetch('../BA-Logged-in/BALoggedInNav.html')
-            .then(response => response.text())
-            .then(data => {
-              document.getElementById('logged-in-navbar-BA').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading logged-in navbar:', error));
-  });
-</script> -->
 
-<!-- Toggle Edit Mode Button -->
-<button id="toggleEditModeBtn">Enable Edit Mode</button>
 
 <!-- Hidden file input to upload images -->
 <input type="file" id="imageUploader" style="display:none" accept="image/*">

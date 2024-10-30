@@ -13,12 +13,13 @@
     flex-direction: column;
     align-items: center; 
     width: 100%;
+    padding-top: 20px;
 }
 
 
 .profile-pic {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%; 
     object-fit: cover;
     margin-bottom: 10px; 
@@ -88,3 +89,5 @@
     border-radius: 5px;
     box-sizing: border-box;
 }
+
+

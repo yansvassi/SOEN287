@@ -335,11 +335,12 @@ h3 {
 }
 
 .nav-profile {
-  display: flex;           /* Align items horizontally */
-  align-items: center;      /* Vertically center the items */
-  gap: 10px;                /* Space between the profile image and the cart icon */
+  display: flex;           
+  align-items: center;      
+  gap: 10px;                
   position: relative;
   gap: 40px;
+  
 }
 
 .nav-profile i.bxs-cart {
@@ -347,8 +348,6 @@ h3 {
   color: #fff;
   padding: 0px;
   cursor: pointer;
-  
-  
 }
 
 .nav-profile i.bxs-cart:hover {
