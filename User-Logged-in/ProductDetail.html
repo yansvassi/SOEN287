@@ -11,6 +11,93 @@
   <link rel="stylesheet" href="../MainPageStyle.css">
 
   <style>
+
+.edit-icon {
+      font-size: 24px;
+      color: white;
+  }
+
+
+
+ 
+  
+  
+  .nav-logo p {
+      color: white;
+      font-size: 24px;
+      margin: 0;
+  }
+  
+  .nav-menu ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+  }
+  
+  .nav-menu ul li {
+      margin-right: 20px;
+  }
+  
+  .nav-menu ul li a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 10px;
+  }
+  
+  .nav-profile {
+      display: flex;
+      align-items: center;
+  }
+
+  .dropdown {
+      position: relative;
+      display: inline-block;
+  }
+
+  .dropbtn {
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      background-color: inherit;
+      border: none;
+      padding: 0;
+      margin-right: 10px;
+  }
+  
+  .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 10px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+      border-radius: 5px;
+  }
+  
+  .dropdown-content a {
+      color: black;
+      text-align: center;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      text-align: left;
+  }
+
+
+  .dropdown-content {
+      background-color: #f1f1f1;
+  }
+
+  /* Show dropdown content when hovering over dropdown */
+  .profile-picture:hover .dropdown-content,
+  .dropbtn:hover + .dropdown-content {
+      display: block;
+  }
+
+  /* SEPERATION */
+
     /* Position the toggle button */
     .edit-mode-container {
       display: flex;
@@ -125,10 +212,52 @@ footer {
 <body>
 
 <!-- The Navigation Bar -->
-<div id="logged-in-navbar-BA"></div>
+<div class="nav-wrapper">
+  <nav class="nav" id = "nav1">
+    <div class="nav-logo">
+      <p>LOGO .</p>
+    </div>
+    <div class="nav-menu" id="navMenu">
+      <ul>
+        <li><a href="../User-Logged-in/HomeLoggedin.html" class="link">Home</a></li>
+        <li><a href="../User-Logged-in/User-dashboard.html" class="link">Services</a></li>
+        <li><a href="../User-Logged-in/aboutUser.html" class="link">About</a></li>
+        <li><a href="../User-Logged-in/ContactUser.html" class="link">Contact</a></li>
+      </ul>
+    </div>
+    <div class="nav-profile">
+      <p>
+        <a href="../User-Logged-in/cart.html">
+          <i class='bx bxs-cart'></i>
+        </a>
+      </p>
+      <div class="nav-profile">
+        <div class="profile-picture dropdown">
+            <img src="../images/img_avatar2.png" alt="Avatar" class="dropbtn">
+            <button class="dropbtn" style="display: none;"></button>
+            <div class="dropdown-content">
+                <a href="../User-Logged-in/profileclient.html">Profile Account</a>
+                <a href="../User-Logged-in/client_services.html">My Services</a>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="logout">
+      <a href="../view-only/Home.html">
+        <i class='bx bx-log-out edit-icon'></i>
+      </a>
+    </div>
+  </div>
+  </nav>
+</div>
+  </nav>
+</div>
+
 <!-- Banner -->
 <div class="banner">
+  <div class = "anothertitle"> 
   <h1 class="products">Product 1</h1>
+</div>
 </div>
 
 <script>
