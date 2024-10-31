@@ -17,13 +17,7 @@
 }
 
 
-.pro-pic {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%; 
-    object-fit: cover;
-    margin-bottom: 10px; 
-}
+
 
 
 .btn button {
@@ -88,6 +82,24 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
+}
+
+.wrapper {
+    margin-top: 200px;
+  }
+
+  .specificimg-container img {
+    height: 400px;
+    border-radius: 50%;
+    padding-top: 20px;
+    
+
+  }
+
+.text-title h1 {
+    padding-top: 20px;
+    padding-bottom: 500px;
+
 }
 
 
