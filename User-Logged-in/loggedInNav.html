@@ -148,20 +148,20 @@
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const currentPath = window.location.pathname.split('/').pop(); // Get just the filename
-    const navLinks = document.querySelectorAll('.nav-menu a');
+//does not currently work : eventlistener for second deliverable: line under current page
+// document.addEventListener("DOMContentLoaded", function() {
+//     const currentPath = window.location.pathname.split('/').pop(); // Get just the filename
+//     const navLinks = document.querySelectorAll('.nav-menu a');
 
-    navLinks.forEach(link => {
-        console.log("Comparing:", link.getAttribute('href').split('/').pop(), currentPath); // Debug log
-        if (link.getAttribute('href').includes(currentPath)) {
-            link.classList.add('active');
-        } else {
-            link.classList.remove('active');
-        }
-    });
-});
-
+//     navLinks.forEach(link => {
+//         console.log("Comparing:", link.getAttribute('href').split('/').pop(), currentPath); // Debug log
+//         if (link.getAttribute('href').includes(currentPath)) {
+//             link.classList.add('active');
+//         } else {
+//             link.classList.remove('active');
+//         }
+//     });
+// });
 </script>
 
 </body>

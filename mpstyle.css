@@ -52,7 +52,7 @@ body{
     padding-bottom: 15px;
     margin: 0 25px;
 }
-.link:hover, .active{
+.link:hover, ul li a.active{
     border-bottom: 2px solid #fff;
 }
 .nav-button .btn{

@@ -31,78 +31,71 @@
 </script>
 
 <!-- Cart content -->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Retrieve the cart data from localStorage
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-        const cartContainer = document.querySelector('.cart-container');
-        cartContainer.innerHTML = ''; // Clear the cart before adding items
-
-        cart.forEach((product, index) => {
-            const cartItem = `
-                <div class="cart-item" id="cart-item-${index}">
-                    <div class="item-details">
-                        <h3>${product.name}</h3>
-                    </div>
-                    <div class="item-price">$${product.price}</div>
-                    <div class="item-quantity">
-                        <button class="minus-btn" onclick="changeQuantity(${index}, -1)">-</button>
-                        <span class="quantity" id="quantity-${index}">${product.quantity}</span>
-                        <button class="plus-btn" onclick="changeQuantity(${index}, 1)">+</button>
-                    </div>
-                    <div class="item-total" id="total-${index}">$${(product.price * product.quantity).toFixed(2)}</div>
-                    <div class="item-remove">
-                        <button onclick="removeFromCart(${index})">&times;</button>
-                    </div>
-                </div>
-            `;
-            cartContainer.innerHTML += cartItem;
-        });
-    });
-
-    function changeQuantity(index, delta) {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const product = cart[index];
-
-        if (product) {
-            product.quantity += delta;
-
-            // Prevent negative quantities
-            if (product.quantity <= 0) {
-                removeFromCart(index);
-            } else {
-                // Update the quantity in the DOM
-                document.getElementById(`quantity-${index}`).innerText = product.quantity;
-                // Update the total price in the DOM
-                document.getElementById(`total-${index}`).innerText = `$${(product.price * product.quantity).toFixed(2)}`;
-
-                // Save the updated cart back to localStorage
-                localStorage.setItem('cart', JSON.stringify(cart));
-            }
-        }
-    }
-
-    function removeFromCart(index) {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        cart.splice(index, 1);  // Remove the item at the given index
-        localStorage.setItem('cart', JSON.stringify(cart));
-
-        // Remove the cart item from the DOM
-        document.getElementById(`cart-item-${index}`).remove();
-    }
-</script>
 
 
-
-<div class="cart-container">
-    
-
+<div class="container">
+    <div class="cart-container" id="cart-container">
+        <!-- Cart items will be inserted here -->
+    </div>
 </div>
 
 <!-- Footer -->
 <div id="footer-container"></div>
 <script>
+ 
+ const cartContainer = document.getElementById('cart-container');
+
+    // Load cart items from localStorage
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function renderCart() {
+        cartContainer.innerHTML = '';
+
+        if (cartItems.length === 0) {
+            cartContainer.innerHTML = '<p>Looks like your cart is empty</p>';
+        } else {
+            cartItems.forEach((item, index) => {
+                const totalPrice = parseFloat(item.price) * item.quantity;
+                const cartItem = document.createElement('div');
+                cartItem.classList.add('cart-item');
+                cartItem.innerHTML = `
+                    <span>${item.name}</span>
+                    <span>$${item.price}</span>
+                    <div class="quantity-controls">
+                        <button onclick="decrementQuantity(${index})">-</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="incrementQuantity(${index})">+</button>
+                    </div>
+                    <span>$${isNaN(totalPrice) ? 'NaN' : totalPrice.toFixed(2)}</span>
+                    <button onclick="removeItem(${index})" style="color:red; border: none; background: none; font-size: 18px;">&times;</button>
+                `;
+                cartContainer.appendChild(cartItem);
+            });
+        }
+    }
+
+    function incrementQuantity(index) {
+        cartItems[index].quantity++;
+        localStorage.setItem('cart', JSON.stringify(cartItems));
+        renderCart();
+    }
+
+    function decrementQuantity(index) {
+        if (cartItems[index].quantity > 1) {
+            cartItems[index].quantity--;
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+        }
+        renderCart();
+    }
+
+    function removeItem(index) {
+        cartItems.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cartItems));
+        renderCart();
+    }
+
+    renderCart();
+
   document.addEventListener("DOMContentLoaded", function() {
     fetch('../footer.html')
             .then(response => response.text())
