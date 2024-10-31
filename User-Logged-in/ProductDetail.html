@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="../mpstyle.css">
+  <link rel="stylesheet" href="../footerStyles.css">
+  <script src = "../navbarscroll.js"> </script>
+  <link rel="stylesheet" href="../MainPageStyle.css">
+
+  <style>
+    /* Position the toggle button */
+    .edit-mode-container {
+      display: flex;
+      justify-content: center;
+    }
+    #toggleEditModeBtn {
+      background-color: #1c3f53;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+
+    .edit-icon {
+    font-size: 24px; /* Adjust the size as needed */
+    color: white; /* Set the icon color to white */
+}
+
+
+    #toggleEditModeBtn:hover {
+      background-color: #081d29;
+    }
+
+    /* Visual cues for editable text and images */
+    .editable {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- The Navigation Bar -->
+<div id="logged-in-navbar-BA"></div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../BA-Logged-in/BALoggedInNav.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('logged-in-navbar-BA').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading logged-in navbar:', error));
+  });
+</script>
+
+
+<!-- Footer Section -->
+<div id="footer-container"></div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../footer.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('footer-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+  });
+</script>
+
+</body>
+</html>
