@@ -56,9 +56,10 @@
   
           <div class="questions-container">
               <div class="btn"> 
-                  <button type="button" onclick="">
+                  <button type="button" onclick="document.getElementById('imageUploader').click()">
                       Change Photo
                   </button>
+                  <input type="file" id="imageUploader" style="display:none" accept="image/*" onchange="updateProfileImage(event)">
               </div>
   
               <div class="questions">
@@ -140,5 +141,7 @@
     <div class="footer-credits">
       <p>&copy; YourCompanyName</p>
     </div>
+
+
 
 </body>
