@@ -56,7 +56,7 @@
 
 <!------------------------------------ Product Searchbar ------------------------------------>
 <div class="search-container">
-  <input type="text" id="searchInput" placeholder="Search Products..." onkeyup="filterProducts()">
+  <input type="text" id="searchInput" placeholder="Search Product Name..." onkeyup="filterProducts()">
     <i class='bx bx-search'></i>
 </div>
 
@@ -89,7 +89,7 @@
   <div class="product_box" id="product1">
     <br>
     <a href="#" class="product-name">Product 1</a>
-    <p class="product-price">$XX</p>
+    <p class="product-price">$50</p>
     <ul class="service-details">
       <li>We do this</li>
       <li>And even this</li>
@@ -97,10 +97,29 @@
       <li>This too</li>
     </ul>
     <div class="btn-group">
-    <a href = ""> <!---Will bring to view product page-->
+
+   <!---Will bring to view product page-->
+    <button class="view-product-btn btn">View</button>
+    <button class="buy-product-btn btn" onclick="addToCart('Product 1', '50')">Buy</button>
+    </div>
+  </div>
+  <div class="container" id="product-container">
+    <div class="product_box" id="product2">
+      <br>
+      <a href="#" class="product-name">Product 2</a>
+      <p class="product-price">$20</p>
+      <ul class="service-details">
+        <li>We do this</li>
+        <li>And even this</li>
+        <li>Wow! we also do this</li>
+        <li>This too</li>
+      </ul>
+      <div class="btn-group">
+  
+     <!---Will bring to view product page-->
       <button class="view-product-btn btn">View</button>
-    </a>
-    <button class="buy-product-btn btn" onclick="addToCart('Product 1', 'XX')">Buy</button>
+      <button class="buy-product-btn btn" onclick="addToCart('Product 2', '20')">Buy</button>
+      </div>
     </div>
 
     <script>
@@ -128,9 +147,6 @@
             alert(productName + ' has been added to your cart');
         }
     </script>
-    
-    
-</div>
   </div>
 </div>
 
