@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="../mpstyle.css">
+  <link rel="stylesheet" href="../footerStyles.css">
+  <script src = "../navbarscroll.js"> </script>
+  <link rel="stylesheet" href="../MainPageStyle.css">
+
+  <style>
+    /* Position the toggle button */
+    .edit-mode-container {
+      display: flex;
+      justify-content: center;
+    }
+    #toggleEditModeBtn {
+      background-color: #1c3f53;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+
+    .edit-icon {
+    font-size: 24px; /* Adjust the size as needed */
+    color: white; /* Set the icon color to white */
+}
+
+
+    #toggleEditModeBtn:hover {
+      background-color: #081d29;
+    }
+
+    /* Visual cues for editable text and images */
+    .editable {
+      cursor: pointer;
+    }
+
+    body, html {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.product-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px;
+    max-width: 1000px;
+    margin: 40px auto;
+    background-color: #d8e4edc0;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px #212325;
+}
+
+.product-image img {
+    max-width: 400px; 
+    width: 100%;
+    border-radius: 8px;
+}
+
+.product-details {
+    max-width: 500px;
+    text-align: left;
+    padding: 20px; /* Adds padding around text for spacing */
+}
+
+.product-name {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0;
+}
+
+.description {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.btn.learn-more {
+    display: inline-block;
+    width: auto;
+    padding: 10px 20px;
+    background-color: #0f253d;
+    color: white;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn.learn-more:hover {
+    background-color: #345f82;
+}
+
+footer {
+    background-color: #0f253d;
+    padding: 40px 0;
+    color: rgb(189, 214, 235);
+    width: 100vw;
+    text-align: center;
+    margin-top: auto;
+}
+
+  </style>
+</head>
+
+<body>
+
+<!-- The Navigation Bar -->
+<div id="logged-in-navbar-BA"></div>
+<!-- Banner -->
+<div class="banner">
+  <h1 class="products">Product 1</h1>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../BA-Logged-in/BALoggedInNav.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('logged-in-navbar-BA').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading logged-in navbar:', error));
+  });
+</script>
+
+<div class="product-container">
+  <div class="product-image">
+      <img src="/SOEN287/images/stockProduct.jpg" alt="product description">
+  </div>
+  <div class="product-details">
+      <h1 class="product-name">Product 1: the product that will change your life</h1>
+      <p class="product-price">$20</p>
+      <p class="description">Some temporary details to be replaced later. Description and details, lorem ipsum</p>
+      <button class="btn learn-more">Buy Now</button>
+  </div>
+</div>
+
+
+<!-- Footer Section -->
+<div id="footer-container"></div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../footer.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('footer-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+  });
+</script>
+
+</body>
+</html>
