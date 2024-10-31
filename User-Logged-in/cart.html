@@ -7,27 +7,38 @@
     <link rel="stylesheet" href="../cartStyles.css">
     <link rel="stylesheet" href="../BrowseStyles.css">
     <link rel="stylesheet" href="../navStyles.css">
-    <!-- Add styles for the logged-in navbar -->
     <link rel="stylesheet" href="../mpstyle.css">
     <link rel="stylesheet" href="../footerStyles.css">
     <link rel="stylesheet" href="../MainPageStyle.css">
     <script src="../navbarscroll.js"></script>
     <style>
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .checkout-button {
+            padding: 10px 20px;
+            background-color: #4a7b9b;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .checkout-button:hover {
+            background-color: #264e65;
+        }
     </style>
 </head>
 <body>
@@ -36,12 +47,10 @@ html, body {
 <div class="banner">
     <h1 class="products">Your Cart</h1>
 </div>
-  
 
 <!-- Placeholder for the logged-in navbar -->
 <div id="logged-in-navbar"></div>
 
-<!-- JavaScript to load the logged-in navbar -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         fetch('../User-Logged-in/loggedInNav.html')
@@ -53,27 +62,23 @@ html, body {
     });
 </script>
 
-<!-- Cart content -->
-
-
+<!-- Cart Content -->
 <div class="container">
     <div class="cart-container" id="cart-container">
         <!-- Cart items will be inserted here -->
     </div>
+    <button class="checkout-button" onclick="checkout()">Checkout</button> <!-- Checkout Button -->
 </div>
 
 <!-- Footer -->
 <div id="footer-container"></div>
-<script>
- 
- const cartContainer = document.getElementById('cart-container');
 
-    // Load cart items from localStorage
+<script>
+    const cartContainer = document.getElementById('cart-container');
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
 
     function renderCart() {
         cartContainer.innerHTML = '';
-
         if (cartItems.length === 0) {
             cartContainer.innerHTML = '<p>Looks like your cart is empty</p>';
         } else {
@@ -117,16 +122,27 @@ html, body {
         renderCart();
     }
 
+    // Checkout Function
+    function checkout() {
+        if (cartItems.length > 0) {
+            alert("Purchase has been successful!");
+            localStorage.removeItem('cart'); // Clears the cart after checkout
+            renderCart(); // Re-renders the empty cart
+        } else {
+            alert("Your cart is empty!");
+        }
+    }
+
     renderCart();
 
-  document.addEventListener("DOMContentLoaded", function() {
-    fetch('../footer.html')
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('../footer.html')
             .then(response => response.text())
             .then(data => {
-              document.getElementById('footer-container').innerHTML = data;
+                document.getElementById('footer-container').innerHTML = data;
             })
             .catch(error => console.error('Error loading footer:', error));
-  });
+    });
 </script>
 
 <script src="../script.js"></script>
