@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-
   <title>View Services Availed</title>
 
   <!-- Include navbar and footer styles -->
@@ -13,6 +11,7 @@
   <link rel="stylesheet" href="../MainPageStyle.css">
   <script src = "../navbarscroll.js"> </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Include jsPDF -->
+
   <style>
     /* General body settings */
     body {
@@ -171,6 +170,7 @@
       <th>Status</th>
       <th>Cost</th>
       <th>Invoice (PDF)</th>
+      <th>Follow-Up Email</th> <!-- New Column for Follow-Up Email Button -->
     </tr>
     </thead>
     <tbody id="availedServicesTable"></tbody>
@@ -223,13 +223,14 @@
     services.forEach((service, index) => {
       const row = document.createElement('tr');
       row.innerHTML = `
-                <td>${service.customer}</td>
-                <td>${service.service}</td>
-                <td>${service.date}</td>
-                <td>${service.status}</td>
-                <td>${service.cost}</td>
-                <td><button onclick="generatePDF(${index})">View Invoice</button></td>
-            `;
+        <td>${service.customer}</td>
+        <td>${service.service}</td>
+        <td>${service.date}</td>
+        <td>${service.status}</td>
+        <td>${service.cost}</td>
+        <td><button onclick="generatePDF(${index})">View Invoice</button></td>
+        <td><button onclick="sendFollowUpEmail(${index})">Send Follow-Up Email</button></td> <!-- Follow-Up Email Button -->
+      `;
       availedServicesTable.appendChild(row);
     });
   }
@@ -279,29 +280,28 @@
     doc.save(`${service.customer}_Invoice.pdf`);
   }
 
-  // Add Service Button
-  const addServiceBtn = document.getElementById('addServiceBtn');
-  addServiceBtn.addEventListener('click', function() {
-    const customerName = document.getElementById('customerName').value;
-    const serviceName = document.getElementById('serviceName').value;
-    const serviceDate = document.getElementById('serviceDate').value;
-    const serviceStatus = document.getElementById('serviceStatus').value;
-    const serviceCost = document.getElementById('serviceCost').value;
+  // Send Follow-Up Email
+  function sendFollowUpEmail(index) {
+    const service = availedServices[index];
+    const customerEmail = "customer@example.com"; // Replace with actual email address
 
-    if (customerName && serviceName && serviceDate && serviceStatus && serviceCost) {
-      availedServices.push({
-        customer: customerName,
-        service: serviceName,
-        date: serviceDate,
-        status: serviceStatus,
-        cost: `$${serviceCost}`,
-        pdf: 'new_invoice.pdf' // Placeholder for new invoice
-      });
-      displayAvailedServices(availedServices);
-    } else {
-      alert('Please fill out all fields.');
-    }
-  });
+    const emailSubject = encodeURIComponent("Payment Reminder for Your Service");
+    const emailBody = encodeURIComponent(`
+      Dear ${service.customer},
+
+      We hope this message finds you well. This is a friendly reminder that payment for your recent service, "${service.service}" availed on ${service.date}, is still pending.
+
+      Please make the payment at your earliest convenience.
+
+      Thank you for choosing our services!
+
+      Best regards,
+      Your Company Name
+    `);
+
+    // Open default email client with pre-filled draft
+    window.location.href = `mailto:${customerEmail}?subject=${emailSubject}&body=${emailBody}`;
+  }
 </script>
 
 <div id="footer"></div>
