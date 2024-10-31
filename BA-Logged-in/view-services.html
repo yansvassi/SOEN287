@@ -9,8 +9,8 @@
   <link rel="stylesheet" href="../mpstyle.css">
   <link rel="stylesheet" href="../footerStyles.css">
   <link rel="stylesheet" href="../MainPageStyle.css">
-  <script src = "../navbarscroll.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Include jsPDF -->
+  <script src="../navbarscroll.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
     /* General body settings */
@@ -20,7 +20,6 @@
       padding: 0;
     }
 
-    /* Wrap all content in a container */
     .content-wrapper {
       display: flex;
       flex-direction: column;
@@ -58,7 +57,7 @@
     }
 
     tr:nth-child(even) {
-      background-color: #fff;
+      background-color: #f9f9f9;
     }
 
     button {
@@ -84,7 +83,6 @@
       border-radius: 4px;
     }
 
-    /* Styling for the form layout */
     #addRowForm {
       background-color: #f5f5f5;
       padding: 20px;
@@ -142,7 +140,6 @@
 <!-- Placeholder for the logged-in navbar -->
 <div id="logged-in-navbar-BA"></div>
 
-<!-- JavaScript to load the logged-in navbar -->
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     fetch('../BA-Logged-in/BALoggedInNav.html')
@@ -154,13 +151,14 @@
   });
 </script>
 
-<!-- Wrap the content in a container -->
+<!-- Content Wrapper -->
 <div class="content-wrapper">
   <h2>Services Availed by Customers</h2>
 
   <!-- Search Bar -->
   <input type="text" id="searchBar" placeholder="Search...">
 
+  <!-- Services Table -->
   <table>
     <thead>
     <tr>
@@ -170,7 +168,8 @@
       <th>Status</th>
       <th>Cost</th>
       <th>Invoice (PDF)</th>
-      <th>Follow-Up Email</th> <!-- New Column for Follow-Up Email Button -->
+      <th>Follow-Up Email</th>
+      <th>Edit</th> <!-- Edit column added -->
     </tr>
     </thead>
     <tbody id="availedServicesTable"></tbody>
@@ -208,7 +207,7 @@
 </div>
 
 <script>
-  // Example services data
+  // Sample services data
   const availedServices = [
     { customer: 'John Doe', service: 'Regular Interior Cleaning', date: '2024-01-12', status: 'Completed', cost: '$100', pdf: 'invoice1.pdf' },
     { customer: 'Jane Smith', service: 'Comprehensive Cleaning', date: '2024-01-14', status: 'Cancelled', cost: '$150', pdf: 'invoice2.pdf' },
@@ -216,20 +215,20 @@
   ];
 
   const availedServicesTable = document.getElementById('availedServicesTable');
-  const searchBar = document.getElementById('searchBar');
 
   function displayAvailedServices(services) {
     availedServicesTable.innerHTML = '';
     services.forEach((service, index) => {
       const row = document.createElement('tr');
       row.innerHTML = `
-        <td>${service.customer}</td>
-        <td>${service.service}</td>
-        <td>${service.date}</td>
-        <td>${service.status}</td>
-        <td>${service.cost}</td>
+        <td contenteditable="false" id="customer-${index}">${service.customer}</td>
+        <td contenteditable="false" id="service-${index}">${service.service}</td>
+        <td contenteditable="false" id="date-${index}">${service.date}</td>
+        <td contenteditable="false" id="status-${index}">${service.status}</td>
+        <td contenteditable="false" id="cost-${index}">${service.cost}</td>
         <td><button onclick="generatePDF(${index})">View Invoice</button></td>
-        <td><button onclick="sendFollowUpEmail(${index})">Send Follow-Up Email</button></td> <!-- Follow-Up Email Button -->
+        <td><button onclick="sendFollowUpEmail(${index})">Send Follow-Up Email</button></td>
+        <td><button onclick="toggleEditMode(${index})" id="edit-btn-${index}">Edit</button></td>
       `;
       availedServicesTable.appendChild(row);
     });
@@ -237,31 +236,30 @@
 
   displayAvailedServices(availedServices);
 
-  // Search filter
-  searchBar.addEventListener('input', function() {
-    const searchTerm = searchBar.value.toLowerCase();
-    const filteredServices = availedServices.filter(service =>
-            service.customer.toLowerCase().includes(searchTerm) ||
-            service.service.toLowerCase().includes(searchTerm) ||
-            service.status.toLowerCase().includes(searchTerm)
-    );
-    displayAvailedServices(filteredServices);
-  });
+  // Toggle edit mode for each user row
+  function toggleEditMode(index) {
+    const fields = ['customer', 'service', 'date', 'status', 'cost'];
+    const isEditable = document.getElementById(`edit-btn-${index}`).textContent === "Edit";
 
-  const backToDashboardBtn = document.getElementById('backToDashboard');
-  backToDashboardBtn.addEventListener('click', function() {
-    window.location.href = 'dashboard.html';
-  });
+    fields.forEach(field => {
+      document.getElementById(`${field}-${index}`).contentEditable = isEditable;
+    });
 
-  document.addEventListener("DOMContentLoaded", function() {
-    fetch('../footer.html')
-            .then(response => response.text())
-            .then(data => {
-              document.getElementById('footer').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading footer:', error));
-  });
+    document.getElementById(`edit-btn-${index}`).textContent = isEditable ? "Save" : "Edit";
 
+    if (!isEditable) {
+      // Save changes to availedServices array
+      availedServices[index].customer = document.getElementById(`customer-${index}`).textContent;
+      availedServices[index].service = document.getElementById(`service-${index}`).textContent;
+      availedServices[index].date = document.getElementById(`date-${index}`).textContent;
+      availedServices[index].status = document.getElementById(`status-${index}`).textContent;
+      availedServices[index].cost = document.getElementById(`cost-${index}`).textContent;
+
+      alert('User information updated successfully.');
+    }
+  }
+
+  // Generate PDF function
   function generatePDF(index) {
     const service = availedServices[index];
     const { jsPDF } = window.jspdf;
@@ -280,7 +278,7 @@
     doc.save(`${service.customer}_Invoice.pdf`);
   }
 
-  // Send Follow-Up Email
+  // Follow-Up Email function
   function sendFollowUpEmail(index) {
     const service = availedServices[index];
     const customerEmail = "customer@example.com"; // Replace with actual email address
@@ -299,12 +297,36 @@
       Your Company Name
     `);
 
-    // Open default email client with pre-filled draft
     window.location.href = `mailto:${customerEmail}?subject=${emailSubject}&body=${emailBody}`;
   }
+
+  document.getElementById('backToDashboard').addEventListener('click', function() {
+    window.location.href = 'dashboard.html';
+  });
+
+  document.getElementById('searchBar').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const filteredServices = availedServices.filter(service =>
+            service.customer.toLowerCase().includes(searchTerm) ||
+            service.service.toLowerCase().includes(searchTerm) ||
+            service.status.toLowerCase().includes(searchTerm)
+    );
+    displayAvailedServices(filteredServices);
+  });
 </script>
 
 <div id="footer"></div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../footer.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('footer').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+  });
+</script>
 
 </body>
 </html>

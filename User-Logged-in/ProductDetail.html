@@ -279,10 +279,35 @@ footer {
       <h1 class="product-name">Product 1: the product that will change your life</h1>
       <p class="product-price">$20</p>
       <p class="description">Some temporary details to be replaced later. Description and details, lorem ipsum</p>
-      <button class="btn learn-more">Buy Now</button>
+      <button class="btn learn-more buy-product-btn" onclick="addToCart('Product 1', '20')">Buy Now</button>
   </div>
 </div>
 
+<script>
+  let cart = [];
+
+  function addToCart(productName, productPrice) {
+      // Create a product object
+      const product = {
+          name: productName,
+          price: productPrice,
+          quantity: 1
+      };
+
+      // Check if the item is already in the cart
+      const existingProduct = cart.find(item => item.name === productName);
+      if (existingProduct) {
+          existingProduct.quantity++;
+      } else {
+          cart.push(product);
+      }
+
+      // Store cart in localStorage so it's persistent
+      localStorage.setItem('cart', JSON.stringify(cart));
+      
+      alert(productName + ' has been added to your cart');
+  }
+</script>
 
 <!-- Footer Section -->
 <div id="footer-container"></div>
