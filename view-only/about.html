@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../MainPageStyle.css">
+  <link rel="stylesheet" href="../mpstyle.css">
+  <script src = "../navbarscroll.js"> </script>
   <title>About Us</title>
   <style>
     body {
@@ -23,6 +26,7 @@
       margin: 20px auto;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-top: 200px;
     }
 
     h1 {
@@ -96,7 +100,28 @@
 </head>
 <body>
 
-<div id="navbar"></div>
+
+    <nav class="nav" id = "nav1">
+      <div class="nav-logo">
+        <p>LOGO .</p>
+      </div>
+      <div class="nav-menu" id="navMenu">
+        <ul>
+          <li><a href="Home.html" class="link active">Home</a></li>
+          <li><a href="services.html" class="link">Services</a></li>
+          <li><a href="about.html" class="link">About</a></li>
+          <li><a href="contact.html" class="link">Contact</a></li>
+        </ul>
+      </div>
+      <div class="nav-button">
+        <button id="loginBtn" onclick="window.location.href='login.html';" class="btn white-btn">Sign In</button>
+        <button id="registerBtn" onclick="window.location.href='register.html';" class="btn">Sign Up</button>
+      </div>
+      <div class="nav-menu-btn">
+        <i class="bx bx-menu" onclick="myMenuFunction()"></i>
+      </div>
+    </nav>
+  </div>
 
 <div class="about-container">
   <h1>About Us</h1>
