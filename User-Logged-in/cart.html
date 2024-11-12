@@ -78,10 +78,11 @@
 
 <script>
     const cartContainer = document.getElementById('cart-container');
-    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
 
     function renderCart() {
         cartContainer.innerHTML = '';
+
         if (cartItems.length === 0) {
             cartContainer.innerHTML = '<p>Looks like your cart is empty</p>';
         } else {
@@ -97,7 +98,7 @@
                         <span>${item.quantity}</span>
                         <button onclick="incrementQuantity(${index})">+</button>
                     </div>
-                    <span>$${isNaN(totalPrice) ? 'NaN' : totalPrice.toFixed(2)}</span>
+                    <span>$${totalPrice.toFixed(2)}</span>
                     <button onclick="removeItem(${index})" style="color:red; border: none; background: none; font-size: 18px;">&times;</button>
                 `;
                 cartContainer.appendChild(cartItem);
@@ -107,45 +108,47 @@
 
     function incrementQuantity(index) {
         cartItems[index].quantity++;
-        localStorage.setItem('cart', JSON.stringify(cartItems));
-        renderCart();
+        updateCart();
     }
 
     function decrementQuantity(index) {
         if (cartItems[index].quantity > 1) {
             cartItems[index].quantity--;
-            localStorage.setItem('cart', JSON.stringify(cartItems));
+            updateCart();
         }
-        renderCart();
     }
 
     function removeItem(index) {
         cartItems.splice(index, 1);
-        localStorage.setItem('cart', JSON.stringify(cartItems));
-        renderCart();
+        updateCart();
     }
 
-    // Checkout Function
     function checkout() {
         if (cartItems.length > 0) {
             alert("Purchase has been successful!");
-            localStorage.removeItem('cart'); // Clears the cart after checkout
-            renderCart(); // Re-renders the empty cart
+            cartItems = [];
+            localStorage.removeItem('cart');
+            renderCart();
         } else {
             alert("Your cart is empty!");
         }
     }
 
+    function updateCart() {
+        localStorage.setItem('cart', JSON.stringify(cartItems));
+        renderCart();
+    }
+
     renderCart();
 
-    document.addEventListener("DOMContentLoaded", function() {
-        fetch('../footer.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('footer-container').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading footer:', error));
-    });
+document.addEventListener("DOMContentLoaded", function() {
+fetch('../footer.html')
+.then(response => response.text())
+.then(data => {
+document.getElementById('footer-container').innerHTML = data;
+})
+.catch(error => console.error('Error loading footer:', error));
+});
 </script>
 
 <script src="../script.js"></script>
