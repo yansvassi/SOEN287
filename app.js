@@ -9,69 +9,75 @@ const PORT = 5000;
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public"))); // Serve static files
-app.set("view engine", "ejs"); // Use EJS for templating
+app.use(express.static(path.join(__dirname, "public"))); // Serve static files like CSS and JS
 
-// Database connection
+// Database Connection
 const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "soen287project",
+    host: "localhost", // XAMPP MySQL default host
+    user: "root", // Default username
+    password: "", // Default password for XAMPP
+    database: "soen287project", // Your database name
 });
 
 db.connect((err) => {
-    if (err) console.error("Error connecting to DB:", err);
-    else console.log("Connected to DB");
+    if (err) {
+        console.error("Error connecting to the database:", err);
+    } else {
+        console.log("Connected to the database.");
+    }
 });
 
 // Routes
 
-// 1. Render Client Services Page
-app.get("/client-services", (req, res) => {
+// 1. Fetch All Services (for both admin and client pages)
+app.get("/services", (req, res) => {
     const sql = "SELECT * FROM services";
     db.query(sql, (err, results) => {
-        if (err) res.status(500).send("Error fetching services.");
-        else res.render("client_services", { services: results });
+        if (err) return res.status(500).send("Error fetching services.");
+        res.json(results); // Return services as JSON
     });
 });
 
-// 2. Render Admin Services Page
-app.get("/view-services", (req, res) => {
-    const sql = "SELECT * FROM services";
-    db.query(sql, (err, results) => {
-        if (err) res.status(500).send("Error fetching services.");
-        else res.render("view_services", { services: results });
-    });
-});
-
-// 3. Add a New Service (Admin)
+// 2. Add a New Service (Admin only)
 app.post("/services", (req, res) => {
     const { customer_name, service_name, service_date, status, cost } = req.body;
     const sql = "INSERT INTO services SET ?";
-    db.query(sql, { customer_name, service_name, service_date, status, cost }, (err) => {
-        if (err) res.status(500).send("Error adding service.");
-        else res.redirect("/view-services");
+    const newService = { customer_name, service_name, service_date, status, cost };
+    db.query(sql, newService, (err) => {
+        if (err) return res.status(500).send("Error adding service.");
+        res.send("Service added successfully.");
     });
 });
 
-// 4. Update Service Status (Client/Admin)
-app.post("/services/update/:id", (req, res) => {
+// 3. Update Service Status (e.g., cancel service)
+app.put("/services/:id", (req, res) => {
     const { status } = req.body;
     const sql = "UPDATE services SET status = ? WHERE id = ?";
     db.query(sql, [status, req.params.id], (err) => {
-        if (err) res.status(500).send("Error updating service status.");
-        else res.redirect(req.get("Referer")); // Redirect to the previous page
+        if (err) return res.status(500).send("Error updating service.");
+        res.send("Service status updated successfully.");
     });
 });
 
-// 5. Delete a Service (Admin)
-app.post("/services/delete/:id", (req, res) => {
+// 4. Delete a Service (Admin only)
+app.delete("/services/:id", (req, res) => {
     const sql = "DELETE FROM services WHERE id = ?";
     db.query(sql, [req.params.id], (err) => {
-        if (err) res.status(500).send("Error deleting service.");
-        else res.redirect("/view-services");
+        if (err) return res.status(500).send("Error deleting service.");
+        res.send("Service deleted successfully.");
     });
 });
 
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+// 5. Serve HTML Files for Admin and Client Pages
+app.get("/admin", (req, res) => {
+    res.sendFile(path.join(__dirname, "BA-Logged-in","view-services.html"));
+});
+
+app.get("/client", (req, res) => {
+    res.sendFile(path.join(__dirname, "User-Logged-in","client_services.html"));
+});
+
+// Start the Server
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});

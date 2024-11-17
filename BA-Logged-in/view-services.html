@@ -13,7 +13,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
-    /* General body settings */
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
@@ -169,13 +168,13 @@
       <th>Cost</th>
       <th>Invoice (PDF)</th>
       <th>Follow-Up Email</th>
-      <th>Edit</th> <!-- Edit column added -->
+      <th>Edit</th>
     </tr>
     </thead>
     <tbody id="availedServicesTable"></tbody>
   </table>
 
-  <!-- Add Row Form -->
+  <!-- Add New Service Form -->
   <div id="addRowForm">
     <h3>Add New Service</h3>
     <div class="form-grid">
@@ -207,118 +206,132 @@
 </div>
 
 <script>
-  // Sample services data
-  const availedServices = [
-    { customer: 'John Doe', service: 'Regular Interior Cleaning', date: '2024-01-12', status: 'Completed', cost: '$100', pdf: 'invoice1.pdf' },
-    { customer: 'Jane Smith', service: 'Comprehensive Cleaning', date: '2024-01-14', status: 'Cancelled', cost: '$150', pdf: 'invoice2.pdf' },
-    { customer: 'Robert Brown', service: 'Deep Carpet Cleaning', date: '2024-01-16', status: 'Pending', cost: '$200', pdf: 'invoice3.pdf' }
-  ];
+  // Fetch services and display them in the table
+  function fetchServices() {
+    fetch("/services")
+            .then(response => response.json())
+            .then(services => {
+              displayAvailedServices(services);
+            })
+            .catch(error => console.error("Error fetching services:", error));
+  }
 
-  const availedServicesTable = document.getElementById('availedServicesTable');
-
+  // Render services in the table
   function displayAvailedServices(services) {
-    availedServicesTable.innerHTML = '';
-    services.forEach((service, index) => {
-      const row = document.createElement('tr');
+    const tableBody = document.getElementById("availedServicesTable");
+    tableBody.innerHTML = "";
+    services.forEach(service => {
+      const row = document.createElement("tr");
       row.innerHTML = `
-        <td contenteditable="false" id="customer-${index}">${service.customer}</td>
-        <td contenteditable="false" id="service-${index}">${service.service}</td>
-        <td contenteditable="false" id="date-${index}">${service.date}</td>
-        <td contenteditable="false" id="status-${index}">${service.status}</td>
-        <td contenteditable="false" id="cost-${index}">${service.cost}</td>
-        <td><button onclick="generatePDF(${index})">View Invoice</button></td>
-        <td><button onclick="sendFollowUpEmail(${index})">Send Follow-Up Email</button></td>
-        <td><button onclick="toggleEditMode(${index})" id="edit-btn-${index}">Edit</button></td>
+        <td contenteditable="false" data-field="customer_name" data-id="${service.id}">${service.customer_name}</td>
+        <td contenteditable="false" data-field="service_name" data-id="${service.id}">${service.service_name}</td>
+        <td contenteditable="false" data-field="service_date" data-id="${service.id}">${service.service_date}</td>
+        <td contenteditable="false" data-field="status" data-id="${service.id}">${service.status}</td>
+        <td contenteditable="false" data-field="cost" data-id="${service.id}">${service.cost}</td>
+        <td><button onclick="generatePDF(${service.id})">View</button></td>
+        <td><button onclick="sendFollowUpEmail('${service.customer_name}', '${service.service_name}')">Send Email</button></td>
+        <td><button onclick="toggleEditMode(this)">Edit</button></td>
       `;
-      availedServicesTable.appendChild(row);
+      tableBody.appendChild(row);
     });
   }
 
-  displayAvailedServices(availedServices);
+  // Enable or save edits
+  function toggleEditMode(button) {
+    const row = button.parentNode.parentNode;
+    const isEditing = button.textContent === "Edit";
+    const cells = row.querySelectorAll("[contenteditable]");
 
-  // Toggle edit mode for each user row
-  function toggleEditMode(index) {
-    const fields = ['customer', 'service', 'date', 'status', 'cost'];
-    const isEditable = document.getElementById(`edit-btn-${index}`).textContent === "Edit";
-
-    fields.forEach(field => {
-      document.getElementById(`${field}-${index}`).contentEditable = isEditable;
+    cells.forEach(cell => {
+      cell.contentEditable = isEditing;
     });
 
-    document.getElementById(`edit-btn-${index}`).textContent = isEditable ? "Save" : "Edit";
+    button.textContent = isEditing ? "Save" : "Edit";
 
-    if (!isEditable) {
-      // Save changes to availedServices array
-      availedServices[index].customer = document.getElementById(`customer-${index}`).textContent;
-      availedServices[index].service = document.getElementById(`service-${index}`).textContent;
-      availedServices[index].date = document.getElementById(`date-${index}`).textContent;
-      availedServices[index].status = document.getElementById(`status-${index}`).textContent;
-      availedServices[index].cost = document.getElementById(`cost-${index}`).textContent;
-
-      alert('User information updated successfully.');
+    if (!isEditing) {
+      const id = cells[0].getAttribute("data-id");
+      const updatedData = {};
+      cells.forEach(cell => {
+        const field = cell.getAttribute("data-field");
+        updatedData[field] = cell.textContent.trim();
+      });
+      updateService(id, updatedData);
     }
   }
 
-  // Generate PDF function
-  function generatePDF(index) {
-    const service = availedServices[index];
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    doc.setFontSize(18);
-    doc.text('Service Invoice', 10, 10);
-
-    doc.setFontSize(12);
-    doc.text(`Customer: ${service.customer}`, 10, 30);
-    doc.text(`Service: ${service.service}`, 10, 40);
-    doc.text(`Date: ${service.date}`, 10, 50);
-    doc.text(`Status: ${service.status}`, 10, 60);
-    doc.text(`Cost: ${service.cost}`, 10, 70);
-
-    doc.save(`${service.customer}_Invoice.pdf`);
+  // Update a service in the database
+  function updateService(id, data) {
+    fetch(`/services/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+            .then(response => response.text())
+            .then(message => {
+              alert(message);
+              fetchServices();
+            })
+            .catch(error => console.error("Error updating service:", error));
   }
 
-  // Follow-Up Email function
-  function sendFollowUpEmail(index) {
-    const service = availedServices[index];
-    const customerEmail = "customer@example.com"; // Replace with actual email address
-
-    const emailSubject = encodeURIComponent("Payment Reminder for Your Service");
-    const emailBody = encodeURIComponent(`
-      Dear ${service.customer},
-
-      We hope this message finds you well. This is a friendly reminder that payment for your recent service, "${service.service}" availed on ${service.date}, is still pending.
-
-      Please make the payment at your earliest convenience.
-
-      Thank you for choosing our services!
-
-      Best regards,
-      Your Company Name
-    `);
-
-    window.location.href = `mailto:${customerEmail}?subject=${emailSubject}&body=${emailBody}`;
+  // Generate PDF
+  function generatePDF(id) {
+    alert(`Generating PDF for service ID: ${id}`);
   }
 
-  document.getElementById('backToDashboard').addEventListener('click', function() {
-    window.location.href = 'dashboard.html';
+  // Send a follow-up email
+  function sendFollowUpEmail(customerName, serviceName) {
+    alert(`Sending follow-up email to ${customerName} for service: ${serviceName}`);
+  }
+
+  // Filter table rows
+  document.getElementById("searchBar").addEventListener("input", function () {
+    const searchTerm = this.value.toLowerCase();
+    const rows = document.querySelectorAll("#availedServicesTable tr");
+    rows.forEach(row => {
+      const visible = Array.from(row.cells).some(cell =>
+              cell.textContent.toLowerCase().includes(searchTerm)
+      );
+      row.style.display = visible ? "" : "none";
+    });
   });
 
-  document.getElementById('searchBar').addEventListener('input', function() {
-    const searchTerm = this.value.toLowerCase();
-    const filteredServices = availedServices.filter(service =>
-            service.customer.toLowerCase().includes(searchTerm) ||
-            service.service.toLowerCase().includes(searchTerm) ||
-            service.status.toLowerCase().includes(searchTerm)
-    );
-    displayAvailedServices(filteredServices);
+  // Initialize fetch
+  fetchServices();
+
+  // Add new service
+  document.getElementById("addServiceBtn").addEventListener("click", function () {
+    const newService = {
+      customer_name: document.getElementById("customerName").value,
+      service_name: document.getElementById("serviceName").value,
+      service_date: document.getElementById("serviceDate").value,
+      status: document.getElementById("serviceStatus").value || "Pending",
+      cost: document.getElementById("serviceCost").value,
+    };
+
+    fetch("/services", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newService),
+    })
+            .then(response => response.text())
+            .then(message => {
+              alert(message);
+              fetchServices();
+            })
+            .catch(error => console.error("Error adding service:", error));
+  });
+
+  // Back to Dashboard
+  document.getElementById("backToDashboard").addEventListener("click", function () {
+    window.location.href = "dashboard.html";
   });
 </script>
 
 <div id="footer"></div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     fetch('../footer.html')
             .then(response => response.text())
             .then(data => {
