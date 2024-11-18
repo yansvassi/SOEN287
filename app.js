@@ -7,16 +7,17 @@ const app = express();
 const PORT = 5000;
 
 // Middleware
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files like CSS and JS
+app.use(express.static(path.join(__dirname))); // Serve static files at root level
 
-// Database Connection
+// Database connection
 const db = mysql.createConnection({
-    host: "localhost", // XAMPP MySQL default host
-    user: "root", // Default username
-    password: "", // Default password for XAMPP
-    database: "soen287project", // Your database name
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "soen287project", // Replace with your database name
 });
 
 db.connect((err) => {
@@ -27,57 +28,64 @@ db.connect((err) => {
     }
 });
 
-// Routes
-
-// 1. Fetch All Services (for both admin and client pages)
+// Fetch all services (Admin page)
 app.get("/services", (req, res) => {
     const sql = "SELECT * FROM services";
     db.query(sql, (err, results) => {
-        if (err) return res.status(500).send("Error fetching services.");
-        res.json(results); // Return services as JSON
+        if (err) {
+            console.error("Error fetching services:", err);
+            return res.status(500).send("Error fetching services.");
+        }
+        res.json(results);
     });
 });
 
-// 2. Add a New Service (Admin only)
+// Add a new service
 app.post("/services", (req, res) => {
     const { customer_name, service_name, service_date, status, cost } = req.body;
+
+    if (!customer_name || !service_name || !service_date || !cost) {
+        return res.status(400).send("All fields are required.");
+    }
+
     const sql = "INSERT INTO services SET ?";
-    const newService = { customer_name, service_name, service_date, status, cost };
+    const newService = { customer_name, service_name, service_date, status: status || "Pending", cost };
+
     db.query(sql, newService, (err) => {
-        if (err) return res.status(500).send("Error adding service.");
+        if (err) {
+            console.error("Error adding service:", err);
+            return res.status(500).send("Failed to add service.");
+        }
         res.send("Service added successfully.");
     });
 });
 
-// 3. Update Service Status (e.g., cancel service)
+// Update a service
 app.put("/services/:id", (req, res) => {
-    const { status } = req.body;
-    const sql = "UPDATE services SET status = ? WHERE id = ?";
-    db.query(sql, [status, req.params.id], (err) => {
-        if (err) return res.status(500).send("Error updating service.");
-        res.send("Service status updated successfully.");
+    const id = req.params.id;
+    const updatedData = req.body;
+
+    const sql = "UPDATE services SET ? WHERE id = ?";
+    db.query(sql, [updatedData, id], (err) => {
+        if (err) {
+            console.error("Error updating service:", err);
+            return res.status(500).send("Failed to update service.");
+        }
+        res.send("Service updated successfully.");
     });
 });
 
-// 4. Delete a Service (Admin only)
-app.delete("/services/:id", (req, res) => {
-    const sql = "DELETE FROM services WHERE id = ?";
-    db.query(sql, [req.params.id], (err) => {
-        if (err) return res.status(500).send("Error deleting service.");
-        res.send("Service deleted successfully.");
-    });
-});
-
-// 5. Serve HTML Files for Admin and Client Pages
+// Serve the admin page
 app.get("/admin", (req, res) => {
-    res.sendFile(path.join(__dirname, "BA-Logged-in","view-services.html"));
+    res.sendFile(path.join(__dirname, "BA-Logged-in/view-services.html"));
 });
 
+// Serve the client page
 app.get("/client", (req, res) => {
-    res.sendFile(path.join(__dirname, "User-Logged-in","client_services.html"));
+    res.sendFile(path.join(__dirname, "User-Logged-in/client_services.html"));
 });
 
-// Start the Server
+// Start the server
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
