@@ -146,11 +146,10 @@
             .then(data => {
               document.getElementById('logged-in-navbar-BA').innerHTML = data;
             })
-            .catch(error => console.error('Error loading logged-in navbar:', error));
+            .catch(error => console.error('Error loading navbar:', error));
   });
 </script>
 
-<!-- Content Wrapper -->
 <div class="content-wrapper">
   <h2>Services Availed by Customers</h2>
 
@@ -161,6 +160,7 @@
   <table>
     <thead>
     <tr>
+      <th>ID</th>
       <th>Customer Name</th>
       <th>Service</th>
       <th>Date</th>
@@ -211,95 +211,28 @@
     fetch("/services")
             .then(response => response.json())
             .then(services => {
-              displayAvailedServices(services);
+              const tableBody = document.getElementById("availedServicesTable");
+              tableBody.innerHTML = "";
+              services.forEach(service => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+            <td>${service.id}</td>
+            <td>${service.customer_name}</td>
+            <td>${service.service_name}</td>
+            <td>${service.service_date}</td>
+            <td>${service.status}</td>
+            <td>${service.cost}</td>
+            <td><button onclick="generatePDF(${service.id})">View</button></td>
+            <td><button onclick="sendFollowUpEmail('${service.customer_name}', '${service.service_name}')">Send Email</button></td>
+            <td><button onclick="toggleEditMode(this)">Edit</button></td>
+          `;
+                tableBody.appendChild(row);
+              });
             })
             .catch(error => console.error("Error fetching services:", error));
   }
 
-  // Render services in the table
-  function displayAvailedServices(services) {
-    const tableBody = document.getElementById("availedServicesTable");
-    tableBody.innerHTML = "";
-    services.forEach(service => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td contenteditable="false" data-field="customer_name" data-id="${service.id}">${service.customer_name}</td>
-        <td contenteditable="false" data-field="service_name" data-id="${service.id}">${service.service_name}</td>
-        <td contenteditable="false" data-field="service_date" data-id="${service.id}">${service.service_date}</td>
-        <td contenteditable="false" data-field="status" data-id="${service.id}">${service.status}</td>
-        <td contenteditable="false" data-field="cost" data-id="${service.id}">${service.cost}</td>
-        <td><button onclick="generatePDF(${service.id})">View</button></td>
-        <td><button onclick="sendFollowUpEmail('${service.customer_name}', '${service.service_name}')">Send Email</button></td>
-        <td><button onclick="toggleEditMode(this)">Edit</button></td>
-      `;
-      tableBody.appendChild(row);
-    });
-  }
-
-  // Enable or save edits
-  function toggleEditMode(button) {
-    const row = button.parentNode.parentNode;
-    const isEditing = button.textContent === "Edit";
-    const cells = row.querySelectorAll("[contenteditable]");
-
-    cells.forEach(cell => {
-      cell.contentEditable = isEditing;
-    });
-
-    button.textContent = isEditing ? "Save" : "Edit";
-
-    if (!isEditing) {
-      const id = cells[0].getAttribute("data-id");
-      const updatedData = {};
-      cells.forEach(cell => {
-        const field = cell.getAttribute("data-field");
-        updatedData[field] = cell.textContent.trim();
-      });
-      updateService(id, updatedData);
-    }
-  }
-
-  // Update a service in the database
-  function updateService(id, data) {
-    fetch(`/services/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-            .then(response => response.text())
-            .then(message => {
-              alert(message);
-              fetchServices();
-            })
-            .catch(error => console.error("Error updating service:", error));
-  }
-
-  // Generate PDF
-  function generatePDF(id) {
-    alert(`Generating PDF for service ID: ${id}`);
-  }
-
-  // Send a follow-up email
-  function sendFollowUpEmail(customerName, serviceName) {
-    alert(`Sending follow-up email to ${customerName} for service: ${serviceName}`);
-  }
-
-  // Filter table rows
-  document.getElementById("searchBar").addEventListener("input", function () {
-    const searchTerm = this.value.toLowerCase();
-    const rows = document.querySelectorAll("#availedServicesTable tr");
-    rows.forEach(row => {
-      const visible = Array.from(row.cells).some(cell =>
-              cell.textContent.toLowerCase().includes(searchTerm)
-      );
-      row.style.display = visible ? "" : "none";
-    });
-  });
-
-  // Initialize fetch
-  fetchServices();
-
-  // Add new service
+  // Add a new service
   document.getElementById("addServiceBtn").addEventListener("click", function () {
     const newService = {
       customer_name: document.getElementById("customerName").value,
@@ -321,6 +254,52 @@
             })
             .catch(error => console.error("Error adding service:", error));
   });
+
+  // Generate PDF for a service
+  function generatePDF(id) {
+    alert(`Generating PDF for service ID: ${id}`);
+  }
+
+  // Send a follow-up email
+  function sendFollowUpEmail(customerName, serviceName) {
+    alert(`Sending follow-up email to ${customerName} for service: ${serviceName}`);
+  }
+
+  // Toggle edit mode for a service
+  function toggleEditMode(button) {
+    const row = button.parentNode.parentNode;
+    const isEditing = button.textContent === "Edit";
+    const cells = row.querySelectorAll("[contenteditable]");
+
+    cells.forEach(cell => {
+      cell.contentEditable = isEditing;
+    });
+
+    button.textContent = isEditing ? "Save" : "Edit";
+
+    if (!isEditing) {
+      const id = cells[0].textContent.trim();
+      const updatedData = {};
+      row.querySelectorAll("[data-field]").forEach(cell => {
+        updatedData[cell.getAttribute("data-field")] = cell.textContent.trim();
+      });
+
+      fetch(`/services/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData),
+      })
+              .then(response => response.text())
+              .then(message => {
+                alert(message);
+                fetchServices();
+              })
+              .catch(error => console.error("Error updating service:", error));
+    }
+  }
+
+  // Initialize the page
+  fetchServices();
 
   // Back to Dashboard
   document.getElementById("backToDashboard").addEventListener("click", function () {
