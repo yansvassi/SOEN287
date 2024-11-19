@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>View Services</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<h1>Admin - Services List</h1>
+<form action="/services" method="POST">
+    <input type="text" name="customer_name" placeholder="Customer Name" required>
+    <input type="text" name="service_name" placeholder="Service Name" required>
+    <input type="date" name="service_date" required>
+    <input type="number" name="cost" placeholder="Cost" required>
+    <button type="submit">Add Service</button>
+</form>
+<table>
+    <tr>
+        <th>Service</th>
+        <th>Customer</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Cost</th>
+        <th>Actions</th>
+    </tr>
+    <% services.forEach(service => { %>
+        <tr>
+            <td><%= service.service_name %></td>
+            <td><%= service.customer_name %></td>
+            <td><%= service.service_date %></td>
+            <td><%= service.status %></td>
+            <td><%= service.cost %></td>
+            <td>
+                <form action="/services/delete/<%= service.id %>" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+    <% }) %>
+</table>
+</body>
+</html>
