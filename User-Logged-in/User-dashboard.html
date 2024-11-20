@@ -154,6 +154,41 @@
             
             alert(productName + ' has been added to your cart');
         }
+
+  // Load products from the server
+  document.addEventListener("DOMContentLoaded", loadProducts);
+
+  function loadProducts() {
+    fetch("http://localhost:5001/services")
+      .then((response) => response.json())
+      .then((products) => {
+        const container = document.getElementById("product-container");
+        container.innerHTML = ""; // Clear existing content
+
+        products.forEach((product) => {
+          const productBox = document.createElement("div");
+          productBox.classList.add("product_box");
+          productBox.innerHTML = `
+            <br>
+            <a href="#" class="product-name">${product.Title}</a>
+            <p class="product-price">$${parseFloat(product.Price).toFixed(2)}</p>
+            <p class="service-details">${product.Description}</p>
+            <div class="btn-group">
+              <a href="../User-Logged-in/ProductDetail.html" class="button-link">
+                <button class="view-product-btn btn">View</button>
+              </a>
+              <button class="buy-product-btn btn" onclick="addToCart('${product.Title}', '${product.Price}')">Buy</button>
+            </div>
+          `;
+          container.appendChild(productBox);
+        });
+      })
+      .catch((error) => {
+        console.error("Error loading products:", error);
+      });
+  }
+
+
     </script>
   </div>
 </div>
