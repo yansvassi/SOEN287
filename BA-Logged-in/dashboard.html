@@ -95,13 +95,8 @@
   <div class="product_box" id="product1">
     <br>
     <a href="#" class="product-name">Product 1</a>
-    <p class="product-price">$XX</p>
-    <ul class="service-details">
-      <li>We do this</li>
-      <li>And even this</li>
-      <li>Wow! we also do this</li>
-      <li>This too</li>
-    </ul>
+    <p class="product-price">$0</p>
+    <p class="service-details">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa ipsam architecto recusandae tempore</p>
     <div class="btn-group">
       <button class="edit-product-btn btn">Edit</button>
       <button class="remove-product-btn btn">Remove</button>
@@ -109,10 +104,11 @@
   </div>
 </div>
 
-<!-- Add Product Button -->
+<!---- Add Product Button ---->
 <div class="add-product-container">
   <button class="btn add-product-btn" id="add-product-btn">+ Add Product</button>
 </div>
+
 
 <!-- Footer -->
 <div id="footer-container"></div>
@@ -132,93 +128,163 @@
   let productCount = 1; // Start with the initial product number
 
   // Function to add a new product card
-  document.getElementById('add-product-btn').addEventListener('click', function() {
-    productCount++; // Increment the product count
+  document.getElementById("add-product-btn").addEventListener("click", function () {
+  const title = prompt("Enter Service Name:");
+  const description = prompt("Enter Service Description:");
+  const price = parseFloat(prompt("Enter Service Price:")).toFixed(2);
 
-    const container = document.getElementById('product-container');
+  if (!title || !description || isNaN(price)) {
+    alert("All fields are required!");
+    return;
+  }
 
-    // Create a new product card
-    const newProduct = document.createElement('div');
-    newProduct.classList.add('product_box');
-    newProduct.innerHTML = `
-      <br>
-      <a href="#" class="product-name">Product ${productCount}</a>
-      <p class="product-price">$XX</p>
-      <ul class="service-details">
-        <li>Service detail 1</li>
-        <li>Service detail 2</li>
-        <li>Service detail 3</li>
-        <li>Service detail 4</li>
-      </ul>
-      <div class="btn-group">
-        <button class="edit-product-btn btn">Edit</button>
-        <button class="remove-product-btn btn">Remove</button>
-      </div>
-    `;
-
-    // Add the new product card to the container
-    container.appendChild(newProduct);
-
-    // Attach event listeners to the new product card
-    attachEventListeners(newProduct);
-  });
+  fetch("http://localhost:5001/services", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ Title:title, Description:description, Price:price }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        alert("Service added successfully!");
+        // Optionally, refresh the UI
+      } else {
+        alert("Failed to add service.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("An error occurred.");
+    });
+});
 
   // Function to toggle between view and edit mode with static 4 service details
   function toggleEditMode(productBox, isEditing) {
-    const productName = productBox.querySelector('.product-name');
-    const productPrice = productBox.querySelector('.product-price');
-    const serviceDetails = productBox.querySelectorAll('.service-details li');
+  const productId = productBox.getAttribute("data-id"); // Ensure `data-id` exists
+  const productName = productBox.querySelector(".product-name");
+  const productPrice = productBox.querySelector(".product-price");
+  const productDescription = productBox.querySelector(".service-details");
 
-    if (isEditing) {
-      // Switch to edit mode: replace content with input fields for 4 service details
-      const nameInput = `<input type="text" value="${productName.textContent}" class="edit-product-name">`;
-      const priceInput = `<input type="text" value="${productPrice.textContent}" class="edit-product-price">`;
+  if (isEditing) {
+    // Switch to edit mode: Replace text with input fields
+    const nameInput = `<input type="text" value="${productName.textContent}" class="edit-product-name">`;
+    const priceInput = `<input type="text" value="${productPrice.textContent.replace("$", "")}" class="edit-product-price">`;
+    const descriptionInput = `<input type="text" value="${productDescription.textContent}" class="edit-product-description">`;
 
-      // For service details, map them to input fields (one per each detail)
-      serviceDetails.forEach((li, index) => {
-        li.outerHTML = `<li><input type="text" value="${li.textContent}" class="edit-service-detail" data-index="${index}"></li>`;
+    productName.outerHTML = nameInput;
+    productPrice.outerHTML = priceInput;
+    productDescription.outerHTML = descriptionInput;
+  } else {
+    // Save changes: Get input values and send to the server
+    const newName = productBox.querySelector(".edit-product-name").value;
+    const newPrice = parseFloat(productBox.querySelector(".edit-product-price").value).toFixed(2);
+    const newDescription = productBox.querySelector(".edit-product-description").value;
+
+    // Send updated data to the server
+    fetch(`http://localhost:5001/services/${productId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        Title: newName,
+        Price: newPrice,
+        Description: newDescription,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          // Update DOM with saved values
+          productBox.querySelector(".edit-product-name").outerHTML = `<a href="#" class="product-name">${newName}</a>`;
+          productBox.querySelector(".edit-product-price").outerHTML = `<p class="product-price">$${newPrice}</p>`;
+          productBox.querySelector(".edit-product-description").outerHTML = `<p class="service-details">${newDescription}</p>`;
+        } else {
+          alert("Error saving changes: " + data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Failed to save changes. Please try again.");
       });
-
-      productName.outerHTML = nameInput;
-      productPrice.outerHTML = priceInput;
-
-    } else {
-      // Switch back to view mode: save changes and replace input fields with text
-      const newProductName = productBox.querySelector('.edit-product-name').value;
-      const newProductPrice = productBox.querySelector('.edit-product-price').value;
-      const newServiceDetails = productBox.querySelectorAll('.edit-service-detail');
-
-      // Replace input fields with the new values
-      productBox.querySelector('.edit-product-name').outerHTML = `<a href="#" class="product-name">${newProductName}</a>`;
-      productBox.querySelector('.edit-product-price').outerHTML = `<p class="product-price">${newProductPrice}</p>`;
-
-      newServiceDetails.forEach((input, index) => {
-        const li = `<li>${input.value}</li>`;
-        productBox.querySelectorAll('.service-details')[0].children[index].outerHTML = li;
-      });
-    }
   }
+}
+
 
   // Attach event listeners for edit and remove buttons
   function attachEventListeners(productBox) {
-    const editButton = productBox.querySelector('.edit-product-btn');
-    const removeButton = productBox.querySelector('.remove-product-btn');
-    let isEditing = false;
+  const editButton = productBox.querySelector('.edit-product-btn');
+  const removeButton = productBox.querySelector('.remove-product-btn');
 
-    editButton.addEventListener('click', function() {
-      toggleEditMode(productBox, !isEditing);
-      isEditing = !isEditing; // Toggle the editing state
-    });
+  // Set the initial editing state on the product box
+  productBox.dataset.isEditing = "false";
 
-    removeButton.addEventListener('click', function() {
-      productBox.remove(); // Remove the product card
+  editButton.addEventListener('click', function () {
+    const isEditing = productBox.dataset.isEditing === "true";
+    toggleEditMode(productBox, !isEditing);
+    productBox.dataset.isEditing = (!isEditing).toString(); // Toggle editing state
+  });
+
+  removeButton.addEventListener("click", function () {
+  const productId = productBox.getAttribute("data-id"); // Ensure this exists
+
+  fetch(`http://localhost:5001/services/${productId}`, {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        productBox.remove(); // Remove the product card
+      } else {
+        alert("Failed to remove service: " + data.message);
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("An error occurred while removing the service.");
     });
-  }
+});
+
+}
 
   // Attach event listeners for the initial product card
   document.querySelectorAll('.product_box').forEach(productBox => {
     attachEventListeners(productBox);
   });
+
+  function loadProducts() {
+  fetch("http://localhost:5001/services")
+    .then((response) => response.json())
+    .then((products) => {
+      const container = document.getElementById("product-container");
+      container.innerHTML = ""; // Clear existing products
+      products.forEach((product) => {
+        const productBox = document.createElement("div");
+        productBox.classList.add("product_box");
+        productBox.setAttribute("data-id", product.id); // Use `id` from the database
+        productBox.innerHTML = `
+          <br>
+          <a href="#" class="product-name">${product.Title}</a>
+          <p class="product-price">$${product.Price.toFixed(2)}</p>
+          <p class="service-details">${product.Description}</p>
+          <div class="btn-group">
+            <button class="edit-product-btn btn">Edit</button>
+            <button class="remove-product-btn btn">Remove</button>
+          </div>
+        `;
+        container.appendChild(productBox);
+        attachEventListeners(productBox); // Attach edit/remove functionality
+      });
+    })
+    .catch((error) => {
+      console.error("Error loading products:", error);
+    });
+}
+
+// Call `loadProducts` when the page loads
+document.addEventListener("DOMContentLoaded", loadProducts);
 </script>
 
 </body>
