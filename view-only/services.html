@@ -61,9 +61,14 @@
   </nav>
 </div>
 
+<!-- Banner -->
+<div class="banner">
+  <h1 class="products">Products</h1>
+</div>
+
 <!------------------------------------ Product Searchbar ------------------------------------>
 <div class="search-container">
-  <input type="text" id="searchInput" placeholder="Search Products..." onkeyup="filterProducts()">
+  <input type="text" id="searchInput" placeholder="Search Product Name..." onkeyup="filterProducts()">
     <i class='bx bx-search'></i>
 </div>
 
@@ -96,7 +101,7 @@
   <div class="product_box" id="product1">
     <br>
     <a href="#" class="product-name">Product 1</a>
-    <p class="product-price">$XX</p>
+    <p class="product-price">$50</p>
     <ul class="service-details">
       <li>We do this</li>
       <li>And even this</li>
@@ -104,10 +109,33 @@
       <li>This too</li>
     </ul>
     <div class="btn-group">
-    <a href = "##"> <!---Will bring to view product page-->
+
+   <!---Will bring to view product page-->
+   <a href="../User-Logged-in/ProductDetail.html" class="button-link">
+    <button class="view-product-btn btn">View</button>
+</a>
+    <button class="buy-product-btn btn" onclick="addToCart('Product 1', '50')">Buy</button>
+    </div>
+  </div>
+  <div class="container" id="product-container">
+    <div class="product_box" id="product2">
+      <br>
+      <a href="#" class="product-name">Product 2</a>
+      <p class="product-price">$20</p>
+      <ul class="service-details">
+        <li>We do this</li>
+        <li>And even this</li>
+        <li>Wow! we also do this</li>
+        <li>This too</li>
+      </ul>
+      <div class="btn-group">
+  
+     <!---Will bring to view product page-->
+     <a href="../User-Logged-in/ProductDetail.html" class="button-link">
       <button class="view-product-btn btn">View</button>
-    </a>
-    <button class="buy-product-btn btn" onclick="myFunction()">Buy</button>
+  </a>
+      <button class="buy-product-btn btn" onclick="addToCart('Product 2', '20')">Buy</button>
+      </div>
     </div>
 
     <script>
@@ -134,10 +162,55 @@
             
             alert(productName + ' has been added to your cart');
         }
+
+  // Load products from the server
+  document.addEventListener("DOMContentLoaded", loadProducts);
+
+  function loadProducts() {
+    fetch("http://localhost:5001/services")
+      .then((response) => response.json())
+      .then((products) => {
+        const container = document.getElementById("product-container");
+        container.innerHTML = ""; // Clear existing content
+
+        products.forEach((product) => {
+          const productBox = document.createElement("div");
+          productBox.classList.add("product_box");
+          productBox.innerHTML = `
+            <br>
+            <a href="#" class="product-name">${product.Title}</a>
+            <p class="product-price">$${parseFloat(product.Price).toFixed(2)}</p>
+            <p class="service-details">${product.Description}</p>
+            <div class="btn-group">
+              <a href="../User-Logged-in/ProductDetail.html" class="button-link">
+                <button class="view-product-btn btn">View</button>
+              </a>
+            </div>
+          `;
+          container.appendChild(productBox);
+        });
+      })
+      .catch((error) => {
+        console.error("Error loading products:", error);
+      });
+  }
+
+  //new part here
+  products.forEach((product) => {
+  const productBox = document.createElement("div");
+  productBox.classList.add("product_box");
+  productBox.innerHTML = `
+    <br>
+    <a href="../User-Logged-in/ProductDetail.html?Title=${encodeURIComponent(product.Title)}&Price=${encodeURIComponent(product.Price)}&Description=${encodeURIComponent(product.description)}" class="button-link">
+      <button class="view-product-btn btn">View</button>
+    </a>
+
+  `;
+  container.appendChild(productBox);
+});
+//ends here
+
     </script>
-    
-    
-</div>
   </div>
 </div>
 

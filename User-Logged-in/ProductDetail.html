@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../mpstyle.css">
   <link rel="stylesheet" href="../footerStyles.css">
   <script src = "../navbarscroll.js"> </script>
-  <script src = "../database.js"> </script>
+  <script src = "../User-Logged-In/server.js"> </script>
   <link rel="stylesheet" href="../MainPageStyle.css">
 
   <style>
@@ -300,6 +300,26 @@ footer {
     localStorage.setItem('cart', JSON.stringify(cart));
     alert(productName + ' has been added to your cart');
   }
+
+  //new
+  document.addEventListener("DOMContentLoaded", function () {
+  // Parse query parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const title = urlParams.get("Title") || "Unknown Product";
+  const price = urlParams.get("Price") || "0.00";
+  const description = urlParams.get("Description") || "No description available.";
+
+  // Update the product details
+  const productName = document.querySelector(".product-name");
+  const productPrice = document.querySelector(".product-price");
+  const productDescription = document.querySelector(".description");
+
+  if (productName) productName.textContent = title;
+  if (productPrice) productPrice.textContent = `$${parseFloat(price).toFixed(2)}`;
+  if (productDescription) productDescription.textContent = description;
+});
+
+
 </script>
 
 <!-- Footer Section -->

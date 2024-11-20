@@ -188,6 +188,20 @@
       });
   }
 
+  //new part here
+  products.forEach((product) => {
+  const productBox = document.createElement("div");
+  productBox.classList.add("product_box");
+  productBox.innerHTML = `
+    <br>
+    <a href="../User-Logged-in/ProductDetail.html?Title=${encodeURIComponent(product.Title)}&Price=${encodeURIComponent(product.Price)}&Description=${encodeURIComponent(product.Description)}" class="button-link">
+      <button class="view-product-btn btn">View</button>
+    </a>
+    <button class="buy-product-btn btn" onclick="addToCart('${product.Title}', '${product.Price}')">Buy</button>
+  `;
+  container.appendChild(productBox);
+});
+//ends here
 
     </script>
   </div>
