@@ -301,23 +301,27 @@ footer {
     alert(productName + ' has been added to your cart');
   }
 
-  //new
   document.addEventListener("DOMContentLoaded", function () {
-  // Parse query parameters
   const urlParams = new URLSearchParams(window.location.search);
-  const title = urlParams.get("Title") || "Unknown Product";
-  const price = urlParams.get("Price") || "0.00";
-  const description = urlParams.get("Description") || "No description available.";
+  const title = urlParams.get("Title");
+  const price = urlParams.get("Price");
+  const description = urlParams.get("Description");
 
-  // Update the product details
+  // Debugging: Log extracted parameters to the console
+  console.log("Title:", title);
+  console.log("Price:", price);
+  console.log("Description:", description);
+
   const productName = document.querySelector(".product-name");
   const productPrice = document.querySelector(".product-price");
   const productDescription = document.querySelector(".description");
 
-  if (productName) productName.textContent = title;
-  if (productPrice) productPrice.textContent = `$${parseFloat(price).toFixed(2)}`;
-  if (productDescription) productDescription.textContent = description;
+  if (productName) productName.textContent = title || "Unknown Product";
+  if (productPrice) productPrice.textContent = `$${parseFloat(price || "0").toFixed(2)}`;
+  if (productDescription) productDescription.textContent = description || "No description available.";
 });
+
+  //new
 
 
 </script>

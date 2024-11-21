@@ -20,7 +20,17 @@
     <!-- defines the title of the web page -->
     <title> Home Page </title>
 
-
+<style>
+      .view-product-btn, .buy-product-btn{
+      padding: 10px 20px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+</style>
 </head>
 
 <body>
@@ -73,53 +83,42 @@
         <p> Each services has been designed carrefully to deliver the outcome you're looking for </p>
 
     </div>
-    <div class="product_box">
-      <br>
-      <a href="#link to view product"
-         class="product-name">Product 1</a>
-      <p></p>
-      <p class="product-price">
-        $XX
-      </p>
-      <ul class="service-details">
-        <li>We do this</li>
-        <li>And even this</li>
-        <li>Wow! we also do this</li>
-        <li>This too</li>
-      </ul>
-  </div>
+    <div class="container" id="product-container">
+      <div class="product_box" id="product1"></div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", loadProducts);
 
-  <!-- Product Services -->
-  <div class="product_box">
-    <br>
-    <a href="#link to view product"
-       class="product-name">Product 2</a>
-    <p></p>
-    <p class="product-price">
-      $XX
-    </p>
-    <ul class="service-details">
-      <li>We do this</li>
-      <li>And even this</li>
-      <li>Wow! we also do this</li>
-      <li>This too</li>
-    </ul>
-</div>
-    <div class="product_box">
-      <br>
-      <a href="#link to view product"
-         class="product-name">Product 3</a>
-      <p></p>
-      <p class="product-price">
-        $XX
-      </p>
-      <ul class="service-details">
-        <li>We do this</li>
-        <li>And even this</li>
-        <li>Wow! we also do this</li>
-        <li>This too</li>
-      </ul>
-  </div>
+function loadProducts() {
+  fetch("http://localhost:5001/services")
+    .then((response) => response.json())
+    .then((products) => {
+      const container = document.getElementById("product-container");
+      container.innerHTML = ""; // Clear existing content
+
+      products.forEach((product) => {
+        const productBox = document.createElement("div");
+        productBox.classList.add("product_box");
+        productBox.innerHTML = `
+          <br>
+          <a href="#" class="product-name">${product.Title}</a>
+          <p class="product-price">$${parseFloat(product.Price).toFixed(2)}</p>
+          <p class="service-details">${product.Description}</p>
+          <div class="btn-group">
+            <br>
+<a href="../User-Logged-in/ProductDetail.html?Title=${encodeURIComponent(product.Title)}&Price=${encodeURIComponent(product.Price)}&Description=${encodeURIComponent(product.Description)}" class="button-link">
+      <button class="view-product-btn btn">View</button>
+    </a>
+          </div>
+        `;
+        container.appendChild(productBox);
+      });
+    })
+    .catch((error) => {
+      console.error("Error loading products:", error);
+    });
+}
+    </script>
   </div>
 
   <!----------------------------- Satisfaction ----------------------------------->

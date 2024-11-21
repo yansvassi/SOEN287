@@ -174,14 +174,16 @@
             <p class="product-price">$${parseFloat(product.Price).toFixed(2)}</p>
             <p class="service-details">${product.Description}</p>
             <div class="btn-group">
-              <a href="../User-Logged-in/ProductDetail.html" class="button-link">
-                <button class="view-product-btn btn">View</button>
-              </a>
-              <button class="buy-product-btn btn" onclick="addToCart('${product.Title}', '${product.Price}')">Buy</button>
+              <br>
+<a href="../User-Logged-in/ProductDetail.html?Title=${encodeURIComponent(product.Title)}&Price=${encodeURIComponent(product.Price)}&Description=${encodeURIComponent(product.Description)}" class="button-link">
+      <button class="view-product-btn btn">View</button>
+    </a>
+    <button class="buy-product-btn btn" onclick="addToCart('${product.Title}', '${product.Price}')">Buy</button>
             </div>
           `;
           container.appendChild(productBox);
         });
+        
       })
       .catch((error) => {
         console.error("Error loading products:", error);
@@ -195,11 +197,12 @@
   productBox.innerHTML = `
     <br>
     <a href="../User-Logged-in/ProductDetail.html?Title=${encodeURIComponent(product.Title)}&Price=${encodeURIComponent(product.Price)}&Description=${encodeURIComponent(product.Description)}" class="button-link">
-      <button class="view-product-btn btn">View</button>
-    </a>
+  <button class="view-product-btn btn">View</button>
+</a>
     <button class="buy-product-btn btn" onclick="addToCart('${product.Title}', '${product.Price}')">Buy</button>
   `;
   container.appendChild(productBox);
+  console.log(`Generated URL: ../User-Logged-in/ProductDetail.html?Title=${encodeURIComponent(product.Title)}&Price=${encodeURIComponent(product.Price)}&Description=${encodeURIComponent(product.Description)}`);
 });
 //ends here
 
