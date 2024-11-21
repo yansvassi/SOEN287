@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../footerStyles.css">
+    <link rel="stylesheet" href="../profile.css">
+    <script src = "../navbarscroll.js"> </script>
+    <title> BA Profile </title>
+
+    <style>
+
+    .content-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        margin-top: 120px;
+        color: #0f253d;
+        font-size: 24px;
+      }
+
+    </style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<div id="logged-in-navbar-BA"></div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('../BA-Logged-in/BALoggedInNav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('logged-in-navbar-BA').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading logged-in navbar:', error));
+    });
+</script>
+
+<!-- Profile Editing Section -->
+<div class="content-wrapper">
+    <div class = title > 
+    <h1>Edit Business Profile  </h1>
+</div>
+
+    <div class="imgprofile-container">
+        <div class="specificimg-container">
+            <img src="../images/img_avatar2.png" alt="Avatar">
+        </div>
+        <div class="btn">
+            <input type="file" id="fileInput" style="display: none;" accept="image/*">
+            <button type="button" id="changePhotoBtn">Change Photo</button>
+        </div>
+
+        <div class="questions">
+            <h2>Business Information</h2> <br>
+            <label for="fname">Business Name:</label> <br>
+            <input type="text" id="fname" name="fname" placeholder="YourCompanyName"> <br>
+            <label for="email">Email Address:</label> <br>
+            <input type="text" id="email" name="email" placeholder="email@example.com"> <br>
+            <label for="pn">Phone Number:</label> <br>
+            <input type="text" id="pn" name="pn" placeholder="+1 (844) 326-6005"> <br>
+            <label for="address">Street Address:</label> <br>
+            <input type="text" id="address" name="address" placeholder="123 Business St"> <br>
+            <label for="city">City:</label> <br>
+            <input type="text" id="city" name="city" placeholder="City"> <br>
+            <label for="pt">Province/Territory:</label> <br>
+            <input type="text" id="pt" name="pt" placeholder="Province/Territory"> <br>
+            <label for="pc">Postal Code:</label> <br>
+            <input type="text" id="pc" name="pc" placeholder="A1A 1A1"> <br>
+        </div>
+
+        <div class="btn save-btn">
+            <button type="button" id="saveChangesBtn">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer id="footer-container"></footer>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('../footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+    });
+
+    // Handle changing the profile picture
+    document.getElementById('changePhotoBtn').addEventListener('click', function() {
+        document.getElementById('fileInput').click();
+    });
+
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Update the profile picture in the profile page
+                document.getElementById('profile-picture').src = e.target.result;
+
+                // Update the profile picture in the navbar
+                const navbarProfilePicture = document.querySelector('.nav-profile img');
+                if (navbarProfilePicture) {
+                    navbarProfilePicture.src = e.target.result;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Handle saving changes and updating the footer (company name, phone, email, and location)
+    document.getElementById('saveChangesBtn').addEventListener('click', function() {
+        // Get the updated values
+        const newCompanyName = document.getElementById('fname').value || "YourCompanyName";
+        const newPhoneNumber = document.getElementById('pn').value || "+1 (844) 326-6005";
+        const newEmail = document.getElementById('email').value || "email@example.com";
+        const newAddress = document.getElementById('address').value || "123 Business St";
+        const newCity = document.getElementById('city').value || "City";
+        const newProvince = document.getElementById('pt').value || "Province/Territory";
+        const newPostalCode = document.getElementById('pc').value || "A1A 1A1";
+
+        // Update the footer
+        const footerContainer = document.getElementById('footer-container');
+
+        // Update company name
+        const companyNameElement = footerContainer.querySelector('.footer-credits p');
+        companyNameElement.textContent = `&copy; ${newCompanyName}`;
+
+        // Update phone number
+        const phoneElement = footerContainer.querySelector('.footer-column p:nth-of-type(1)');
+        phoneElement.textContent = newPhoneNumber;
+
+        // Update email
+        const emailElement = footerContainer.querySelector('.footer-column p:nth-of-type(2)');
+        emailElement.textContent = `Email Us: ${newEmail}`;
+
+        // Update location
+        const locationElement = footerContainer.querySelector('.footer-column p:nth-of-type(3)');
+        locationElement.textContent = `${newAddress}, ${newCity}, ${newProvince}, ${newPostalCode}`;
+    });
+</script>
+
+</body>
+</html>

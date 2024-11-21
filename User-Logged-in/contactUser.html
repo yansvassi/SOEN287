@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src = "../navbarscroll.js"> </script>
+  <title>Contact Us</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .contact-container {
+      width: 80%;
+      max-width: 800px;
+      background-color: #fff;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-top: 100px; /* Added margin-top to prevent overlap */
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 100%; /* Ensures the form elements take full width */
+    }
+
+    input, textarea {
+      width: 100%; /* Makes inputs and textarea span full width */
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box; /* Includes padding in the element width */
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 150px;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #7da2bc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #476378;
+    }
+
+    .contact-info {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .contact-info p {
+      color: #555;
+    }
+
+    .contact-info a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .contact-info a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  
+
+<div class="contact-container">
+  <h1>Contact Us</h1>
+  <form id="contactForm">
+    <input type="text" id="name" placeholder="Your Name" required>
+    <input type="email" id="email" placeholder="Your Email" required>
+    <input type="text" id="subject" placeholder="Subject" required>
+    <textarea id="message" placeholder="Your Message" required></textarea>
+    <button type="submit">Send Message</button>
+  </form>
+
+  <div class="contact-info">
+    <p>Phone: <a href="tel:+1234567890">+1 234 567 890</a></p>
+    <p>Email: <a href="mailto:info@yourbusiness.com">info@yourbusiness.com</a></p>
+    <p>Address: 123 Business St, City, Country</p>
+  </div>
+</div>
+
+<!-- Placeholder for the logged-in navbar -->
+<div id="logged-in-navbar"></div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../User-Logged-in/loggedInNav.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('logged-in-navbar').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading logged-in navbar:', error));
+  });
+</script>
+
+<script>
+  fetch('../footer.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('footer').innerHTML = data;
+          });
+
+  const contactForm = document.getElementById('contactForm');
+  contactForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    alert('Your message has been sent!');
+    contactForm.reset();
+  });
+</script>
+
+<div id="footer"></div>
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Specifies the chanracter encoding for the HTML document-->
+    <meta charset="UTF-8">
+    <!-- to esnure it is compatible with older versions of Interet Explorer -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- This is vital for mobiel devices, to match the viewport width to math the device -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Many icons used in the file is from Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Link to the CSS file names mpstyle.css -->
+    <link rel="stylesheet" href="../mpstyle.css">
+    <!-- Link to the CSS file names mpstyle.css -->
+    <link rel="stylesheet" href="../footerStyles.css">
+    <!-- Link to the CSS file names mpstyle.css -->
+    <link rel="stylesheet" href="../profile.css">
+    <!-- Link to javascript named navbarscroll.js -->
+    <script src = "../navbarscroll.js"> </script>
+    <!-- Link to the CSS file names mpstyle.css -->
+    <link rel="stylesheet" href="../MainPageStyle.css">
+    <!-- defines the title of the web page -->
+    <title> Client Profilel </title>
+
+
+</head>
+<body>
+
+    <!----------------------------- The Navigation Bar ----------------------------------->
+
+    <!-- Placeholder for the logged-in navbar -->
+    <div id="logged-in-navbar"></div>
+
+    <!-- JavaScript to load the logged-in navbar -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../User-Logged-in/loggedInNav.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('logged-in-navbar').innerHTML = data;
+                })
+                .catch(error => console.error('Error loading logged-in navbar:', error));
+        });
+    </script>
+
+    <!----------------------------- Questions ----------------------------------->
+    <div class="wrapper"> 
+      <div class="text-title"> 
+          <h1>Edit Profile</h1>
+      </div> 
+  
+      <div class="imgprofile-container">
+          <div class="specificimg-container">
+              <img src="../images/img_avatar2.png" alt="Avatar">
+          </div>
+  
+          <div class="questions-container">
+              <div class="btn"> 
+                  <button type="button" onclick="document.getElementById('imageUploader').click()">
+                      Change Photo
+                  </button>
+                  <input type="file" id="imageUploader" style="display:none" accept="image/*" onchange="updateProfileImage(event)">
+              </div>
+  
+              <div class="questions">
+                  <h2>Personal Information</h2>
+                  <label for="fname">First Name:</label> <br>
+                  <input type="text" id="fname" name="fname" placeholder="John"> <br>
+  
+                  <label for="lname">Last Name:</label> <br>
+                  <input type="text" id="lname" name="lname" placeholder="Robert"> <br>
+  
+                  <label for="email">Email Address:</label> <br>
+                  <input type="text" id="email" name="email" placeholder="username1234@gmail.com"> <br>
+  
+                  <label for="address">Street Address:</label> <br>
+                  <input type="text" id="address" name="address" placeholder="123 Cherry Street"> <br>
+  
+                  <label for="city">City:</label> <br>
+                  <input type="text" id="city" name="city" placeholder="Montreal"> <br>
+  
+                  <label for="pt">Province/Territory:</label> <br>
+                  <input type="text" id="pt" name="pt" placeholder="Quebec"> <br>
+  
+                  <label for="pc">Postal Code:</label> <br>
+                  <input type="text" id="pc" name="pc" placeholder="123 ABC"> <br>
+  
+                  <label for="pn">Phone Number:</label> <br>
+                  <input type="text" id="pn" name="pn" placeholder="999-999-9999">
+              </div>
+  
+              <div class="payment">
+                  <h2>Add Payment Method</h2>
+                  <label for="card-number">Card Number:</label> <br>
+                  <input type="text" id="card-number" name="card-number"> <br>
+  
+                  <label for="expiry-date">Expiry Date:</label> <br>
+                  <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY"> <br>
+  
+                  <label for="card-name">Name on Card:</label> <br>
+                  <input type="text" id="card-name" name="card-name" placeholder="John Doe">
+              </div>
+  
+              <div class="btn save-btn">
+                  <button type="button" onclick="">
+                      Save Changes
+                  </button>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+
+  <!----------------------------- Footer ----------------------------------->  
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <h3><a href="../view-only/contact.html">Contact Us</a></h3>
+        <p>+1 (844) 326-6005</p>
+        <p><a href="mailto:email@example.com">Email Us</a></p>
+        <p>Mon-Fri 9am-3pm PT</p>
+      </div>
+      <div class="footer-column">
+        <h3>Customers</h3>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Catalogs</a></li>
+          <li><a href="#">Do Not Sell My Info</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="../view-only/about.html">About Us</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-credits">
+      <p>&copy; YourCompanyName</p>
+    </div>
+
+
+
+</body>

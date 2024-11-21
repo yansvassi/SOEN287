@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!---------------------------Page style---------------------------->
+  <link rel="stylesheet" href="../BrowseStyles.css">
+  <link rel="stylesheet" href="../navStyles.css">
+  <link rel="stylesheet" href="../MainPageStyle.css">
+  <script src = "../navbarscroll.js"> </script>
+
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse</title>
+
+  <style>
+
+    .view-product-btn, .buy-product-btn{
+      padding: 10px 20px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .banner .products {
+        padding-bottom: 10px;
+    }
+
+    .button-link {
+    text-decoration: none; /* Remove underline */
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- The Navigation Bar -->
+<div id="logged-in-navbar-BA"></div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../User-Logged-in/loggedInNav.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('logged-in-navbar-BA').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading logged-in navbar:', error));
+  });
+</script>
+
+<!-- Banner -->
+<div class="banner">
+  <h1 class="products">Products</h1>
+</div>
+
+<!------------------------------------ Product Searchbar ------------------------------------>
+<div class="search-container">
+  <input type="text" id="searchInput" placeholder="Search Product Name..." onkeyup="filterProducts()">
+    <i class='bx bx-search'></i>
+</div>
+
+<script>
+  function filterProducts() {
+    // Get the input value
+    let input = document.getElementById('searchInput').value.toLowerCase();
+
+    // Get all product containers
+    let products = document.querySelectorAll('.product_box');
+
+    // Loop through all product containers
+    products.forEach(product => {
+        // Get the product name
+        let productName = product.querySelector('.product-name').textContent.toLowerCase();
+
+        // Show or hide the product based on the search match
+        if (productName.includes(input)) {
+            product.style.display = "";  // Show product
+        } else {
+            product.style.display = "none";  // Hide product
+        }
+    });
+}
+</script>
+
+
+<!------------Individual product------------>
+<div class="container" id="product-container">
+  <div class="product_box" id="product1">
+    <br>
+    <a href="#" class="product-name">Product 1</a>
+    <p class="product-price">$50</p>
+    <ul class="service-details">
+      <li>We do this</li>
+      <li>And even this</li>
+      <li>Wow! we also do this</li>
+      <li>This too</li>
+    </ul>
+    <div class="btn-group">
+
+   <!---Will bring to view product page-->
+   <a href="../User-Logged-in/ProductDetail.html" class="button-link">
+    <button class="view-product-btn btn">View</button>
+</a>
+    <button class="buy-product-btn btn" onclick="addToCart('Product 1', '50')">Buy</button>
+    </div>
+  </div>
+  <div class="container" id="product-container">
+    <div class="product_box" id="product2">
+      <br>
+      <a href="#" class="product-name">Product 2</a>
+      <p class="product-price">$20</p>
+      <ul class="service-details">
+        <li>We do this</li>
+        <li>And even this</li>
+        <li>Wow! we also do this</li>
+        <li>This too</li>
+      </ul>
+      <div class="btn-group">
+  
+     <!---Will bring to view product page-->
+     <a href="../User-Logged-in/ProductDetail.html" class="button-link">
+      <button class="view-product-btn btn">View</button>
+  </a>
+      <button class="buy-product-btn btn" onclick="addToCart('Product 2', '20')">Buy</button>
+      </div>
+    </div>
+
+    <script>
+        let cart = [];
+    
+        function addToCart(productName, productPrice) {
+            // Create a product object
+            const product = {
+                name: productName,
+                price: productPrice,
+                quantity: 1
+            };
+    
+            // Check if the item is already in the cart
+            const existingProduct = cart.find(item => item.name === productName);
+            if (existingProduct) {
+                existingProduct.quantity++;
+            } else {
+                cart.push(product);
+            }
+    
+            // Store cart in localStorage so it's persistent
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            alert(productName + ' has been added to your cart');
+        }
+
+  // Load products from the server
+  document.addEventListener("DOMContentLoaded", loadProducts);
+
+  function loadProducts() {
+    fetch("http://localhost:5001/services")
+      .then((response) => response.json())
+      .then((products) => {
+        const container = document.getElementById("product-container");
+        container.innerHTML = ""; // Clear existing content
+
+        products.forEach((product) => {
+          const productBox = document.createElement("div");
+          productBox.classList.add("product_box");
+          productBox.innerHTML = `
+            <br>
+            <a href="#" class="product-name">${product.Title}</a>
+            <p class="product-price">$${parseFloat(product.Price).toFixed(2)}</p>
+            <p class="service-details">${product.Description}</p>
+            <div class="btn-group">
+              <a href="../User-Logged-in/ProductDetail.html" class="button-link">
+                <button class="view-product-btn btn">View</button>
+              </a>
+              <button class="buy-product-btn btn" onclick="addToCart('${product.Title}', '${product.Price}')">Buy</button>
+            </div>
+          `;
+          container.appendChild(productBox);
+        });
+      })
+      .catch((error) => {
+        console.error("Error loading products:", error);
+      });
+  }
+
+  //new part here
+  products.forEach((product) => {
+  const productBox = document.createElement("div");
+  productBox.classList.add("product_box");
+  productBox.innerHTML = `
+    <br>
+    <a href="../User-Logged-in/ProductDetail.html?Title=${encodeURIComponent(product.Title)}&Price=${encodeURIComponent(product.Price)}&Description=${encodeURIComponent(product.Description)}" class="button-link">
+      <button class="view-product-btn btn">View</button>
+    </a>
+    <button class="buy-product-btn btn" onclick="addToCart('${product.Title}', '${product.Price}')">Buy</button>
+  `;
+  container.appendChild(productBox);
+});
+//ends here
+
+    </script>
+  </div>
+</div>
+
+<!-------------------------------- Footer ---------------------------------->
+<div id="footer-container"></div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../footer.html')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('footer-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+  });
+
+  </script>
+
+</body>
+</html>

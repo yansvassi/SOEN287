@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src = "../navbarscroll.js"> </script>
+  <title>My Services</title>
+
+  <!-- Include navbar and footer styles -->
+  <link rel="stylesheet" href="../mpstyle.css">
+  <link rel="stylesheet" href="../footerStyles.css">
+  <link rel="stylesheet" href="../MainPageStyle.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Include jsPDF -->
+
+  <style>
+    /* General body settings */
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Wrap all content in a container */
+    .content-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      margin-top: 120px;
+    }
+
+    h2 {
+      color: #0f253d;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      max-width: 800px;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    table, th, td {
+      border: 1px solid #d7e2ea;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #345e81;
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fff;
+    }
+
+    button {
+      padding: 15px 60px;
+      background-color: #4a7b9b;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #264e65;
+    }
+
+    #searchBar {
+      margin-bottom: 20px;
+      padding: 10px;
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Placeholder for the logged-in navbar -->
+<div id="logged-in-navbar"></div>
+
+<!-- JavaScript to load the logged-in navbar -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch('../User-Logged-in/loggedInNav.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('logged-in-navbar').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading logged-in navbar:', error));
+  });
+</script>
+
+<!-- Wrap the content in a container -->
+<div class="content-wrapper">
+  <h2>My Services</h2>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Service</th>
+      <th>Date</th>
+      <th>Status</th>
+      <th>Cost</th>
+      <th>Cancel Service</th>
+      <th>Invoice(PDF)</th>
+    </tr>
+    </thead>
+    <tbody id="availedServicesTable"></tbody>
+  </table>
+
+  <button id="backToDashboard">Back to Dashboard</button>
+</div>
+
+<script>
+// Example services data
+const availedServices = [
+  { service: 'Regular Interior Cleaning', date: '2024-01-12', status: 'Completed', cost: '$100' },
+  { service: 'Comprehensive Cleaning', date: '2024-01-14', status: 'Cancelled', cost: '$150' },
+  { service: 'Deep Carpet Cleaning', date: '2024-01-16', status: 'Pending', cost: '$200' }
+];
+
+function displayAvailedServices(services) {
+  const availedServicesTable = document.getElementById('availedServicesTable');
+  availedServicesTable.innerHTML = '';
+
+  services.forEach((service, index) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${service.service}</td>
+      <td>${service.date}</td>
+      <td>${service.status}</td>
+      <td>${service.cost}</td>
+      <td><button onclick="cancelService(${index})">Cancel</button></td>
+      <td><button onclick="generatePDF(${index})">View Invoice</button></td>
+
+    `;
+
+    availedServicesTable.appendChild(row);
+  });
+}
+
+// Cancel a service, with extra conditions
+function cancelService(index) {
+  const service = availedServices[index];
+
+  if (service.status === 'Completed') {
+    alert('You cannot cancel this service as it is already completed');
+  } else if (service.status === 'Cancelled'){
+    alert('This service is already cancelled');
+  } else if (service.status === 'Pending'){
+    const confirmCancel = confirm('Are you sure you want to cancel this service?');
+    if(confirmCancel){
+      service.status = 'Cancelled'
+      displayAvailedServices(availedServices)
+    }
+
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  displayAvailedServices(availedServices);
+});
+
+function generatePDF(index) {
+    const service = availedServices[index];
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text('Service Invoice', 10, 10);
+
+    doc.setFontSize(12);
+    doc.text(`Service: ${service.service}`, 10, 40);
+    doc.text(`Date: ${service.date}`, 10, 50);
+    doc.text(`Status: ${service.status}`, 10, 60);
+    doc.text(`Cost: ${service.cost}`, 10, 70);
+
+    doc.save(`${service.customer}_Invoice.pdf`);
+  }
+
+const backToDashboardBtn = document.getElementById('backToDashboard');
+backToDashboardBtn.addEventListener('click', function() {
+  window.location.href = 'User-dashboard.html';
+});
+</script>
+
+<!----------------------------- Footer ----------------------------------->
+<div id="footer-container"></div>
+<script>
+  // JavaScript to load the footer.html into the current document
+  document.addEventListener("DOMContentLoaded", function() {
+      fetch('footer.html')
+          .then(response => response.text())
+          .then(data => {
+              document.getElementById('footer-container').innerHTML = data;
+          })
+          .catch(error => console.error('Error loading footer:', error));
+  });
+</script>
+
+</body>
+</html>
+
+

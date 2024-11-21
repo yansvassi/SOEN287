@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Specifies the character encoding for the HTML document -->
+    <meta charset="UTF-8">
+    <!-- To ensure it is compatible with older versions of Internet Explorer -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- This is vital for mobile devices, to match the viewport width to match the device -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Many icons used in the file are from Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Link to the CSS file named mpstyle.css -->
+    <link rel="stylesheet" href="../register.css">
+    <!-- Defines the title of the web page -->
+    <title>Register Page</title>
+</head>
+
+<body>
+
+    <!----------------------------- Form Box ----------------------------------->
+    <div class="form-box">
+
+        <!------------------- Registration Form (First) -------------------------->
+        <div class="register-container" id="register">
+            <div class="top">
+                <span>Have an account? <a href="#" onclick="login()">Login</a></span>
+                <header>Register</header>
+            </div>
+            <div class="two-forms">
+                <div class="input-box">
+                    <input type="text" class="input-field" placeholder="First Name">
+                    <i class="bx bx-user"></i>
+                </div>
+                <div class="input-box">
+                    <input type="text" class="input-field" placeholder="Last Name">
+                    <i class="bx bx-user"></i>
+                </div>
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Email">
+                <i class="bx bx-envelope"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Password">
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            <div class = "admin-client">
+                <input type = "radio" id = "login-admin" name = "login-type" required > <label for="login-client" class = "BA-label" > Business Administrator </label>
+                <input type = "radio" id = "login-client" name = "login-type" required > <label for="login-client" class = "client-label"> Customer </label>
+            </div>
+            <div class="input-box">
+                <input type="submit" class="submit" value="Register">
+            </div>
+            <div class="two-col">
+                <div class="one">
+                    <input type="checkbox" id="register-check">
+                    <label for="register-check"> Remember Me</label>
+                </div>
+                <div class="two">
+                    <label><a href="#">Terms & conditions</a></label>
+                </div>
+            </div>
+        </div>
+
+        <!------------------- Login Form (Second) -------------------------->
+        <div class="login-container" id="login">
+            <div class="top">
+                <span>Don't have an account? <a href="#" onclick="register()">Register</a></span>
+                <header>Login</header>
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Email">
+                <i class="bx bx-user"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Password">
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            <div class = "admin-client">
+                <input type = "radio" id = "login-admin" name = "login-type" required > <label for="login-client" class = "BA-label" > Business Administrator </label>
+                <input type = "radio" id = "login-client" name = "login-type" required > <label for="login-client" class = "client-label"> Customer </label>
+            </div>
+            <div class="input-box">
+                <input type="submit" class="submit" value="Sign In">
+            </div>
+            <div class="two-col">
+                <div class="one">
+                    <input type="checkbox" id="login-check">
+                    <label for="login-check"> Remember Me</label>
+                </div>
+                <div class="two">
+                    <label><a href="#">Forgot password?</a></label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- JavaScript functions -->
+<script>
+    function myMenuFunction() {
+    var i = document.getElementById("navMenu");
+    if(i.className === "nav-menu") {
+        i.className += " responsive";
+    } else {
+        i.className = "nav-menu";
+    }
+}
+
+
+var loginBtn = document.getElementById("loginBtn");
+var registerBtn = document.getElementById("registerBtn");
+var loginForm = document.getElementById("login");
+var registerForm = document.getElementById("register");
+
+
+function register() {
+    loginForm.style.left = "-510px"; 
+    registerForm.style.right = "5px"; 
+    if(registerBtn) {
+        registerBtn.className += " white-btn"; 
+    }
+    if(loginBtn) {
+        loginBtn.className = "btn"; 
+    }
+    loginForm.style.opacity = 0; 
+    registerForm.style.opacity = 1; 
+}
+
+
+function login() {
+    loginForm.style.left = "4px"; 
+    registerForm.style.right = "-520px"; 
+    if(loginBtn) {
+        loginBtn.className += " white-btn"; 
+    }
+    if(registerBtn) {
+        registerBtn.className = "btn"; 
+    }
+    loginForm.style.opacity = 1; 
+    registerForm.style.opacity = 0; 
+}
+</script>
+
+</body>
+</html>
