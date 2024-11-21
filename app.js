@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 
 const app = express();
-const PORT = 5000;
+const PORT = 7011;
 
 // Middleware
 app.use(bodyParser.json());
@@ -28,8 +28,12 @@ db.connect((err) => {
     }
 });
 
+app.get("/view-only/addclient", (req, res) => {
+    res.send("This is the addclient endpoint. Use POST to submit data.");
+});
+
 // Add a new client 
-app.post("/addclient", (req, res) => {
+app.post("/view-only/addclient", (req, res) => {
     const client = {
         Fname: req.body.Fname,
         Lname: req.body.Lname,
