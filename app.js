@@ -4,7 +4,11 @@ const bodyParser = require("body-parser");
 const path = require("path");
 
 const app = express();
+<<<<<<< HEAD
 const PORT = 7011;
+=======
+const PORT = 5000;
+>>>>>>> d4aa1c1d1fbf43e2e89967ee6ba3867bebe40cc9
 
 // Middleware
 app.use(bodyParser.json());
@@ -17,7 +21,11 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
+<<<<<<< HEAD
     database: "SOEN287", // Replace with your database name
+=======
+    database: "soen287project", // Replace with your database name
+>>>>>>> d4aa1c1d1fbf43e2e89967ee6ba3867bebe40cc9
 });
 
 db.connect((err) => {
@@ -28,6 +36,7 @@ db.connect((err) => {
     }
 });
 
+<<<<<<< HEAD
 app.get("/view-only/addclient", (req, res) => {
     res.send("This is the addclient endpoint. Use POST to submit data.");
 });
@@ -55,6 +64,8 @@ app.post("/view-only/addclient", (req, res) => {
     
 })
 
+=======
+>>>>>>> d4aa1c1d1fbf43e2e89967ee6ba3867bebe40cc9
 // Fetch all services (Admin page)
 app.get("/services", (req, res) => {
     const sql = "SELECT * FROM services";

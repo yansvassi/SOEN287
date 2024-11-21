@@ -14,16 +14,13 @@
     <!-- Link to the CSS file names mpstyle.css -->
     <link rel="stylesheet" href="../footerStyles.css">
     <!-- Link to javascript named navbarscroll.js -->
-    <script src = "../navbarscroll.js"> </script>
+    <script src = ../navbarscroll.js"> </script>
     <!-- Link to the CSS file names mpstyle.css -->
     <link rel="stylesheet" href="../MainPageStyle.css">
     <!-- defines the title of the web page -->
+    <script src="../services.js"></script>
     <title> Home Page </title>
-
-<<<<<<< HEAD
-
-=======
-<style>
+    <style>
       .view-product-btn, .buy-product-btn{
       padding: 10px 20px;
       border: none;
@@ -34,28 +31,35 @@
       transition: all 0.3s ease;
     }
 </style>
->>>>>>> d4aa1c1d1fbf43e2e89967ee6ba3867bebe40cc9
+
 </head>
 
 <body>
 
 <!----------------------------- The Navigation Bar ----------------------------------->
 
-<!-- Placeholder for the logged-in navbar -->
-<div id="logged-in-navbar"></div>
-
-<!-- JavaScript to load the logged-in navbar -->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        fetch('../User-Logged-in/loggedInNav.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('logged-in-navbar').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading logged-in navbar:', error));
-    });
-</script>
-
+<div class="nav-wrapper">
+    <nav class="nav" id = "nav1">
+      <div class="nav-logo">
+        <p>LOGO .</p>
+      </div>
+      <div class="nav-menu" id="navMenu">
+        <ul>
+          <li><a href="../view-only/Home.html" class="link active">Home</a></li>
+          <li><a href="../view-only/services.html" class="link">Services</a></li>
+          <li><a href="../view-only/about.html" class="link">About</a></li>
+          <li><a href="../view-only/contact.html" class="link">Contact</a></li>
+        </ul>
+      </div>
+      <div class="nav-button">
+        <button id="loginBtn" onclick="window.location.href='login.html';" class="btn white-btn">Sign In</button>
+        <button id="registerBtn" onclick="window.location.href='../view-only/Register.html';" class="btn">Sign Up</button> 
+      </div>
+      <div class="nav-menu-btn">
+        <i class="bx bx-menu" onclick="myMenuFunction()"></i>
+      </div>
+    </nav>
+  </div>
 
   <!-- Front Page Image -->
 
@@ -74,7 +78,7 @@
         <div class = "tape1"> </div>
     </div>
     <div class="welcome-image">
-        <img src="../images/Welcomeimage1.jpg" alt="Welcome Image">
+        <img src="../SOEN287/images/Welcomeimage1.jpg" alt="Welcome Image">
 
     </div>
 </div>
@@ -86,94 +90,46 @@
         <h1> Result-Focus Something Services </h1>
         <p> Each services has been designed carrefully to deliver the outcome you're looking for </p>
 
-    </div>
-<<<<<<< HEAD
-    <div class="product_box">
-      <br>
-      <a href="#link to view product"
-         class="product-name">Product 1</a>
-      <p></p>
-      <p class="product-price">
-        $XX
-      </p>
-      <ul class="service-details">
-        <li>We do this</li>
-        <li>And even this</li>
-        <li>Wow! we also do this</li>
-        <li>This too</li>
-      </ul>
-  </div>
-
-  <!-- Product Services -->
-  <div class="product_box">
-    <br>
-    <a href="#link to view product"
-       class="product-name">Product 2</a>
-    <p></p>
-    <p class="product-price">
-      $XX
-    </p>
-    <ul class="service-details">
-      <li>We do this</li>
-      <li>And even this</li>
-      <li>Wow! we also do this</li>
-      <li>This too</li>
-    </ul>
+    
+  <!----------Products--------->
 </div>
-    <div class="product_box">
-      <br>
-      <a href="#link to view product"
-         class="product-name">Product 3</a>
-      <p></p>
-      <p class="product-price">
-        $XX
-      </p>
-      <ul class="service-details">
-        <li>We do this</li>
-        <li>And even this</li>
-        <li>Wow! we also do this</li>
-        <li>This too</li>
-      </ul>
-  </div>
-=======
-    <div class="container" id="product-container">
-      <div class="product_box" id="product1"></div>
-    </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", loadProducts);
+<div class="container" id="product-container">
+  <div class="product_box" id="product1"></div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", loadProducts);
 
 function loadProducts() {
-  fetch("http://localhost:5001/services")
-    .then((response) => response.json())
-    .then((products) => {
-      const container = document.getElementById("product-container");
-      container.innerHTML = ""; // Clear existing content
+fetch("http://localhost:5001/services")
+.then((response) => response.json())
+.then((products) => {
+  const container = document.getElementById("product-container");
+  container.innerHTML = ""; // Clear existing content
 
-      products.forEach((product) => {
-        const productBox = document.createElement("div");
-        productBox.classList.add("product_box");
-        productBox.innerHTML = `
-          <br>
-          <a href="#" class="product-name">${product.Title}</a>
-          <p class="product-price">$${parseFloat(product.Price).toFixed(2)}</p>
-          <p class="service-details">${product.Description}</p>
-          <div class="btn-group">
-            <br>
+  products.forEach((product) => {
+    const productBox = document.createElement("div");
+    productBox.classList.add("product_box");
+    productBox.innerHTML = `
+      <br>
+      <a href="#" class="product-name">${product.Title}</a>
+      <p class="product-price">$${parseFloat(product.Price).toFixed(2)}</p>
+      <p class="service-details">${product.Description}</p>
+      <div class="btn-group">
+        <br>
 <a href="../User-Logged-in/ProductDetail.html?Title=${encodeURIComponent(product.Title)}&Price=${encodeURIComponent(product.Price)}&Description=${encodeURIComponent(product.Description)}" class="button-link">
-      <button class="view-product-btn btn">View</button>
-    </a>
-          </div>
-        `;
-        container.appendChild(productBox);
-      });
-    })
-    .catch((error) => {
-      console.error("Error loading products:", error);
-    });
+  <button class="view-product-btn btn">View</button>
+</a>
+      </div>
+    `;
+    container.appendChild(productBox);
+  });
+})
+.catch((error) => {
+  console.error("Error loading products:", error);
+});
 }
-    </script>
->>>>>>> d4aa1c1d1fbf43e2e89967ee6ba3867bebe40cc9
-  </div>
+</script>
+</div>
 
   <!----------------------------- Satisfaction ----------------------------------->
 
@@ -206,7 +162,7 @@ function loadProducts() {
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-column">
-        <h3><a href="../view-only/contact.html">Contact Us</a></h3>
+        <h3><a href="contact.html">Contact Us</a></h3>
         <p>+1 (844) 326-6005</p>
         <p><a href="mailto:email@example.com">Email Us</a></p>
         <p>Mon-Fri 9am-3pm PT</p>
@@ -214,7 +170,6 @@ function loadProducts() {
       <div class="footer-column">
         <h3>Customers</h3>
         <ul>
-          <li><a href="#">FAQ</a></li>
           <li><a href="#">Catalogs</a></li>
           <li><a href="#">Do Not Sell My Info</a></li>
         </ul>
@@ -222,7 +177,7 @@ function loadProducts() {
       <div class="footer-column">
         <h3>Company</h3>
         <ul>
-          <li><a href="../view-only/about.html">About Us</a></li>
+          <li><a href="about.html">About Us</a></li>
           <li><a href="#">Privacy Policy</a></li>
           <li><a href="#">Terms</a></li>
         </ul>
@@ -233,6 +188,48 @@ function loadProducts() {
     </div>
 
 
+
+<!-- Java script porition -->
+<script>
+
+    function myMenuFunction() {
+     var i = document.getElementById("navMenu");
+
+     if(i.className === "nav-menu") {
+         i.className += " responsive";
+     } else {
+         i.className = "nav-menu";
+     }
+    }
+
+ </script>
+
+ <script>
+
+     var a = document.getElementById("loginBtn");
+     var b = document.getElementById("registerBtn");
+     var x = document.getElementById("login");
+     var y = document.getElementById("register");
+
+     function login() {
+         x.style.left = "4px";
+         y.style.right = "-520px";
+         a.className += " white-btn";
+         b.className = "btn";
+         x.style.opacity = 1;
+         y.style.opacity = 0;
+     }
+
+     function register() {
+         x.style.left = "-510px";
+         y.style.right = "5px";
+         a.className = "btn";
+         b.className += " white-btn";
+         x.style.opacity = 0;
+         y.style.opacity = 1;
+     }
+
+ </script>
 
  </body>
  </html>
