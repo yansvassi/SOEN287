@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 
 const app = express();
-const PORT = 7011;
+const PORT = 7013;
 
 // Middleware
 app.use(bodyParser.json());
@@ -92,41 +92,78 @@ app.post("/addlogin", (req, res) => {
     const client = {
         Email: req.body.Email,
         Password: req.body.Password,
-        choice: req.body['login-type'],
+        choice: req.body["login-type"],
     };
 
-    // Validate required fields
     if (!client.Email || !client.Password || !client.choice) {
         return res.status(400).send("All fields are required.");
     }
 
-    // Check if the email exists
     const checkEmail = "SELECT * FROM `Register Informations` WHERE Email = ?";
-    db.query(checkEmail, client.Email, (err, results) => {
+    db.query(checkEmail, [client.Email], (err, results) => {
         if (err) {
             console.error("Error checking email:", err.message);
             return res.status(500).send("An error occurred while checking the email.");
         }
 
         if (results.length === 0) {
-            // Email does not exist
-            return res.status(400).send("Email not registered.");
+            return res.status(401).send("Email not registered.");
         }
 
-        const user = results[0]; // Get the user record
+        const user = results[0];
 
-        // Check if the password matches (use bcrypt for secure comparisons)
         if (user.Password !== client.Password) {
-            return res.status(400).send("Incorrect password.");
+            return res.status(401).send("Incorrect password.");
         }
 
-            // Redirect based on user role
-            if (client.choice === "admin" && user.choice === "admin") {
-                return res.sendFile(path.join(__dirname, "BA-Logged-in/BAHome.html"));
-            } else (client.choice === "client" && user.choice === "client") 
-                return res.sendFile(path.join(__dirname, "User-Logged-in/HomeLoggedin.html"));
-        });
+        // Redirect based on user role
+        if (client.choice === "admin" && user.choice === "admin") {
+            return res.sendFile(path.join(__dirname, "BA-Logged-in/BAHome.html"));
+        } else if (client.choice === "client" && user.choice === "client") {
+            return res.sendFile(path.join(__dirname, "User-Logged-in/HomeLoggedin.html"));
+        } else {
+            return res.status(400).send("Invalid role specified.");
+        }
     });
+});
+
+app.post("/BA-Logged-in/editprofile", (req, res) => {
+    
+
+    const { fname, email, pn, address, city, pt, pc } = req.body;
+    let updates = [];
+    let values = [];
+
+    if (fname) updates.push("fname = ?"), values.push(fname);
+    if (email) updates.push("email = ?"), values.push(email);
+    if (pn) updates.push("pn = ?"), values.push(pn);
+    if (address) updates.push("address = ?"), values.push(address);
+    if (city) updates.push("city = ?"), values.push(city);
+    if (pt) updates.push("position_title = ?"), values.push(pt);
+    if (pc) updates.push("postal_code = ?"), values.push(pc);
+
+    // Check if there are fields to update
+    if (updates.length === 0) {
+        return res.status(400).send("No fields to update.");
+    }
+
+    // Construct the SQL query
+    const sql = `UPDATE AdminProfile SET ${updates.join(", ")} LIMIT 1`;
+
+    // Execute the query
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error("Error updating profile:", err.message);
+            return res.status(500).send("An error occurred while updating the profile.");
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).send("No profile found to update.");
+        }
+
+        res.status(200).send("Profile updated successfully.");
+    });
+});
 
 
 // Add a new service
