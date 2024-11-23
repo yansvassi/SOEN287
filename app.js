@@ -4,11 +4,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 
 const app = express();
-<<<<<<< HEAD
 const PORT = 7011;
-=======
-const PORT = 5000;
->>>>>>> d4aa1c1d1fbf43e2e89967ee6ba3867bebe40cc9
 
 // Middleware
 app.use(bodyParser.json());
@@ -21,11 +17,7 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-<<<<<<< HEAD
     database: "SOEN287", // Replace with your database name
-=======
-    database: "soen287project", // Replace with your database name
->>>>>>> d4aa1c1d1fbf43e2e89967ee6ba3867bebe40cc9
 });
 
 db.connect((err) => {
@@ -36,7 +28,6 @@ db.connect((err) => {
     }
 });
 
-<<<<<<< HEAD
 app.get("/view-only/addclient", (req, res) => {
     res.send("This is the addclient endpoint. Use POST to submit data.");
 });
@@ -47,10 +38,28 @@ app.post("/view-only/addclient", (req, res) => {
         Fname: req.body.Fname,
         Lname: req.body.Lname,
         Email: req.body.Email, 
-        Password: req.body.Password
+        Password: req.body.Password,
+        choice: req.body['login-type'],
 
-
+        
     };
+
+    if (!client.Fname || !client.Lname || !client.Email || !client.Password || !client.choice) {
+        return res.status(400).send("All fields are required.");
+    }
+
+    const checkEmail = "SELECT * FROM `Register Informations` WHERE Email = ?";
+    db.query(checkEmail, client.Email, (err, results) => 
+    {
+        if (err)
+            {
+                console.error("Error checking email!");
+                return res.status(500).send("An error occurred while checking the email");
+            }
+            if (results.length > 0) {
+                // Email already exists
+                return res.status(400).send("This email is already registered. Please return to the main site and try again.");
+    }
 
     const sql = "INSERT INTO `Register Informations` SET ?";
     db.query(sql, client, (err, result) => {
@@ -58,25 +67,67 @@ app.post("/view-only/addclient", (req, res) => {
             console.error("Error inserting record:", err.message);
             res.status(500).send("Could not insert new record!");
         } else {
-            res.status(200).send("Record inserted successfully!");
+            if (client.choice == "admin")
+                {
+                    res.sendFile(path.join(__dirname, "BA-Logged-in/BAHome.html"));
+
+                }
+
+            if (client.choice = "client")
+                {
+                    res.sendFile(path.join(__dirname, "User-Logged-in/HomeLoggedin.html"));
+                }
         }
+    });
+
     });
     
 })
 
-=======
->>>>>>> d4aa1c1d1fbf43e2e89967ee6ba3867bebe40cc9
-// Fetch all services (Admin page)
-app.get("/services", (req, res) => {
-    const sql = "SELECT * FROM services";
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error("Error fetching services:", err);
-            return res.status(500).send("Error fetching services.");
-        }
-        res.json(results);
-    });
+app.get("/addlogin", (req, res) => {
+    res.send("This is the addlogin endpoint. Use POST to submit data.");
 });
+
+app.post("/addlogin", (req, res) => {
+    const client = {
+        Email: req.body.Email,
+        Password: req.body.Password,
+        choice: req.body['login-type'],
+    };
+
+    // Validate required fields
+    if (!client.Email || !client.Password || !client.choice) {
+        return res.status(400).send("All fields are required.");
+    }
+
+    // Check if the email exists
+    const checkEmail = "SELECT * FROM `Register Informations` WHERE Email = ?";
+    db.query(checkEmail, client.Email, (err, results) => {
+        if (err) {
+            console.error("Error checking email:", err.message);
+            return res.status(500).send("An error occurred while checking the email.");
+        }
+
+        if (results.length === 0) {
+            // Email does not exist
+            return res.status(400).send("Email not registered.");
+        }
+
+        const user = results[0]; // Get the user record
+
+        // Check if the password matches (use bcrypt for secure comparisons)
+        if (user.Password !== client.Password) {
+            return res.status(400).send("Incorrect password.");
+        }
+
+            // Redirect based on user role
+            if (client.choice === "admin" && user.choice === "admin") {
+                return res.sendFile(path.join(__dirname, "BA-Logged-in/BAHome.html"));
+            } else (client.choice === "client" && user.choice === "client") 
+                return res.sendFile(path.join(__dirname, "User-Logged-in/HomeLoggedin.html"));
+        });
+    });
+
 
 // Add a new service
 app.post("/services", (req, res) => {
@@ -110,6 +161,35 @@ app.put("/services/:id", (req, res) => {
             return res.status(500).send("Failed to update service.");
         }
         res.send("Service updated successfully.");
+    });
+});
+
+// Get the descriptions for Home and About
+app.get("/api/descriptions", (req,res) => {
+    const sql = "SELECT * FROM Descriptions";
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error getting descriptions:", err);
+            res.status(500).json({ error: "Error getting descriptions." });
+        } 
+        else {
+            res.json(results);
+        }
+    });
+});
+
+// Update descriptions
+app.put("/api/descriptions", (req, res) => {
+    const { section, description } = req.body;
+    const sql = "UPDATE Descriptions SET description = ? WHERE section = ?";
+    db.query(sql, [description, section], (err) => {
+        if (err){
+            console.error("Error updating description:", err);
+            res.status(500).json({ error: "Error updating description." });
+        }
+        else {
+            res.json({ message: '${section} description updated successfully!' });
+        }
     });
 });
 
