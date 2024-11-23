@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 
 const app = express();
-const PORT = 7011;
+const PORT = 7020;
 
 // Middleware
 app.use(bodyParser.json());
@@ -207,3 +207,82 @@ app.get("/client", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+
+//yana
+const cors = require("cors");
+
+// Middleware
+app.use(bodyParser.json());
+app.use(cors());
+
+// Route: Add a new service
+app.post("/services", (req, res) => {
+  const {Title, Description, Price } = req.body;
+
+  if (!Title || !Description || Price == null) {
+    return res.status(400).json({ success: false, message: "All fields are required." });
+  }
+
+  const query = "INSERT INTO Service (Title, Description, Price) VALUES (?, ?, ?)";
+  db.query(query, [Title, Description, Price], (err, result) => {
+    if (err) {
+      console.error("Error inserting data:", err);
+      return res.status(500).json({ success: false, message: "Database error." });
+    }
+    res.json({ success: true, id: result.insertId });
+  });
+});
+
+// Route: Get all services
+app.get("/services", (req, res) => {
+  const query = "SELECT * FROM Service";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error fetching data:", err);
+      return res.status(500).json({ success: false, message: "Database error." });
+    }
+    res.json(results);
+  });
+});
+
+// Route: Update a service
+app.put("/services/:id", (req, res) => {
+  const { id } = req.params;
+  const { Title, Description, Price } = req.body;
+
+  if (!Title || !Description || Price == null) {
+    return res.status(400).json({ success: false, message: "All fields are required." });
+  }
+
+  const query = "UPDATE Service SET Title = ?, Description = ?, Price = ? WHERE id = ?";
+  db.query(query, [Title, Description, Price, id], (err, result) => {
+    if (err) {
+      console.error("Error updating data:", err);
+      return res.status(500).json({ success: false, message: "Database error." });
+    }
+    res.json({ success: true });
+  });
+});
+
+// Route: Delete a service
+app.delete("/services/:id", (req, res) => {
+  const { id } = req.params;
+
+  console.log(`Received delete request for ID: ${id}`); // Debug log
+
+  const query = "DELETE FROM Service WHERE id = ?";
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error("Error deleting data:", err);
+      return res.status(500).json({ success: false, message: "Database error." });
+    }
+
+    if (result.affectedRows > 0) {
+      res.json({ success: true });
+    } else {
+      res.status(404).json({ success: false, message: "Service not found." });
+    }
+  });
+});
+
