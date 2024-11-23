@@ -57,3 +57,22 @@ document.getElementById('cancelEditBtn').addEventListener('click', function() {
     // Reload the page to discard changes and return to the original product details
     location.reload();
 });
+
+// Get and display descriptions for Home and About 
+document.addEventListener("DOMContentLoaded", () => {
+    fetch("/api/descriptions")
+        .then((response) => response.json())
+        .then((data) => {
+            const homeDesc = data.find((desc) => desc.section === "Home");
+            const aboutDesc = data.find((desc) => desc.section === "About");
+
+            if (homeDesc) {
+                document.getElementById("home-description").textContent = homeDesc.description; // Use quotes for ID
+            }
+
+            if (aboutDesc) {
+                document.getElementById("about-description").textContent = aboutDesc.description; // Fix `about.description`
+            }
+        })
+        .catch((error) => console.error("Error getting descriptions:", error));
+});
