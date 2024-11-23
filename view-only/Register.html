@@ -44,18 +44,16 @@
                 <input type="password" class="input-field" name = "Password" placeholder="Password">
                 <i class="bx bx-lock-alt"></i>
             </div>
-            <div class = "admin-client">
-                <input type = "radio" id = "login-admin" name = "login-type" required > <label for="login-client" class = "BA-label" > Business Administrator </label>
-                <input type = "radio" id = "login-client" name = "login-type" required > <label for="login-client" class = "client-label"> Customer </label>
+            <div class="admin-client">
+                <input type="radio" id="register-admin" name="login-type" value="admin" required>
+                <label for="register-admin" class="BA-label">Business Administrator</label>
+                <input type="radio" id="register-client" name="login-type" value="client" required>
+                <label for="register-client" class="client-label">Customer</label>
             </div>
             <div class="input-box">
                 <input type="submit" class="submit" value="Register">
             </div>
             <div class="two-col">
-                <div class="one">
-                    <input type="checkbox" id="register-check">
-                    <label for="register-check"> Remember Me</label>
-                </div>
                 <div class="two">
                     <label><a href="#">Terms & conditions</a></label>
                 </div>
@@ -77,21 +75,14 @@
                 <input type="password" class="input-field" placeholder="Password">
                 <i class="bx bx-lock-alt"></i>
             </div>
-            <div class = "admin-client">
-                <input type = "radio" id = "login-admin" name = "login-type" required > <label for="login-client" class = "BA-label" > Business Administrator </label>
-                <input type = "radio" id = "login-client" name = "login-type" required > <label for="login-client" class = "client-label"> Customer </label>
+            <div class="admin-client">
+                <input type="radio" id="login-admin" name="login-type" value="admin" required>
+                <label for="login-admin" class="BA-label">Business Administrator</label>
+                <input type="radio" id="login-client" name="login-type" value="client" required>
+                <label for="login-client" class="client-label">Customer</label>
             </div>
             <div class="input-box">
                 <input type="submit" class="submit" value="Sign In">
-            </div>
-            <div class="two-col">
-                <div class="one">
-                    <input type="checkbox" id="login-check">
-                    <label for="login-check"> Remember Me</label>
-                </div>
-                <div class="two">
-                    <label><a href="#">Forgot password?</a></label>
-                </div>
             </div>
         </div>
     </div>
