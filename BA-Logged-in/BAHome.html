@@ -26,12 +26,10 @@
       font-size: 16px;
     }
 
-
     .edit-icon {
     font-size: 24px; /* Adjust the size as needed */
     color: white; /* Set the icon color to white */
 }
-
 
     #toggleEditModeBtn:hover {
       background-color: #081d29;
@@ -41,6 +39,17 @@
     .editable {
       cursor: pointer;
     }
+
+      .view-product-btn, .buy-product-btn{
+      padding: 10px 20px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
   </style>
 </head>
 
@@ -86,45 +95,44 @@
 
 
 <!-- Product Section -->
-<div class="container">
-  <div class="text-box">
-    <h1 class="editable" contenteditable="false" id="productTitle">Result-Focus Something Services</h1>
-    <p class="editable" contenteditable="false" id="productDesc">Each service has been designed carefully to deliver the outcome you're looking for.</p>
-  </div>
-
-  <div class="product_box">
-    <a href="#" class="product-name editable" contenteditable="false" id="productName1">Product 1</a>
-    <p class="product-price editable" contenteditable="false" id="productPrice1">$XX</p>
-    <ul class="service-details">
-      <li class="editable" contenteditable="false">We do this</li>
-      <li class="editable" contenteditable="false">And even this</li>
-      <li class="editable" contenteditable="false">Wow! we also do this</li>
-      <li class="editable" contenteditable="false">This too</li>
-    </ul>
-  </div>
-
-  <div class="product_box">
-    <a href="#" class="product-name editable" contenteditable="false" id="productName2">Product 2</a>
-    <p class="product-price editable" contenteditable="false" id="productPrice2">$XX</p>
-    <ul class="service-details">
-      <li class="editable" contenteditable="false">We do this</li>
-      <li class="editable" contenteditable="false">And even this</li>
-      <li class="editable" contenteditable="false">Wow! we also do this</li>
-      <li class="editable" contenteditable="false">This too</li>
-    </ul>
-  </div>
-
-  <div class="product_box">
-    <a href="#" class="product-name editable" contenteditable="false" id="productName3">Product 3</a>
-    <p class="product-price editable" contenteditable="false" id="productPrice3">$XX</p>
-    <ul class="service-details">
-      <li class="editable" contenteditable="false">We do this</li>
-      <li class="editable" contenteditable="false">And even this</li>
-      <li class="editable" contenteditable="false">Wow! we also do this</li>
-      <li class="editable" contenteditable="false">This too</li>
-    </ul>
-  </div>
+<div class="container" id="product-container">
+  <div class="product_box" id="product1"></div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", loadProducts);
+
+function loadProducts() {
+fetch("http://localhost:7013/servicess")
+.then((response) => response.json())
+.then((products) => {
+  const container = document.getElementById("product-container");
+  container.innerHTML = ""; // Clear existing content
+
+  products.forEach((product) => {
+    const productBox = document.createElement("div");
+    productBox.classList.add("product_box");
+    productBox.innerHTML = `
+      <br>
+      <a href="#" class="product-name">${product.Title}</a>
+      <p class="product-price">$${parseFloat(product.Price).toFixed(2)}</p>
+      <p class="service-details">${product.Description}</p>
+      <div class="btn-group">
+        <br>
+<a href="../User-Logged-in/ProductDetail.html?Title=${encodeURIComponent(product.Title)}&Price=${encodeURIComponent(product.Price)}&Description=${encodeURIComponent(product.Description)}" class="button-link">
+  <button class="view-product-btn btn">View</button>
+</a>
+      </div>
+    `;
+    container.appendChild(productBox);
+  });
+})
+.catch((error) => {
+  console.error("Error loading products:", error);
+});
+}
+</script>
+</div>
+
 
 <!-- Footer Section -->
 <div id="footer-container"></div>

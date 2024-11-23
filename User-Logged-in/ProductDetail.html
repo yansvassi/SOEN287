@@ -258,7 +258,7 @@ footer {
 
 <!-- Banner -->
 <div class="banner">
-  <h1 class="products" id = "title2">Product 1</h1>
+  <h1 class="products" id = "title2"></h1>
 </div>
 
 <script>
@@ -280,69 +280,52 @@ footer {
       <h1 class="product-name">Product 1: the product that will change your life</h1>
       <p class="product-price">$20</p>
       <p class="description">Some temporary details to be replaced later. Description and details, lorem ipsum</p>
-      <button class="btn learn-more buy-product-btn" onclick="addToCart('Product 1', '20')">Buy Now</button>
+      <button class="btn learn-more buy-product-btn" onclick="addToCart()">Buy Now</button>
+
   </div>
 </div>
 
 <script>
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-  function addToCart(productName, productPrice) {
-    const product = { name: productName, price: productPrice, quantity: 1 };
-    const existingProduct = cart.find(item => item.name === productName);
+function addToCart() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productName = urlParams.get("Title");
+    const productPrice = parseFloat(urlParams.get("Price")).toFixed(2);
 
-    if (existingProduct) {
-      existingProduct.quantity++;
-    } else {
-      cart.push(product);
+    if (!productName || isNaN(productPrice)) {
+        alert("Invalid product details!");
+        return;
     }
 
+    // Create a product object
+    const product = { name: productName, price: productPrice, quantity: 1 };
+
+    // Check if the item is already in the cart
+    const existingProduct = cart.find(item => item.name === productName);
+    if (existingProduct) {
+        existingProduct.quantity++;
+    } else {
+        cart.push(product);
+    }
+
+    // Store cart in localStorage
     localStorage.setItem('cart', JSON.stringify(cart));
-    alert(productName + ' has been added to your cart');
-  }
+    alert(`${productName} has been added to your cart.`);
+}
 
-<<<<<<< HEAD
-  //new
-  document.addEventListener("DOMContentLoaded", function () {
-  // Parse query parameters
-  const urlParams = new URLSearchParams(window.location.search);
-  const title = urlParams.get("Title") || "Unknown Product";
-  const price = urlParams.get("Price") || "0.00";
-  const description = urlParams.get("Description") || "No description available.";
-
-  // Update the product details
-=======
-  document.addEventListener("DOMContentLoaded", function () {
-  const urlParams = new URLSearchParams(window.location.search);
-  const title = urlParams.get("Title");
-  const price = urlParams.get("Price");
-  const description = urlParams.get("Description");
-
-  // Debugging: Log extracted parameters to the console
-  console.log("Title:", title);
-  console.log("Price:", price);
-  console.log("Description:", description);
-
->>>>>>> d4aa1c1d1fbf43e2e89967ee6ba3867bebe40cc9
-  const productName = document.querySelector(".product-name");
-  const productPrice = document.querySelector(".product-price");
-  const productDescription = document.querySelector(".description");
-
-<<<<<<< HEAD
-  if (productName) productName.textContent = title;
-  if (productPrice) productPrice.textContent = `$${parseFloat(price).toFixed(2)}`;
-  if (productDescription) productDescription.textContent = description;
+document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const title = urlParams.get("Title");
+    const price = urlParams.get("Price");
+    const description = urlParams.get("Description");
+    const productName = document.querySelector(".product-name");
+    const productPrice = document.querySelector(".product-price");
+    const productDescription = document.querySelector(".description");
+    if (productName) productName.textContent = title || "Unknown Product";
+    if (productPrice) productPrice.textContent = `$${parseFloat(price || "0").toFixed(2)}`;
+    if (productDescription) productDescription.textContent = description || "No description available.";
 });
-
-=======
-  if (productName) productName.textContent = title || "Unknown Product";
-  if (productPrice) productPrice.textContent = `$${parseFloat(price || "0").toFixed(2)}`;
-  if (productDescription) productDescription.textContent = description || "No description available.";
-});
-
-  //new
-
->>>>>>> d4aa1c1d1fbf43e2e89967ee6ba3867bebe40cc9
 
 </script>
 

@@ -20,9 +20,6 @@
     <!-- defines the title of the web page -->
     <title> Home Page </title>
 
-<<<<<<< HEAD
-
-=======
 <style>
       .view-product-btn, .buy-product-btn{
       padding: 10px 20px;
@@ -34,7 +31,6 @@
       transition: all 0.3s ease;
     }
 </style>
->>>>>>> d4aa1c1d1fbf43e2e89967ee6ba3867bebe40cc9
 </head>
 
 <body>
@@ -87,55 +83,7 @@
         <p> Each services has been designed carrefully to deliver the outcome you're looking for </p>
 
     </div>
-<<<<<<< HEAD
-    <div class="product_box">
-      <br>
-      <a href="#link to view product"
-         class="product-name">Product 1</a>
-      <p></p>
-      <p class="product-price">
-        $XX
-      </p>
-      <ul class="service-details">
-        <li>We do this</li>
-        <li>And even this</li>
-        <li>Wow! we also do this</li>
-        <li>This too</li>
-      </ul>
-  </div>
 
-  <!-- Product Services -->
-  <div class="product_box">
-    <br>
-    <a href="#link to view product"
-       class="product-name">Product 2</a>
-    <p></p>
-    <p class="product-price">
-      $XX
-    </p>
-    <ul class="service-details">
-      <li>We do this</li>
-      <li>And even this</li>
-      <li>Wow! we also do this</li>
-      <li>This too</li>
-    </ul>
-</div>
-    <div class="product_box">
-      <br>
-      <a href="#link to view product"
-         class="product-name">Product 3</a>
-      <p></p>
-      <p class="product-price">
-        $XX
-      </p>
-      <ul class="service-details">
-        <li>We do this</li>
-        <li>And even this</li>
-        <li>Wow! we also do this</li>
-        <li>This too</li>
-      </ul>
-  </div>
-=======
     <div class="container" id="product-container">
       <div class="product_box" id="product1"></div>
     </div>
@@ -143,7 +91,7 @@
         document.addEventListener("DOMContentLoaded", loadProducts);
 
 function loadProducts() {
-  fetch("http://localhost:5001/services")
+  fetch("http://localhost:7013/servicess")
     .then((response) => response.json())
     .then((products) => {
       const container = document.getElementById("product-container");
@@ -172,7 +120,6 @@ function loadProducts() {
     });
 }
     </script>
->>>>>>> d4aa1c1d1fbf43e2e89967ee6ba3867bebe40cc9
   </div>
 
   <!----------------------------- Satisfaction ----------------------------------->

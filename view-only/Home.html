@@ -100,7 +100,7 @@
     document.addEventListener("DOMContentLoaded", loadProducts);
 
 function loadProducts() {
-fetch("http://localhost:5001/services")
+fetch("http://localhost:7013/servicess")
 .then((response) => response.json())
 .then((products) => {
   const container = document.getElementById("product-container");

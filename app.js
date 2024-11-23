@@ -273,7 +273,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Route: Add a new service
-app.post("/services", (req, res) => {
+app.post("/servicess", (req, res) => {
   const {Title, Description, Price } = req.body;
 
   if (!Title || !Description || Price == null) {
@@ -291,7 +291,7 @@ app.post("/services", (req, res) => {
 });
 
 // Route: Get all services
-app.get("/services", (req, res) => {
+app.get("/servicess", (req, res) => {
   const query = "SELECT * FROM Service";
   db.query(query, (err, results) => {
     if (err) {
@@ -303,7 +303,7 @@ app.get("/services", (req, res) => {
 });
 
 // Route: Update a service
-app.put("/services/:id", (req, res) => {
+app.put("/servicess/:id", (req, res) => {
   const { id } = req.params;
   const { Title, Description, Price } = req.body;
 
