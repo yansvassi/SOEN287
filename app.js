@@ -85,17 +85,50 @@ app.post("/view-only/addclient", (req, res) => {
     
 })
 
-// Fetch all services (Admin page)
-app.get("/services", (req, res) => {
-    const sql = "SELECT * FROM services";
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error("Error fetching services:", err);
-            return res.status(500).send("Error fetching services.");
-        }
-        res.json(results);
-    });
+app.get("/addlogin", (req, res) => {
+    res.send("This is the addlogin endpoint. Use POST to submit data.");
 });
+
+app.post("/addlogin", (req, res) => {
+    const client = {
+        Email: req.body.Email,
+        Password: req.body.Password,
+        choice: req.body['login-type'],
+    };
+
+    // Validate required fields
+    if (!client.Email || !client.Password || !client.choice) {
+        return res.status(400).send("All fields are required.");
+    }
+
+    // Check if the email exists
+    const checkEmail = "SELECT * FROM `Register Informations` WHERE Email = ?";
+    db.query(checkEmail, client.Email, (err, results) => {
+        if (err) {
+            console.error("Error checking email:", err.message);
+            return res.status(500).send("An error occurred while checking the email.");
+        }
+
+        if (results.length === 0) {
+            // Email does not exist
+            return res.status(400).send("Email not registered.");
+        }
+
+        const user = results[0]; // Get the user record
+
+        // Check if the password matches (use bcrypt for secure comparisons)
+        if (user.Password !== client.Password) {
+            return res.status(400).send("Incorrect password.");
+        }
+
+            // Redirect based on user role
+            if (client.choice === "admin" && user.choice === "admin") {
+                return res.sendFile(path.join(__dirname, "BA-Logged-in/BAHome.html"));
+            } else (client.choice === "client" && user.choice === "client") 
+                return res.sendFile(path.join(__dirname, "User-Logged-in/HomeLoggedin.html"));
+        });
+    });
+
 
 // Add a new service
 app.post("/services", (req, res) => {

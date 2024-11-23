@@ -110,6 +110,7 @@ body{
 
 /* Switch login-container and register-container styles */
 .register-container{
+    margin-top: 50px;
     position: absolute;
     left: 4px; /* Previously used for login */
     width: 500px;
