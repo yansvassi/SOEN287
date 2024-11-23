@@ -129,18 +129,37 @@ app.post("/addlogin", (req, res) => {
 
 app.post("/BA-Logged-in/editprofile", (req, res) => {
     
+    const info = {
+        fname: fname.req.body,
+        email: email.req.body, 
+        pn: pn.req.body, 
+        address: address.req.body, 
+        city: city.req.body, 
+        pt: pt.req.body,
+        pc: pc.req.body
 
-    const { fname, email, pn, address, city, pt, pc } = req.body;
-    let updates = [];
-    let values = [];
+    }
 
-    if (fname) updates.push("fname = ?"), values.push(fname);
-    if (email) updates.push("email = ?"), values.push(email);
-    if (pn) updates.push("pn = ?"), values.push(pn);
-    if (address) updates.push("address = ?"), values.push(address);
-    if (city) updates.push("city = ?"), values.push(city);
-    if (pt) updates.push("position_title = ?"), values.push(pt);
-    if (pc) updates.push("postal_code = ?"), values.push(pc);
+    if (fname) 
+        {
+            const sql = "UPDATE AdminProfile SET fname ? WHERE 1";
+        }
+    if (email) 
+        {
+            const sql = "UPDATE AdminProfile SET email ? WHERE 1";
+        }
+    if (pn) 
+        {
+            const sql = "UPDATE AdminProfile SET pn ? WHERE 1";
+        }
+    if (address) 
+        {
+            const sql = "UPDATE AdminProfile SET address ? WHERE 1";
+        }
+    if (ciy)
+        {
+            const sql = "UPDATE AdminProfile SET city ? WHERE 1";
+        }
 
     // Check if there are fields to update
     if (updates.length === 0) {
@@ -148,7 +167,7 @@ app.post("/BA-Logged-in/editprofile", (req, res) => {
     }
 
     // Construct the SQL query
-    const sql = `UPDATE AdminProfile SET ${updates.join(", ")} LIMIT 1`;
+    const sql = "UPDATE AdminProfile SET ";
 
     // Execute the query
     db.query(sql, values, (err, result) => {
