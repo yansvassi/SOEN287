@@ -6,7 +6,6 @@ const path = require("path");
 const app = express();
 const PORT = 7011;
 
-
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -129,6 +128,35 @@ app.put("/services/:id", (req, res) => {
             return res.status(500).send("Failed to update service.");
         }
         res.send("Service updated successfully.");
+    });
+});
+
+// Get the descriptions for Home and About
+app.get("/api/descriptions", (req,res) => {
+    const sql = "SELECT * FROM Descriptions";
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error getting descriptions:", err);
+            res.status(500).json({ error: "Error getting descriptions." });
+        } 
+        else {
+            res.json(results);
+        }
+    });
+});
+
+// Update descriptions
+app.put("/api/descriptions", (req, res) => {
+    const { section, description } = req.body;
+    const sql = "UPDATE Descriptions SET description = ? WHERE section = ?";
+    db.query(sql, [description, section], (err) => {
+        if (err){
+            console.error("Error updating description:", err);
+            res.status(500).json({ error: "Error updating description." });
+        }
+        else {
+            res.json({ message: '${section} description updated successfully!' });
+        }
     });
 });
 
