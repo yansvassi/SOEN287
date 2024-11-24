@@ -57,10 +57,6 @@
   });
 </script>
 
-<div class="update-link-container">
-  <a href="update-descriptions.html" class="btn update-link">Go to Update Descriptions</a>
-</div>
-
 <!-- Banner -->
 <div class="banner">
   <h1>Your Products</h1>
@@ -132,7 +128,7 @@
     return;
   }
 
-  fetch("http://localhost:5001/services", {
+  fetch("http://localhost:7013/servicess", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -177,7 +173,7 @@
     const newDescription = productBox.querySelector(".edit-product-description").value;
 
     // Send updated data to the server
-    fetch(`http://localhost:5001/services/${productId}`, {
+    fetch(`http://localhost:7013/servicess/${productId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -224,7 +220,7 @@
   removeButton.addEventListener("click", function () {
   const productId = productBox.getAttribute("data-id"); // Ensure this exists
 
-  fetch(`http://localhost:5001/services/${productId}`, {
+  fetch(`http://localhost:7013/servicess/${productId}`, {
     method: "DELETE",
   })
     .then((response) => response.json())
@@ -249,7 +245,7 @@
   });
 
   function loadProducts() {
-  fetch("http://localhost:5001/services")
+  fetch("http://localhost:7013/servicess")
     .then((response) => response.json())
     .then((products) => {
       const container = document.getElementById("product-container");

@@ -243,35 +243,6 @@ app.put("/services/:id", (req, res) => {
     });
 });
 
-// Get the descriptions for Home and About
-app.get("/api/descriptions", (req,res) => {
-    const sql = "SELECT * FROM Descriptions";
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error("Error getting descriptions:", err);
-            res.status(500).json({ error: "Error getting descriptions." });
-        } 
-        else {
-            res.json(results);
-        }
-    });
-});
-
-// Update descriptions
-app.put("/api/descriptions", (req, res) => {
-    const { section, description } = req.body;
-    const sql = "UPDATE Descriptions SET description = ? WHERE section = ?";
-    db.query(sql, [description, section], (err) => {
-        if (err){
-            console.error("Error updating description:", err);
-            res.status(500).json({ error: "Error updating description." });
-        }
-        else {
-            res.json({ message: '${section} description updated successfully!' });
-        }
-    });
-});
-
 // Serve the admin page
 app.get("/admin", (req, res) => {
     res.sendFile(path.join(__dirname, "BA-Logged-in/view-services.html"));
@@ -296,7 +267,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Route: Add a new service
-app.post("/services", (req, res) => {
+app.post("/servicess", (req, res) => {
   const {Title, Description, Price } = req.body;
 
   if (!Title || !Description || Price == null) {
@@ -314,7 +285,7 @@ app.post("/services", (req, res) => {
 });
 
 // Route: Get all services
-app.get("/services", (req, res) => {
+app.get("/servicess", (req, res) => {
   const query = "SELECT * FROM Service";
   db.query(query, (err, results) => {
     if (err) {
@@ -326,7 +297,7 @@ app.get("/services", (req, res) => {
 });
 
 // Route: Update a service
-app.put("/services/:id", (req, res) => {
+app.put("/servicess/:id", (req, res) => {
   const { id } = req.params;
   const { Title, Description, Price } = req.body;
 
@@ -365,3 +336,44 @@ app.delete("/services/:id", (req, res) => {
   });
 });
 
+// Route to fetch descriptions
+// Route to fetch descriptions
+app.get("/api/get-descriptions", (req, res) => {
+    const query = "SELECT * FROM Descriptions LIMIT 1";
+  
+    db.query(query, (err, results) => {
+      if (err) {
+        console.error("Error fetching descriptions:", err);
+        return res.status(500).json({ success: false, message: "Database error." });
+      }
+  
+      if (results.length > 0) {
+        res.json({ success: true, data: results[0] });
+      } else {
+        res.status(404).json({ success: false, message: "No descriptions found." });
+      }
+    });
+  });
+  
+  // Route to update descriptions
+  app.post("/api/update-descriptions", (req, res) => {
+    const { welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText } = req.body;
+  
+    if (!welcomeTitle || !welcomeSlogan || !coreValuesTitle || !coreValuesText) {
+      return res.status(400).json({ success: false, message: "All fields are required." });
+    }
+  
+    const query = `
+      UPDATE Descriptions
+      SET welcomeTitle = ?, welcomeSlogan = ?, coreValuesTitle = ?, coreValuesText = ?`;
+  
+    db.query(query, [welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText], (err) => {
+      if (err) {
+        console.error("Error updating descriptions:", err);
+        return res.status(500).json({ success: false, message: "Database error." });
+      }
+  
+      res.json({ success: true, message: "Descriptions updated successfully!" });
+    });
+  });
+  

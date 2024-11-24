@@ -16,22 +16,28 @@
       display: flex;
       justify-content: center;
     }
+
     #toggleEditModeBtn {
-      background-color: #1c3f53;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
+    display: block;          /* Make the button behave like a block element */
+    margin: 20px auto;       /* Automatically center the button horizontally */
+    padding: 10px 20px;      /* Adjust padding for better appearance */
+    background-color: #345f82; /* Button background color */
+    color: white;            /* Button text color */
+    border: none;            /* Remove border */
+    border-radius: 12px;      /* Rounded corners */
+    cursor: pointer;         /* Pointer cursor on hover */
+    font-size: 16px;         /* Adjust font size */
+}
+
+#toggleEditModeBtn:hover {
+    background-color: #002e73; /* Darker background on hover */
+}
 
 
     .edit-icon {
     font-size: 24px; /* Adjust the size as needed */
     color: white; /* Set the icon color to white */
 }
-
 
     #toggleEditModeBtn:hover {
       background-color: #081d29;
@@ -41,6 +47,28 @@
     .editable {
       cursor: pointer;
     }
+
+      .view-product-btn, .buy-product-btn{
+      padding: 10px 20px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    .editable {
+  /* border: 1px solid transparent;
+  padding: 5px;
+  font-size: 18px; */
+  cursor: text;
+}
+
+.editable:focus {
+  outline: 2px solid #5f96e3;
+  border-radius: 4px;
+}
+
   </style>
 </head>
 
@@ -65,7 +93,7 @@
 <input type="file" id="imageUploader" style="display:none" accept="image/*">
 
 <!-- Front Page Image -->
-<div class="frontimage-container">
+<!-- <div class="frontimage-container">
   <img class="front-page editable" id="frontImage" src="../images/HomePage.webp" alt="Front Image">
   <div class="text-title editable" contenteditable="false" id="welcomeTitle"> <h1>Welcome to this company</h1></div>
   <div class="text editable" contenteditable="false" id="welcomeSlogan">Add a slogan.</div>
@@ -74,7 +102,7 @@
   <button id="toggleEditModeBtn">Enable Edit Mode</button>
 </div>
 <!-- Add Text and Image -->
-<div class="welcome-container">
+<!-- <div class="welcome-container">
   <div class="welcome-text">
     <h1 class="editable" contenteditable="false" id="coreValuesTitle">Quality, Consistency, Personalization</h1>
     <p class="editable" contenteditable="false" id="coreValuesText">Established in Montreal, Quebec in 2022. Shine’s 3 core values drive our one mission: To deliver a personalized experience to each and every one of our customers.</p>
@@ -82,49 +110,127 @@
   <div class="welcome-image">
     <img src="../images/Welcomeimage1.jpg" class="editable" id="welcomeImage" alt="Welcome Image">
   </div>
-</div>
+</div> -->
+
+<form id="updateDescriptionsForm">
+  <div class="frontimage-container">
+    <img class="front-page" id="frontImage" src="../images/HomePage.webp" alt="Front Image">
+
+    <!-- Styled Editable Title -->
+    <div class="welcome-text">
+    <h1 class="text-title editable" id="welcomeTitle" contenteditable="true">Welcome to this company</h1>
+    </div>
+    
+    <!-- Styled Editable Slogan -->
+    <div class="text editable" id="welcomeSlogan" contenteditable="true">Add a slogan.</div>
+  </div>
+
+  <div class="welcome-container">
+    <div class="welcome-text">
+      <!-- Styled Editable Core Values Title -->
+      <h1 class="editable" id="coreValuesTitle" contenteditable="true">Quality, Consistency, Personalization</h1>
+
+      <!-- Styled Editable Core Values Text -->
+      <p class="editable" id="coreValuesText" contenteditable="true">
+        Established in Montreal, Quebec in 2022. Shine’s 3 core values drive our one mission: To deliver a personalized experience to each and every one of our customers.
+      </p>
+    </div>
+    <div class="welcome-image">
+      <img src="../images/Welcomeimage1.jpg" id="welcomeImage" alt="Welcome Image">
+    </div>
+  </div>
+
+  <button type="submit" id="toggleEditModeBtn">Save Changes</button>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Fetch existing descriptions
+    fetch("http://localhost:7013/api/get-descriptions")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          document.getElementById("welcomeTitle").innerText = data.data.welcomeTitle;
+          document.getElementById("welcomeSlogan").innerText = data.data.welcomeSlogan;
+          document.getElementById("coreValuesTitle").innerText = data.data.coreValuesTitle;
+          document.getElementById("coreValuesText").innerText = data.data.coreValuesText;
+        } else {
+          console.error("Failed to fetch descriptions:", data.message);
+        }
+      })
+      .catch((error) => console.error("Error fetching descriptions:", error));
+
+    // Update descriptions on form submit
+    document.getElementById("updateDescriptionsForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const descriptions = {
+        welcomeTitle: document.getElementById("welcomeTitle").innerText.trim(),
+        welcomeSlogan: document.getElementById("welcomeSlogan").innerText.trim(),
+        coreValuesTitle: document.getElementById("coreValuesTitle").innerText.trim(),
+        coreValuesText: document.getElementById("coreValuesText").innerText.trim(),
+      };
+
+      fetch("http://localhost:7013/api/update-descriptions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(descriptions),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            alert("Descriptions updated successfully!");
+          } else {
+            alert("Failed to update descriptions.");
+          }
+        })
+        .catch((error) => console.error("Error updating descriptions:", error));
+    });
+  });
+</script>
+
+</script>
 
 
 <!-- Product Section -->
-<div class="container">
-  <div class="text-box">
-    <h1 class="editable" contenteditable="false" id="productTitle">Result-Focus Something Services</h1>
-    <p class="editable" contenteditable="false" id="productDesc">Each service has been designed carefully to deliver the outcome you're looking for.</p>
-  </div>
-
-  <div class="product_box">
-    <a href="#" class="product-name editable" contenteditable="false" id="productName1">Product 1</a>
-    <p class="product-price editable" contenteditable="false" id="productPrice1">$XX</p>
-    <ul class="service-details">
-      <li class="editable" contenteditable="false">We do this</li>
-      <li class="editable" contenteditable="false">And even this</li>
-      <li class="editable" contenteditable="false">Wow! we also do this</li>
-      <li class="editable" contenteditable="false">This too</li>
-    </ul>
-  </div>
-
-  <div class="product_box">
-    <a href="#" class="product-name editable" contenteditable="false" id="productName2">Product 2</a>
-    <p class="product-price editable" contenteditable="false" id="productPrice2">$XX</p>
-    <ul class="service-details">
-      <li class="editable" contenteditable="false">We do this</li>
-      <li class="editable" contenteditable="false">And even this</li>
-      <li class="editable" contenteditable="false">Wow! we also do this</li>
-      <li class="editable" contenteditable="false">This too</li>
-    </ul>
-  </div>
-
-  <div class="product_box">
-    <a href="#" class="product-name editable" contenteditable="false" id="productName3">Product 3</a>
-    <p class="product-price editable" contenteditable="false" id="productPrice3">$XX</p>
-    <ul class="service-details">
-      <li class="editable" contenteditable="false">We do this</li>
-      <li class="editable" contenteditable="false">And even this</li>
-      <li class="editable" contenteditable="false">Wow! we also do this</li>
-      <li class="editable" contenteditable="false">This too</li>
-    </ul>
-  </div>
+<div class="container" id="product-container">
+  <div class="product_box" id="product1"></div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", loadProducts);
+
+function loadProducts() {
+fetch("http://localhost:7013/servicess")
+.then((response) => response.json())
+.then((products) => {
+  const container = document.getElementById("product-container");
+  container.innerHTML = ""; // Clear existing content
+
+  products.forEach((product) => {
+    const productBox = document.createElement("div");
+    productBox.classList.add("product_box");
+    productBox.innerHTML = `
+      <br>
+      <a href="#" class="product-name">${product.Title}</a>
+      <p class="product-price">$${parseFloat(product.Price).toFixed(2)}</p>
+      <p class="service-details">${product.Description}</p>
+      <div class="btn-group">
+        <br>
+<a href="../User-Logged-in/ProductDetail.html?Title=${encodeURIComponent(product.Title)}&Price=${encodeURIComponent(product.Price)}&Description=${encodeURIComponent(product.Description)}" class="button-link">
+  <button class="view-product-btn btn">View</button>
+</a>
+      </div>
+    `;
+    container.appendChild(productBox);
+  });
+})
+.catch((error) => {
+  console.error("Error loading products:", error);
+});
+}
+</script>
+</div>
+
 
 <!-- Footer Section -->
 <div id="footer-container"></div>
@@ -141,64 +247,64 @@
 
 <!-- JavaScript to Toggle Edit Mode, Save Changes, and Load from localStorage -->
 <script>
-  const editButton = document.getElementById("toggleEditModeBtn");
-  const imageUploader = document.getElementById("imageUploader");
-  let editMode = false;
+  // const editButton = document.getElementById("toggleEditModeBtn");
+  // const imageUploader = document.getElementById("imageUploader");
+  // let editMode = false;
 
-  // Load saved content from localStorage
-  function loadSavedContent() {
-    document.querySelectorAll("[contenteditable]").forEach((element) => {
-      const savedContent = localStorage.getItem(element.id);
-      if (savedContent) {
-        element.innerHTML = savedContent;
-      }
-    });
+  // // Load saved content from localStorage
+  // function loadSavedContent() {
+  //   document.querySelectorAll("[contenteditable]").forEach((element) => {
+  //     const savedContent = localStorage.getItem(element.id);
+  //     if (savedContent) {
+  //       element.innerHTML = savedContent;
+  //     }
+  //   });
 
-    const savedFrontImage = localStorage.getItem('frontImage');
-    if (savedFrontImage) {
-      document.getElementById('frontImage').src = savedFrontImage;
-    }
+  //   const savedFrontImage = localStorage.getItem('frontImage');
+  //   if (savedFrontImage) {
+  //     document.getElementById('frontImage').src = savedFrontImage;
+  //   }
 
-    const savedWelcomeImage = localStorage.getItem('welcomeImage');
-    if (savedWelcomeImage) {
-      document.getElementById('welcomeImage').src = savedWelcomeImage;
-    }
-  }
+  //   const savedWelcomeImage = localStorage.getItem('welcomeImage');
+  //   if (savedWelcomeImage) {
+  //     document.getElementById('welcomeImage').src = savedWelcomeImage;
+  //   }
+  // }
 
-  // Save changes to localStorage
-  function saveContent(element) {
-    localStorage.setItem(element.id, element.innerHTML);
-  }
+  // // Save changes to localStorage
+  // function saveContent(element) {
+  //   localStorage.setItem(element.id, element.innerHTML);
+  // }
 
-  function saveImage(id, src) {
-    localStorage.setItem(id, src);
-  }
+  // function saveImage(id, src) {
+  //   localStorage.setItem(id, src);
+  // }
 
-  // Initialize the page by loading any saved content
-  document.addEventListener("DOMContentLoaded", function() {
-    loadSavedContent();
-  });
+  // // Initialize the page by loading any saved content
+  // document.addEventListener("DOMContentLoaded", function() {
+  //   loadSavedContent();
+  // });
 
   // Function to toggle edit mode
-  editButton.addEventListener("click", () => {
-    editMode = !editMode;
+  // editButton.addEventListener("click", () => {
+  //   editMode = !editMode;
 
-    document.querySelectorAll("[contenteditable]").forEach((element) => {
-      element.contentEditable = editMode ? "true" : "false";
-    });
+  //   document.querySelectorAll("[contenteditable]").forEach((element) => {
+  //     element.contentEditable = editMode ? "true" : "false";
+  //   });
 
-    document.querySelectorAll(".editable").forEach((element) => {
-      element.style.border = editMode ? "2px dashed #4a7b9b" : "none";
-      element.style.backgroundColor = editMode ? "#f0f8ff" : "transparent";
+  //   document.querySelectorAll(".editable").forEach((element) => {
+  //     element.style.border = editMode ? "2px dashed #4a7b9b" : "none";
+  //     element.style.backgroundColor = editMode ? "#f0f8ff" : "transparent";
 
-      // Save changes when exiting edit mode
-      if (!editMode) {
-        saveContent(element);
-      }
-    });
+  //     // Save changes when exiting edit mode
+  //     if (!editMode) {
+  //       saveContent(element);
+  //     }
+  //   });
 
-    editButton.textContent = editMode ? "Disable Edit Mode" : "Enable Edit Mode";
-  });
+  //   editButton.textContent = editMode ? "Disable Edit Mode" : "Enable Edit Mode";
+  // });
 
   // Function to open file selector and replace images
   function replaceImage(imageElement) {

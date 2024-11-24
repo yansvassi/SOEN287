@@ -20,9 +20,6 @@
     <!-- defines the title of the web page -->
     <title> Home Page </title>
 
-<<<<<<< HEAD
-
-=======
 <style>
       .view-product-btn, .buy-product-btn{
       padding: 10px 20px;
@@ -33,8 +30,11 @@
       font-weight: 500;
       transition: all 0.3s ease;
     }
+
+    .welcomeTitle {
+      font-size: 60px;
+    }
 </style>
->>>>>>> d4aa1c1d1fbf43e2e89967ee6ba3867bebe40cc9
 </head>
 
 <body>
@@ -59,15 +59,15 @@
 
   <!-- Front Page Image -->
 
-<div class = "frontimage-container">
+<!-- <div class = "frontimage-container">
         <img class ="front-page" src="../images/HomePage.webp">
         <div class = "text-title"> <h1> Welcome to this company </h1></div>
         <div class = "text"> Add a slogan. </div>
-</div>
+</div> -->
 
 
 <!-- Add Text and Image -->
-<div class="welcome-container">
+<!-- <div class="welcome-container">
     <div class="welcome-text">
         <h1>Quality, Consistency, Personalization</h1>
         <p>Established in Montreal, Quebec in 2022. Shine’s 3 core values drive our one mission: To deliver a personalized experience to each and every one of our customers.</p>
@@ -77,65 +77,54 @@
         <img src="../images/Welcomeimage1.jpg" alt="Welcome Image">
 
     </div>
-</div>
+</div> -->
 
 <!-- Product Section -->
 
-<div class="container">
+<!-- <div class="container">
     <div class = "text-box">
         <h1> Result-Focus Something Services </h1>
         <p> Each services has been designed carrefully to deliver the outcome you're looking for </p>
 
-    </div>
-<<<<<<< HEAD
-    <div class="product_box">
-      <br>
-      <a href="#link to view product"
-         class="product-name">Product 1</a>
-      <p></p>
-      <p class="product-price">
-        $XX
-      </p>
-      <ul class="service-details">
-        <li>We do this</li>
-        <li>And even this</li>
-        <li>Wow! we also do this</li>
-        <li>This too</li>
-      </ul>
-  </div>
+    </div> -->
 
-  <!-- Product Services -->
-  <div class="product_box">
-    <br>
-    <a href="#link to view product"
-       class="product-name">Product 2</a>
-    <p></p>
-    <p class="product-price">
-      $XX
-    </p>
-    <ul class="service-details">
-      <li>We do this</li>
-      <li>And even this</li>
-      <li>Wow! we also do this</li>
-      <li>This too</li>
-    </ul>
-</div>
-    <div class="product_box">
-      <br>
-      <a href="#link to view product"
-         class="product-name">Product 3</a>
-      <p></p>
-      <p class="product-price">
-        $XX
-      </p>
-      <ul class="service-details">
-        <li>We do this</li>
-        <li>And even this</li>
-        <li>Wow! we also do this</li>
-        <li>This too</li>
-      </ul>
-  </div>
-=======
+    <div class="frontimage-container">
+      <img class="front-page" id="frontImage" src="../images/HomePage.webp" alt="Front Image">
+      <div class="text-title" id="welcomeTitle">Loading...</div>
+      <div class="text" id="welcomeSlogan">Loading...</div>
+    </div>
+    
+    <div class="welcome-container">
+      <div class="welcome-text">
+        <h1 id="coreValuesTitle">Loading...</h1>
+        <p id="coreValuesText">Loading...</p>
+      </div>
+      <div class="welcome-image">
+        <img src="../images/Welcomeimage1.jpg" alt="Welcome Image">
+      </div>
+    </div>
+    
+      <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch("http://localhost:7013/api/get-descriptions")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          document.getElementById("welcomeTitle").innerText = data.data.welcomeTitle;
+          document.getElementById("welcomeSlogan").innerText = data.data.welcomeSlogan;
+          document.getElementById("coreValuesTitle").innerText = data.data.coreValuesTitle;
+          document.getElementById("coreValuesText").innerText = data.data.coreValuesText;
+        } else {
+          console.error("Failed to fetch descriptions:", data.message);
+        }
+      })
+      .catch((error) => console.error("Error fetching descriptions:", error));
+  });
+</script>
+
+    </script>
+    
+
     <div class="container" id="product-container">
       <div class="product_box" id="product1"></div>
     </div>
@@ -143,7 +132,7 @@
         document.addEventListener("DOMContentLoaded", loadProducts);
 
 function loadProducts() {
-  fetch("http://localhost:5001/services")
+  fetch("http://localhost:7013/servicess")
     .then((response) => response.json())
     .then((products) => {
       const container = document.getElementById("product-container");
@@ -172,7 +161,6 @@ function loadProducts() {
     });
 }
     </script>
->>>>>>> d4aa1c1d1fbf43e2e89967ee6ba3867bebe40cc9
   </div>
 
   <!----------------------------- Satisfaction ----------------------------------->
