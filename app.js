@@ -127,63 +127,86 @@ app.post("/addlogin", (req, res) => {
     });
 });
 
+app.get("/BA-Logged-in/editprofile", (req, res) => {
+    res.send("This is the addlogin endpoint. Use POST to submit data.");
+  });
+
+// update admin profile 
 app.post("/BA-Logged-in/editprofile", (req, res) => {
-    
     const info = {
-        fname: fname.req.body,
-        email: email.req.body, 
-        pn: pn.req.body, 
-        address: address.req.body, 
-        city: city.req.body, 
-        pt: pt.req.body,
-        pc: pc.req.body
+        fname: req.body.fname,
+        email: req.body.email,
+        pn: req.body.pn,
+        address: req.body.address,
+        city: req.body.city,
+        pt: req.body.pt,
+        pc: req.body.pc
+    };
 
+    let fields = [];
+    let values = [];
+
+    if (info.fname) {
+        fields.push("fname = ?");
+        values.push(info.fname);
+    }
+    if (info.email) {
+        fields.push("email = ?");
+        values.push(info.email);
+    }
+    if (info.pn) {
+        fields.push("pn = ?");
+        values.push(info.pn);
+    }
+    if (info.address) {
+        fields.push("address = ?");
+        values.push(info.address);
+    }
+    if (info.city) {
+        fields.push("city = ?");
+        values.push(info.city);
+    }
+    if (info.pt) {
+        fields.push("pt = ?");
+        values.push(info.pt);
+    }
+    if (info.pc) {
+        fields.push("pc = ?");
+        values.push(info.pc);
     }
 
-    if (fname) 
-        {
-            const sql = "UPDATE AdminProfile SET fname ? WHERE 1";
-        }
-    if (email) 
-        {
-            const sql = "UPDATE AdminProfile SET email ? WHERE 1";
-        }
-    if (pn) 
-        {
-            const sql = "UPDATE AdminProfile SET pn ? WHERE 1";
-        }
-    if (address) 
-        {
-            const sql = "UPDATE AdminProfile SET address ? WHERE 1";
-        }
-    if (ciy)
-        {
-            const sql = "UPDATE AdminProfile SET city ? WHERE 1";
-        }
-
-    // Check if there are fields to update
-    if (updates.length === 0) {
-        return res.status(400).send("No fields to update.");
+   
+    if (fields.length === 0) {
+        return res.status(400).send("No fields provided to update.");
     }
 
-    // Construct the SQL query
-    const sql = "UPDATE AdminProfile SET ";
+ 
+    const sql = `UPDATE AdminProfile SET ${fields.join(", ")}`;
 
-    // Execute the query
+  
     db.query(sql, values, (err, result) => {
         if (err) {
-            console.error("Error updating profile:", err.message);
+            console.error("Error updating profile:", err);
             return res.status(500).send("An error occurred while updating the profile.");
         }
-
-        if (result.affectedRows === 0) {
-            return res.status(404).send("No profile found to update.");
-        }
-
-        res.status(200).send("Profile updated successfully.");
+        else {
+        return res.sendFile(path.join(__dirname, "BA-Logged-in/BA-profile.html")); }
     });
 });
+app.set('view engine', 'ejs');
 
+
+app.get('/admin-profile', (req, res) => {
+    const query = 'SELECT fname, email, pn, address, city, pt, pc FROM AdminProfile LIMIT 1'; 
+  
+    db.query(query, (err, results) => {
+      if (err) {
+        console.error('Error fetching admin profile:', err.message);
+        return res.status(500).json({ error: 'Failed to fetch admin profile' });
+      }
+      res.json(results[0]); 
+    });
+  });
 
 // Add a new service
 app.post("/services", (req, res) => {
@@ -261,7 +284,7 @@ app.get("/client", (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}/view-only/Home.html`);
 });
 
 

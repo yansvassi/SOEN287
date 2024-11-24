@@ -112,37 +112,6 @@
             reader.readAsDataURL(file);
         }
     });
-
-    // Handle saving changes and updating the footer (company name, phone, email, and location)
-    document.getElementById('saveChangesBtn').addEventListener('click', function() {
-        // Get the updated values
-        const newCompanyName = document.getElementById('fname').value || "YourCompanyName";
-        const newPhoneNumber = document.getElementById('pn').value || "+1 (844) 326-6005";
-        const newEmail = document.getElementById('email').value || "email@example.com";
-        const newAddress = document.getElementById('address').value || "123 Business St";
-        const newCity = document.getElementById('city').value || "City";
-        const newProvince = document.getElementById('pt').value || "Province/Territory";
-        const newPostalCode = document.getElementById('pc').value || "A1A 1A1";
-
-        // Update the footer
-        const footerContainer = document.getElementById('footer-container');
-
-        // Update company name
-        const companyNameElement = footerContainer.querySelector('.footer-credits p');
-        companyNameElement.textContent = `&copy; ${newCompanyName}`;
-
-        // Update phone number
-        const phoneElement = footerContainer.querySelector('.footer-column p:nth-of-type(1)');
-        phoneElement.textContent = newPhoneNumber;
-
-        // Update email
-        const emailElement = footerContainer.querySelector('.footer-column p:nth-of-type(2)');
-        emailElement.textContent = `Email Us: ${newEmail}`;
-
-        // Update location
-        const locationElement = footerContainer.querySelector('.footer-column p:nth-of-type(3)');
-        locationElement.textContent = `${newAddress}, ${newCity}, ${newProvince}, ${newPostalCode}`;
-    });
 </script>
 
 </body>
