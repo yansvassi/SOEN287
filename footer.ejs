@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Footer</title>
+  <link rel="stylesheet" href="/footerStyles.css"> <!-- Adjusted path -->
+</head>
+<body>
+  <footer class="footer">
+    <div class="footer-container">
+      <!-- Dynamically render admin contact info -->
+      <div class="footer-column">
+        <h3>Contact Admins</h3>
+        <% admins.forEach((admin) => { %>
+          <p><strong>Name:</strong> <%= admin.fname %></p>
+          <p><strong>Email:</strong> <%= admin.email %></p>
+          <p><strong>Phone:</strong> <%= admin.pn %></p>
+          <hr>
+        <% }) %>
+      </div>
+      <div class="footer-column">
+        <h3>Customers</h3>
+        <ul>
+          <li><a href="#">Catalogs</a></li>
+          <li><a href="#">Do Not Sell My Info</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="view-only/about.html">About Us</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-credits">
+      <p>&copy; YourCompanyName</p>
+    </div>
+  </footer>
+</body>
+</html>

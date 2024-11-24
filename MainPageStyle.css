@@ -24,10 +24,10 @@ filter: brightness(70%);
   padding-top: 10px;
   font-size: 30px;
   text-align: center;
-
+  font-weight: bold;
 }
 
-.text-title, #welcomeTitle{
+.text-title, #welcomeTitle, .title{
   color: #fff;
   position: absolute;
   top: 50%;
@@ -36,6 +36,7 @@ filter: brightness(70%);
   padding-bottom: 30px;
   font-size: 60px;
   text-align: center;
+  font-weight: bold;
 }
 
 .welcome-container {
