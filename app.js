@@ -17,7 +17,7 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "SOEN287", // Replace with your database name
+    database: "SOEN287project", // Replace with your database name
 });
 
 db.connect((err) => {
@@ -32,16 +32,66 @@ app.get("/view-only/addclient", (req, res) => {
     res.send("This is the addclient endpoint. Use POST to submit data.");
 });
 
-// Add a new client 
+app.post("/purchase", (req, res) => {
+    const { customer_name, service_name, service_date, cost, status } = req.body;
+
+    if (!customer_name || !service_name || !service_date || !cost) {
+        return res.status(400).send("All fields are required.");
+    }
+
+    // Insert into Services Availed table
+    const availedQuery = "INSERT INTO `Services Availed` (customer_name, service_name, service_date, cost, status) VALUES (?, ?, ?, ?, ?)";
+    db.query(availedQuery, [customer_name, service_name, service_date, cost, status || "Pending"], (err) => {
+        if (err) {
+            console.error("Error adding to Services Availed:", err);
+            return res.status(500).send("Failed to add to Services Availed.");
+        }
+            res.status(200).send("Purchase recorded successfully.");
+    });
+});
+
+app.get("/services-availed", (req, res) => {
+    const query = "SELECT * FROM `Services Availed`";
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error("Error fetching data from Services Availed:", err);
+            return res.status(500).json({ success: false, message: "Database error." });
+        }
+        res.json(results);
+    });
+});
+
+app.get("/services-availed/:id", (req, res) => {
+    const id = req.params.id;
+
+    const query = `
+        SELECT id, customer_name, service_name, service_date, status, cost
+        FROM \`Services Availed\`
+        WHERE id = ?
+    `;
+
+    db.query(query, [id], (err, results) => {
+        if (err) {
+            console.error("Error fetching service details:", err);
+            return res.status(500).json({ success: false, message: "Database error." });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ success: false, message: "Service not found." });
+        }
+
+        res.json(results[0]);
+    });
+});
+
+// Add a new client
 app.post("/view-only/addclient", (req, res) => {
     const client = {
         Fname: req.body.Fname,
         Lname: req.body.Lname,
-        Email: req.body.Email, 
+        Email: req.body.Email,
         Password: req.body.Password,
         choice: req.body['login-type'],
-
-        
     };
 
     if (!client.Fname || !client.Lname || !client.Email || !client.Password || !client.choice) {
@@ -49,7 +99,7 @@ app.post("/view-only/addclient", (req, res) => {
     }
 
     const checkEmail = "SELECT * FROM `Register Informations` WHERE Email = ?";
-    db.query(checkEmail, client.Email, (err, results) => 
+    db.query(checkEmail, client.Email, (err, results) =>
     {
         if (err)
             {
@@ -81,12 +131,32 @@ app.post("/view-only/addclient", (req, res) => {
     });
 
     });
-    
+
 })
 
 app.get("/addlogin", (req, res) => {
     res.send("This is the addlogin endpoint. Use POST to submit data.");
 });
+
+app.get("/client-services/:customer_name", (req, res) => {
+    const customerName = req.params.customer_name;
+
+    const query = `
+        SELECT id, service_name, DATE_FORMAT(service_date, '%Y-%m-%d') AS service_date, status, cost
+        FROM \`Services Availed\`
+        WHERE customer_name = ?
+    `;
+
+    db.query(query, [customerName], (err, results) => {
+        if (err) {
+            console.error("Error fetching client services:", err);
+            return res.status(500).json({ success: false, message: "Database error." });
+        }
+        console.log("Fetched services:", results); // Debugging: Log the results
+        res.json(results);
+    });
+});
+
 
 app.post("/addlogin", (req, res) => {
     const client = {
@@ -128,31 +198,31 @@ app.post("/addlogin", (req, res) => {
 });
 
 app.post("/BA-Logged-in/editprofile", (req, res) => {
-    
+
     const info = {
         fname: fname.req.body,
-        email: email.req.body, 
-        pn: pn.req.body, 
-        address: address.req.body, 
-        city: city.req.body, 
+        email: email.req.body,
+        pn: pn.req.body,
+        address: address.req.body,
+        city: city.req.body,
         pt: pt.req.body,
         pc: pc.req.body
 
     }
 
-    if (fname) 
+    if (fname)
         {
             const sql = "UPDATE AdminProfile SET fname ? WHERE 1";
         }
-    if (email) 
+    if (email)
         {
             const sql = "UPDATE AdminProfile SET email ? WHERE 1";
         }
-    if (pn) 
+    if (pn)
         {
             const sql = "UPDATE AdminProfile SET pn ? WHERE 1";
         }
-    if (address) 
+    if (address)
         {
             const sql = "UPDATE AdminProfile SET address ? WHERE 1";
         }
@@ -206,19 +276,25 @@ app.post("/services", (req, res) => {
 });
 
 // Update a service
-app.put("/services/:id", (req, res) => {
+app.put("/services-availed/:id", (req, res) => {
     const id = req.params.id;
     const updatedData = req.body;
 
-    const sql = "UPDATE services SET ? WHERE id = ?";
-    db.query(sql, [updatedData, id], (err) => {
+    const query = `
+        UPDATE \`Services Availed\`
+        SET ?
+        WHERE id = ?
+    `;
+
+    db.query(query, [updatedData, id], (err) => {
         if (err) {
-            console.error("Error updating service:", err);
-            return res.status(500).send("Failed to update service.");
+            console.error("Error updating Services Availed:", err);
+            return res.status(500).send("Failed to update entry in Services Availed.");
         }
-        res.send("Service updated successfully.");
+        res.send("Entry updated successfully.");
     });
 });
+
 
 // Serve the admin page
 app.get("/admin", (req, res) => {
@@ -312,7 +388,6 @@ app.delete("/services/:id", (req, res) => {
     }
   });
 });
-
 // Route to fetch descriptions
 // Route to fetch descriptions
 app.get("/api/get-descriptions", (req, res) => {
