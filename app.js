@@ -313,3 +313,44 @@ app.delete("/services/:id", (req, res) => {
   });
 });
 
+// Route to fetch descriptions
+// Route to fetch descriptions
+app.get("/api/get-descriptions", (req, res) => {
+    const query = "SELECT * FROM Descriptions LIMIT 1";
+  
+    db.query(query, (err, results) => {
+      if (err) {
+        console.error("Error fetching descriptions:", err);
+        return res.status(500).json({ success: false, message: "Database error." });
+      }
+  
+      if (results.length > 0) {
+        res.json({ success: true, data: results[0] });
+      } else {
+        res.status(404).json({ success: false, message: "No descriptions found." });
+      }
+    });
+  });
+  
+  // Route to update descriptions
+  app.post("/api/update-descriptions", (req, res) => {
+    const { welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText } = req.body;
+  
+    if (!welcomeTitle || !welcomeSlogan || !coreValuesTitle || !coreValuesText) {
+      return res.status(400).json({ success: false, message: "All fields are required." });
+    }
+  
+    const query = `
+      UPDATE Descriptions
+      SET welcomeTitle = ?, welcomeSlogan = ?, coreValuesTitle = ?, coreValuesText = ?`;
+  
+    db.query(query, [welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText], (err) => {
+      if (err) {
+        console.error("Error updating descriptions:", err);
+        return res.status(500).json({ success: false, message: "Database error." });
+      }
+  
+      res.json({ success: true, message: "Descriptions updated successfully!" });
+    });
+  });
+  

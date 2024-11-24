@@ -63,15 +63,15 @@
 
   <!-- Front Page Image -->
 
-<div class = "frontimage-container">
+<!-- <div class = "frontimage-container">
         <img class ="front-page" src="../images/HomePage.webp">
         <div class = "text-title"> <h1> Welcome to this company </h1></div>
         <div class = "text"> Add a slogan. </div>
-</div>
+</div> -->
 
 
 <!-- Add Text and Image -->
-<div class="welcome-container">
+<!-- <div class="welcome-container">
     <div class="welcome-text">
         <h1>Quality, Consistency, Personalization</h1>
         <p>Established in Montreal, Quebec in 2022. Shine’s 3 core values drive our one mission: To deliver a personalized experience to each and every one of our customers.</p>
@@ -81,16 +81,64 @@
         <img src="../SOEN287/images/Welcomeimage1.jpg" alt="Welcome Image">
 
     </div>
-</div>
+</div> -->
 
 <!-- Product Section -->
 
-<div class="container">
+<!-- <div class="container">
     <div class = "text-box">
         <h1> Result-Focus Something Services </h1>
         <p> Each services has been designed carrefully to deliver the outcome you're looking for </p>
 
+      -->
+
+      <div class="frontimage-container">
+        <img class="front-page" id="frontImage" src="../images/HomePage.webp" alt="Front Image">
     
+        <!-- Styled Editable Title -->
+        <div class="welcome-text">
+        <h1 class="text-title editable" id="welcomeTitle" contenteditable="true">Welcome to this company</h1>
+        </div>
+        
+        <!-- Styled Editable Slogan -->
+        <div class="text editable" id="welcomeSlogan" contenteditable="true">Add a slogan.</div>
+      </div>
+    
+      <div class="welcome-container">
+        <div class="welcome-text">
+          <!-- Styled Editable Core Values Title -->
+          <h1 class="editable" id="coreValuesTitle" contenteditable="true">Quality, Consistency, Personalization</h1>
+    
+          <!-- Styled Editable Core Values Text -->
+          <p class="editable" id="coreValuesText" contenteditable="true">
+            Established in Montreal, Quebec in 2022. Shine’s 3 core values drive our one mission: To deliver a personalized experience to each and every one of our customers.
+          </p>
+        </div>
+        <div class="welcome-image">
+          <img src="../images/Welcomeimage1.jpg" id="welcomeImage" alt="Welcome Image">
+        </div>
+      </div>
+      
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          fetch("http://localhost:7013/api/get-descriptions")
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                document.getElementById("welcomeTitle").innerText = data.data.welcomeTitle;
+                document.getElementById("welcomeSlogan").innerText = data.data.welcomeSlogan;
+                document.getElementById("coreValuesTitle").innerText = data.data.coreValuesTitle;
+                document.getElementById("coreValuesText").innerText = data.data.coreValuesText;
+              } else {
+                console.error("Failed to fetch descriptions:", data.message);
+              }
+            })
+            .catch((error) => console.error("Error fetching descriptions:", error));
+        });
+</script>
+      
+      </script>
+      
   <!----------Products--------->
 </div>
 <div class="container" id="product-container">
@@ -133,29 +181,7 @@ fetch("http://localhost:7013/servicess")
 
   <!----------------------------- Satisfaction ----------------------------------->
 
-  <div class="Satisfaction-text">
-    <h1>We’ve got you covered</h1>
-    <div class="item">
-        <i class='bx bx-home'></i>
-        <p><b>Experienced Staff</b> – all teams are highly experienced & trained on our checklists and protocols</p>
-    </div>
-    <div class="item">
-        <i class='bx bx-hard-hat'></i>
-        <p><b>Fully Equipped</b> – we come fully equipped with all products and equipment</p>
-    </div>
-    <div class="item">
-        <i class='bx bx-list-check'></i>
-        <p><b>Premium Quality</b> – our 76-point checklist delivers the same premium cleaning every single time</p>
-    </div>
-    <div class="item">
-        <i class='bx bxs-check-shield'></i>
-        <p><b>Guaranteed Satisfaction</b> – all packages are backed by our guarantee of quality</p>
-    </div>
-    <div class="item">
-        <i class='bx bxs-objects-vertical-bottom'></i>
-        <p><b>Insured & Vetted</b> – all team members have been police checked, thoroughly vetted, and insured.</p>
-    </div>
-</div>
+    <!--   none :(   -->
 
   <!----------------------------- Footer ----------------------------------->
 
