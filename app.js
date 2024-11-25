@@ -17,7 +17,7 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "SOEN287", // Replace with your database name
+    database: "SOEN287project", // Replace with your database name
 });
 
 db.connect((err) => {
@@ -353,4 +353,83 @@ app.get("/api/get-descriptions", (req, res) => {
       res.json({ success: true, message: "Descriptions updated successfully!" });
     });
   });
-  
+
+
+app.post("/purchase", (req, res) => {
+    const { customer_name, service_name, service_date, cost, status } = req.body;
+    if (!customer_name || !service_name || !service_date || !cost) {
+        return res.status(400).send("All fields are required.");
+    }
+    // Insert into Services Availed table
+    const availedQuery = "INSERT INTO `Services Availed` (customer_name, service_name, service_date, cost, status) VALUES (?, ?, ?, ?, ?)";
+    db.query(availedQuery, [customer_name, service_name, service_date, cost, status || "Pending"], (err) => {
+        if (err) {
+            console.error("Error adding to Services Availed:", err);
+            return res.status(500).send("Failed to add to Services Availed.");
+        }
+        res.status(200).send("Purchase recorded successfully.");
+    });
+});
+app.get("/services-availed", (req, res) => {
+    const query = "SELECT * FROM `Services Availed`";
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error("Error fetching data from Services Availed:", err);
+            return res.status(500).json({ success: false, message: "Database error." });
+        }
+        res.json(results);
+    });
+});
+app.get("/services-availed/:id", (req, res) => {
+    const id = req.params.id;
+    const query = `
+        SELECT id, customer_name, service_name, service_date, status, cost
+        FROM \`Services Availed\`
+        WHERE id = ?
+    `;
+    db.query(query, [id], (err, results) => {
+        if (err) {
+            console.error("Error fetching service details:", err);
+            return res.status(500).json({ success: false, message: "Database error." });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ success: false, message: "Service not found." });
+        }
+        res.json(results[0]);
+    });
+});
+
+app.get("/client-services/:customer_name", (req, res) => {
+    const customerName = req.params.customer_name;
+    const query = `
+        SELECT id, service_name, DATE_FORMAT(service_date, '%Y-%m-%d') AS service_date, status, cost
+        FROM \`Services Availed\`
+        WHERE customer_name = ?
+    `;
+    db.query(query, [customerName], (err, results) => {
+        if (err) {
+            console.error("Error fetching client services:", err);
+            return res.status(500).json({ success: false, message: "Database error." });
+        }
+        console.log("Fetched services:", results); // Debugging: Log the results
+        res.json(results);
+    });
+});
+
+app.put("/services-availed/:id", (req, res) => {
+    const id = req.params.id;
+    const updatedData = req.body;
+
+    const query = `
+        UPDATE \`Services Availed\`
+        SET ?
+        WHERE id = ?
+    `;
+    db.query(query, [updatedData, id], (err) => {
+        if (err) {
+            console.error("Error updating Services Availed:", err);
+            return res.status(500).send("Failed to update entry in Services Availed.");
+        }
+        res.send("Entry updated successfully.");
+    });
+});
