@@ -152,11 +152,13 @@
             return;
         }
 
+        const customerName = localStorage.getItem("customer_name") || "Unknown Customer";
+
         cartItems.forEach((item) => {
             const purchaseDetails = {
-                customer_name: "John Doe", // Replace with dynamic user info
+                customer_name: customerName,
                 service_name: item.name,
-                service_date: new Date().toISOString().split('T')[0], // Today's date
+                service_date: new Date().toISOString().split('T')[0],
                 cost: item.price * item.quantity,
                 status: "Pending",
             };

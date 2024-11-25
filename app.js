@@ -116,6 +116,8 @@ app.post("/addlogin", (req, res) => {
             return res.status(401).send("Incorrect password.");
         }
 
+        const fullName = `${user.Fname} ${user.Lname}`;
+
         // Redirect based on user role
         if (client.choice === "admin" && user.choice === "admin") {
             return res.sendFile(path.join(__dirname, "BA-Logged-in/BAHome.html"));

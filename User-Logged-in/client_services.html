@@ -178,7 +178,7 @@ function cancelService(index) {
 
 
 document.addEventListener("DOMContentLoaded", function() {
-  const loggedInCustomerName = localStorage.getItem("customer_name") || "John Doe"; // Replace with actual logged-in customer name logic
+  const loggedInCustomerName = localStorage.getItem("customer_name");
 
   // Fetch services for the logged-in client
   fetch(`/client-services/${loggedInCustomerName}`)
