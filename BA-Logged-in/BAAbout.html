@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Link to javascript named navbarscroll.js -->
-  <script src = "../navbarscroll.js"> </script>
   <title>About Us</title>
+  <script src="../navbarscroll.js"></script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -94,6 +93,21 @@
     .team-member a:hover {
       text-decoration: underline;
     }
+
+    .save-button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #ffffff;
+      color: rgb(4, 0, 0);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .save-button:hover {
+      background-color: #345e81;
+    }
   </style>
 </head>
 <body>
@@ -104,60 +118,111 @@
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     fetch('../BA-Logged-in/BALoggedInNav.html')
-            .then(response => response.text())
-            .then(data => {
-              document.getElementById('logged-in-navbar-BA').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading logged-in navbar:', error));
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('logged-in-navbar-BA').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading logged-in navbar:', error));
   });
 </script>
 
 <div class="about-container">
-  <h1>About Us</h1>
+  <h1 class="editable" contenteditable="true" id="aboutTitle">About Us</h1>
 
   <div class="about-section">
-    <p>Welcome to our SOEN 287 Group Project website.</p>
+    <p class="editable" contenteditable="true" id="aboutDescription">Welcome to our SOEN 287 Group Project website.</p>
 
     <div class="team-section">
-      <h2>Meet Our Team</h2>
+      <h2 class="editable" contenteditable="true" id="teamTitle">Meet Our Team</h2>
       <div class="team-members">
         <div class="team-member">
           <img src="/images/img_avatar2.png" alt="Team Member 1">
-          <h3>Yana</h3>
-          <p>Developer</p>
-          <p><a href="mailto:yana.vassilyev@gmail.com">yana.vassilyev@gmail.com</a></p>
+          <h3 class="editable" contenteditable="true" id="teamMember1Name">Yana</h3>
+          <p class="editable" contenteditable="true" id="teamMember1Role">Developer</p>
+          <p class="editable" contenteditable="true" id="teamMember1Email"><a href="mailto:yana.vassilyev@gmail.com">yana.vassilyev@gmail.com</a></p>
         </div>
         <div class="team-member">
           <img src="/images/img_avatar2.png" alt="Team Member 2">
-          <h3>Lucas</h3>
-          <p>Developer</p>
-          <p><a href="mailto:lucas.pentlandhyde@gmail.com">lucas.pentlandhyde@gmail.com</a></p>
+          <h3 class="editable" contenteditable="true" id="teamMember2Name">Lucas</h3>
+          <p class="editable" contenteditable="true" id="teamMember2Role">Developer</p>
+          <p class="editable" contenteditable="true" id="teamMember2Email"><a href="mailto:lucas.pentlandhyde@gmail.com">lucas.pentlandhyde@gmail.com</a></p>
         </div>
         <div class="team-member">
           <img src="/images/img_avatar2.png" alt="Team Member 3">
-          <h3>Jorane-Tiana</h3>
-          <p>Developer</p>
-          <p><a href="mailto:jorane1234@gmail.com">jorane1234@gmail.com</a></p>
+          <h3 class="editable" contenteditable="true" id="teamMember3Name">Jorane-Tiana</h3>
+          <p class="editable" contenteditable="true" id="teamMember3Role">Developer</p>
+          <p class="editable" contenteditable="true" id="teamMember3Email"><a href="mailto:jorane1234@gmail.com">jorane1234@gmail.com</a></p>
         </div>
         <div class="team-member">
           <img src="/images/img_avatar2.png" alt="Team Member 4">
-          <h3>Daniel</h3>
-          <p>Developer</p>
-          <p><a href="mailto:daniel05.ayass@gmail.com">daniel05.ayass@gmail.com</a></p>
+          <h3 class="editable" contenteditable="true" id="teamMember4Name">Daniel</h3>
+          <p class="editable" contenteditable="true" id="teamMember4Role">Developer</p>
+          <p class="editable" contenteditable="true" id="teamMember4Email"><a href="mailto:daniel05.ayass@gmail.com">daniel05.ayass@gmail.com</a></p>
         </div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-column">
+      <h3>Admin Contact</h3>
+      <p id="adminName"> </p>
+      <p id="adminEmail"></p>
+      <p id="adminPhone"></p>
+      <p id="adminAddress"></p>
+      <p id="adminCity"></p>
+      <p id="adminProvince"></p>
+      <p id="adminPostalCode"></p>
+    </div>
+    <div class="footer-column">
+      <h3>Customers</h3>
+      <ul>
+        <li><a href="#">Catalogs</a></li>
+        <li><a href="#">Do Not Sell My Info</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h3>Company</h3>
+      <ul>
+        <li><a href="view-only/about.html">About Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-credits">
+    <p>&copy; YourCompanyName</p>
+  </div>
+</footer>
+
 <script>
-  fetch('../footer.html')
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById('footer').innerHTML = data;
-          });
+    document.addEventListener("DOMContentLoaded", function () {
+    console.log("YES!");
+    fetch("http://localhost:7013/admin-profile")
+.then((response) => {
+  console.log("Fetch response:", response);
+  return response.json();
+})
+.then((data) => {
+  console.log("Fetched data:", data)
+        if (data) {
+          document.getElementById("adminName").innerHTML = `Business Name: ${data.fname || "N/A"}`;
+          document.getElementById("adminEmail").innerHTML = `Email: ${data.email || "N/A"}`;
+          document.getElementById("adminPhone").innerHTML = `Phone: ${data.pn || "N/A"}`;
+          document.getElementById("adminAddress").innerHTML = `Address: ${data.address || "N/A"}`;
+          document.getElementById("adminCity").innerHTML = `City: ${data.city || "N/A"}`;
+          document.getElementById("adminProvince").innerHTML = `Province: ${data.pt || "N/A"}`;
+          document.getElementById("adminPostalCode").innerHTML = `Postal Code: ${data.pc || "N/A"}`;
+        } else {
+          console.error("Failed to fetch admin profile: No data returned.");
+        }
+      })
+      .catch((error) => console.error("Error fetching admin profile:", error));
+  });
 </script>
-<div id="footer"></div>
 
 </body>
 </html>

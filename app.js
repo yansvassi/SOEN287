@@ -17,7 +17,7 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "SOEN287", // Replace with your database name
+    database: "SOEN287project", // Replace with your database name
 });
 
 db.connect((err) => {
@@ -116,6 +116,8 @@ app.post("/addlogin", (req, res) => {
             return res.status(401).send("Incorrect password.");
         }
 
+        const fullName = `${user.Fname} ${user.Lname}`;
+
         // Redirect based on user role
         if (client.choice === "admin" && user.choice === "admin") {
             return res.sendFile(path.join(__dirname, "BA-Logged-in/BAHome.html"));
@@ -175,12 +177,105 @@ app.post("/BA-Logged-in/editprofile", (req, res) => {
             console.error("Error updating profile:", err.message);
             return res.status(500).send("An error occurred while updating the profile.");
         }
+        else {
+        return res.sendFile(path.join(__dirname, "BA-Logged-in/BA-profile.html")); }
+    });
+});
 
-        if (result.affectedRows === 0) {
-            return res.status(404).send("No profile found to update.");
+
+
+app.get('/admin-profile', (req, res) => {
+    const query = 'SELECT fname, email, pn, address, city, pt, pc FROM AdminProfile LIMIT 1'; 
+  
+    db.query(query, (err, results) => {
+      if (err) {
+        console.error('Error fetching admin profile:', err.message);
+        return res.status(500).json({ error: 'Failed to fetch admin profile' });
+      }
+      res.json(results[0]); 
+    });
+  });
+
+  app.post("/User-Logged-in/editClientProfile", (req, res) => {
+    const info = {
+        fname: req.body.fname,
+        lname: req.body.lname,
+        email: req.body.email,
+        pn: req.body.pn,
+        address: req.body.address,
+        city: req.body.city,
+        pt: req.body.pt,
+        pc: req.body.pc,
+        card_number: req.body.card_number,
+        expiry_date: req.body.expiry_date,
+        card_name: req.body.card_name
+    };
+
+    let fields = [];
+    let values = [];
+
+
+    if (info.fname) {
+        fields.push("fname = ?");
+        values.push(info.fname);
+    }
+    if (info.lname) {
+        fields.push("lname = ?");
+        values.push(info.lname);
+    }
+    if (info.email) {
+        fields.push("email = ?");
+        values.push(info.email);
+    }
+    if (info.pn) {
+        fields.push("pn = ?");
+        values.push(info.pn);
+    }
+    if (info.address) {
+        fields.push("address = ?");
+        values.push(info.address);
+    }
+    if (info.city) {
+        fields.push("city = ?");
+        values.push(info.city);
+    }
+    if (info.pt) {
+        fields.push("pt = ?");
+        values.push(info.pt);
+    }
+    if (info.pc) {
+        fields.push("pc = ?");
+        values.push(info.pc);
+    }
+    if (info.card_number) {
+        fields.push("card_number = ?");
+        values.push(info.card_number);
+    }
+    if (info.expiry_date) {
+        fields.push("expiry_date = ?");
+        values.push(info.expiry_date);
+    }
+    if (info.card_name) {
+        fields.push("card_name = ?");
+        values.push(info.card_name);
+    }
+
+ 
+    if (fields.length === 0) {
+        return res.status(400).send("No fields provided to update.");
+    }
+
+   
+    const sql = `UPDATE ClientProfile SET ${fields.join(", ")}`;
+
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error("Error updating client profile:", err);
+            return res.status(500).send("An error occurred while updating the client profile.");
+        } else {
+            return res.sendFile(path.join(__dirname, "User-Logged-in/profileclient.html")); // Adjust file path as needed
         }
-
-        res.status(200).send("Profile updated successfully.");
     });
 });
 
@@ -353,4 +448,5 @@ app.get("/api/get-descriptions", (req, res) => {
       res.json({ success: true, message: "Descriptions updated successfully!" });
     });
   });
+
   
