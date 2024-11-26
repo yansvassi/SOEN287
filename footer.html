@@ -12,9 +12,13 @@
     <div class="footer-container">
       <div class="footer-column">
         <h3>Admin Contact</h3>
-        <div id="admin-profile">
-         
-        </div>
+        <p id="adminName"> </p>
+        <p id="adminEmail"></p>
+        <p id="adminPhone"></p>
+        <p id="adminAddress"></p>
+        <p id="adminCity"></p>
+        <p id="adminProvince"></p>
+        <p id="adminPostalCode"></p>
       </div>
       <div class="footer-column">
         <h3>Customers</h3>
@@ -36,40 +40,31 @@
       <p>&copy; YourCompanyName</p>
     </div>
   </footer>
-<script>
-function loadAdminProfile() {
-  fetch("http://localhost:7013/admin-profile")
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((admin) => {
-      const container = document.getElementById("admin-profile"); 
-      container.innerHTML = ""; 
 
-      const profileBox = document.createElement("div");
-      profileBox.classList.add("profile-box");
-      profileBox.innerHTML = `
-        <p class="admin-field"><strong>Name:</strong> ${admin.fname || "N/A"}</p>
-        <p class="admin-field"><strong>Email:</strong> ${admin.email || "N/A"}</p>
-        <p class="admin-field"><strong>Phone:</strong> ${admin.pn || "N/A"}</p>
-        <p class="admin-field"><strong>Address:</strong> ${admin.address || "N/A"}</p>
-        <p class="admin-field"><strong>City:</strong> ${admin.city || "N/A"}</p>
-        <p class="admin-field"><strong>Province:</strong> ${admin.pt || "N/A"}</p>
-        <p class="admin-field"><strong>Postal Code:</strong> ${admin.pc || "N/A"}</p>
-      `;
-
-      container.appendChild(profileBox);
-    })
-    .catch((error) => {
-      console.error("Error loading admin profile:", error);
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      console.log("YES!");
+      fetch("http://localhost:7013/admin-profile")
+  .then((response) => {
+    console.log("Fetch response:", response);
+    return response.json();
+  })
+  .then((data) => {
+    console.log("Fetched data:", data)
+          if (data) {
+            document.getElementById("adminName").innerHTML = "Yes";
+            document.getElementById("adminEmail").innerHTML = `Email: ${data.email || "N/A"}`;
+            document.getElementById("adminPhone").innerHTML = `Phone: ${data.pn || "N/A"}`;
+            document.getElementById("adminAddress").innerHTML = `Address: ${data.address || "N/A"}`;
+            document.getElementById("adminCity").innerHTML = `City: ${data.city || "N/A"}`;
+            document.getElementById("adminProvince").innerHTML = `Province: ${data.pt || "N/A"}`;
+            document.getElementById("adminPostalCode").innerHTML = `Postal Code: ${data.pc || "N/A"}`;
+          } else {
+            console.error("Failed to fetch admin profile: No data returned.");
+          }
+        })
+        .catch((error) => console.error("Error fetching admin profile:", error));
     });
-}
-
-document.addEventListener("DOMContentLoaded", loadAdminProfile);
-</script>
-
+  </script>
 </body>
 </html>

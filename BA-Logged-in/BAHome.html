@@ -232,16 +232,63 @@ fetch("http://localhost:7013/servicess")
 </div>
 
 
-<!-- Footer Section -->
-<div id="footer-container"></div>
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-column">
+      <h3>Admin Contact</h3>
+      <p id="adminName"> </p>
+      <p id="adminEmail"></p>
+      <p id="adminPhone"></p>
+      <p id="adminAddress"></p>
+      <p id="adminCity"></p>
+      <p id="adminProvince"></p>
+      <p id="adminPostalCode"></p>
+    </div>
+    <div class="footer-column">
+      <h3>Customers</h3>
+      <ul>
+        <li><a href="#">Catalogs</a></li>
+        <li><a href="#">Do Not Sell My Info</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h3>Company</h3>
+      <ul>
+        <li><a href="view-only/about.html">About Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-credits">
+    <p>&copy; YourCompanyName</p>
+  </div>
+</footer>
+
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    fetch('../footer.html')
-            .then(response => response.text())
-            .then(data => {
-              document.getElementById('footer-container').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading footer:', error));
+    document.addEventListener("DOMContentLoaded", function () {
+    console.log("YES!");
+    fetch("http://localhost:7013/admin-profile")
+.then((response) => {
+  console.log("Fetch response:", response);
+  return response.json();
+})
+.then((data) => {
+  console.log("Fetched data:", data)
+        if (data) {
+          document.getElementById("adminName").innerHTML = `Business Name: ${data.fname || "N/A"}`;
+          document.getElementById("adminEmail").innerHTML = `Email: ${data.email || "N/A"}`;
+          document.getElementById("adminPhone").innerHTML = `Phone: ${data.pn || "N/A"}`;
+          document.getElementById("adminAddress").innerHTML = `Address: ${data.address || "N/A"}`;
+          document.getElementById("adminCity").innerHTML = `City: ${data.city || "N/A"}`;
+          document.getElementById("adminProvince").innerHTML = `Province: ${data.pt || "N/A"}`;
+          document.getElementById("adminPostalCode").innerHTML = `Postal Code: ${data.pc || "N/A"}`;
+        } else {
+          console.error("Failed to fetch admin profile: No data returned.");
+        }
+      })
+      .catch((error) => console.error("Error fetching admin profile:", error));
   });
 </script>
 
