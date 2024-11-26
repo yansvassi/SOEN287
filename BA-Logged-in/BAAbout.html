@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Link to javascript named navbarscroll.js -->
-  <script src = "../navbarscroll.js"> </script>
   <title>About Us</title>
+  <script src="../navbarscroll.js"></script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -94,6 +93,21 @@
     .team-member a:hover {
       text-decoration: underline;
     }
+
+    .save-button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #ffffff;
+      color: rgb(4, 0, 0);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .save-button:hover {
+      background-color: #345e81;
+    }
   </style>
 </head>
 <body>
@@ -104,46 +118,46 @@
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     fetch('../BA-Logged-in/BALoggedInNav.html')
-            .then(response => response.text())
-            .then(data => {
-              document.getElementById('logged-in-navbar-BA').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading logged-in navbar:', error));
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('logged-in-navbar-BA').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading logged-in navbar:', error));
   });
 </script>
 
 <div class="about-container">
-  <h1>About Us</h1>
+  <h1 class="editable" contenteditable="true" id="aboutTitle">About Us</h1>
 
   <div class="about-section">
-    <p>Welcome to our SOEN 287 Group Project website.</p>
+    <p class="editable" contenteditable="true" id="aboutDescription">Welcome to our SOEN 287 Group Project website.</p>
 
     <div class="team-section">
-      <h2>Meet Our Team</h2>
+      <h2 class="editable" contenteditable="true" id="teamTitle">Meet Our Team</h2>
       <div class="team-members">
         <div class="team-member">
           <img src="/images/img_avatar2.png" alt="Team Member 1">
-          <h3>Yana</h3>
-          <p>Developer</p>
-          <p><a href="mailto:yana.vassilyev@gmail.com">yana.vassilyev@gmail.com</a></p>
+          <h3 class="editable" contenteditable="true" id="teamMember1Name">Yana</h3>
+          <p class="editable" contenteditable="true" id="teamMember1Role">Developer</p>
+          <p class="editable" contenteditable="true" id="teamMember1Email"><a href="mailto:yana.vassilyev@gmail.com">yana.vassilyev@gmail.com</a></p>
         </div>
         <div class="team-member">
           <img src="/images/img_avatar2.png" alt="Team Member 2">
-          <h3>Lucas</h3>
-          <p>Developer</p>
-          <p><a href="mailto:lucas.pentlandhyde@gmail.com">lucas.pentlandhyde@gmail.com</a></p>
+          <h3 class="editable" contenteditable="true" id="teamMember2Name">Lucas</h3>
+          <p class="editable" contenteditable="true" id="teamMember2Role">Developer</p>
+          <p class="editable" contenteditable="true" id="teamMember2Email"><a href="mailto:lucas.pentlandhyde@gmail.com">lucas.pentlandhyde@gmail.com</a></p>
         </div>
         <div class="team-member">
           <img src="/images/img_avatar2.png" alt="Team Member 3">
-          <h3>Jorane-Tiana</h3>
-          <p>Developer</p>
-          <p><a href="mailto:jorane1234@gmail.com">jorane1234@gmail.com</a></p>
+          <h3 class="editable" contenteditable="true" id="teamMember3Name">Jorane-Tiana</h3>
+          <p class="editable" contenteditable="true" id="teamMember3Role">Developer</p>
+          <p class="editable" contenteditable="true" id="teamMember3Email"><a href="mailto:jorane1234@gmail.com">jorane1234@gmail.com</a></p>
         </div>
         <div class="team-member">
           <img src="/images/img_avatar2.png" alt="Team Member 4">
-          <h3>Daniel</h3>
-          <p>Developer</p>
-          <p><a href="mailto:daniel05.ayass@gmail.com">daniel05.ayass@gmail.com</a></p>
+          <h3 class="editable" contenteditable="true" id="teamMember4Name">Daniel</h3>
+          <p class="editable" contenteditable="true" id="teamMember4Role">Developer</p>
+          <p class="editable" contenteditable="true" id="teamMember4Email"><a href="mailto:daniel05.ayass@gmail.com">daniel05.ayass@gmail.com</a></p>
         </div>
       </div>
     </div>

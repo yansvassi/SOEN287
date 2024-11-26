@@ -17,7 +17,7 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "SOEN287", // Replace with your database name
+    database: "SOEN287project", // Replace with your database name
 });
 
 db.connect((err) => {
@@ -116,6 +116,8 @@ app.post("/addlogin", (req, res) => {
             return res.status(401).send("Incorrect password.");
         }
 
+        const fullName = `${user.Fname} ${user.Lname}`;
+
         // Redirect based on user role
         if (client.choice === "admin" && user.choice === "admin") {
             return res.sendFile(path.join(__dirname, "BA-Logged-in/BAHome.html"));
@@ -127,66 +129,52 @@ app.post("/addlogin", (req, res) => {
     });
 });
 
-app.get("/BA-Logged-in/editprofile", (req, res) => {
-    res.send("This is the addlogin endpoint. Use POST to submit data.");
-  });
-
-// update admin profile 
 app.post("/BA-Logged-in/editprofile", (req, res) => {
+    
     const info = {
-        fname: req.body.fname,
-        email: req.body.email,
-        pn: req.body.pn,
-        address: req.body.address,
-        city: req.body.city,
-        pt: req.body.pt,
-        pc: req.body.pc
-    };
+        fname: fname.req.body,
+        email: email.req.body, 
+        pn: pn.req.body, 
+        address: address.req.body, 
+        city: city.req.body, 
+        pt: pt.req.body,
+        pc: pc.req.body
 
-    let fields = [];
-    let values = [];
-
-    if (info.fname) {
-        fields.push("fname = ?");
-        values.push(info.fname);
-    }
-    if (info.email) {
-        fields.push("email = ?");
-        values.push(info.email);
-    }
-    if (info.pn) {
-        fields.push("pn = ?");
-        values.push(info.pn);
-    }
-    if (info.address) {
-        fields.push("address = ?");
-        values.push(info.address);
-    }
-    if (info.city) {
-        fields.push("city = ?");
-        values.push(info.city);
-    }
-    if (info.pt) {
-        fields.push("pt = ?");
-        values.push(info.pt);
-    }
-    if (info.pc) {
-        fields.push("pc = ?");
-        values.push(info.pc);
     }
 
-   
-    if (fields.length === 0) {
-        return res.status(400).send("No fields provided to update.");
+    if (fname) 
+        {
+            const sql = "UPDATE AdminProfile SET fname ? WHERE 1";
+        }
+    if (email) 
+        {
+            const sql = "UPDATE AdminProfile SET email ? WHERE 1";
+        }
+    if (pn) 
+        {
+            const sql = "UPDATE AdminProfile SET pn ? WHERE 1";
+        }
+    if (address) 
+        {
+            const sql = "UPDATE AdminProfile SET address ? WHERE 1";
+        }
+    if (ciy)
+        {
+            const sql = "UPDATE AdminProfile SET city ? WHERE 1";
+        }
+
+    // Check if there are fields to update
+    if (updates.length === 0) {
+        return res.status(400).send("No fields to update.");
     }
 
- 
-    const sql = `UPDATE AdminProfile SET ${fields.join(", ")}`;
+    // Construct the SQL query
+    const sql = "UPDATE AdminProfile SET ";
 
-  
+    // Execute the query
     db.query(sql, values, (err, result) => {
         if (err) {
-            console.error("Error updating profile:", err);
+            console.error("Error updating profile:", err.message);
             return res.status(500).send("An error occurred while updating the profile.");
         }
         else {
@@ -291,6 +279,7 @@ app.get('/admin-profile', (req, res) => {
     });
 });
 
+
 // Add a new service
 app.post("/services", (req, res) => {
     const { customer_name, service_name, service_date, status, cost } = req.body;
@@ -338,7 +327,7 @@ app.get("/client", (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}/view-only/Home.html`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
 
 
@@ -459,4 +448,5 @@ app.get("/api/get-descriptions", (req, res) => {
       res.json({ success: true, message: "Descriptions updated successfully!" });
     });
   });
+
   

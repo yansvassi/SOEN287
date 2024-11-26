@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Bag</title>
+    <title>Your Cart</title>
     <link rel="stylesheet" href="../cartStyles.css">
     <link rel="stylesheet" href="../BrowseStyles.css">
     <link rel="stylesheet" href="../navStyles.css">
@@ -42,6 +42,29 @@
         .checkout-button:hover {
             background-color: #264e65;
         }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .quantity-controls button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            background-color: #4a7b9b;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .quantity-controls button:hover {
+            background-color: #264e65;
+        }
     </style>
 </head>
 <body>
@@ -68,9 +91,9 @@
 <!-- Cart Content -->
 <div class="container">
     <div class="cart-container" id="cart-container">
-        <!-- Cart items will be inserted here -->
+        <!-- Cart items will be dynamically inserted here -->
     </div>
-    <button class="checkout-button" onclick="checkout()">Checkout</button> <!-- Checkout Button -->
+    <button class="checkout-button" onclick="checkout()">Checkout</button>
 </div>
 
 <!-- Footer -->
@@ -138,11 +161,11 @@
     const cartContainer = document.getElementById('cart-container');
     let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
 
+    // Render the cart items dynamically
     function renderCart() {
         cartContainer.innerHTML = '';
-
         if (cartItems.length === 0) {
-            cartContainer.innerHTML = '<p>Looks like your cart is empty</p>';
+            cartContainer.innerHTML = '<p>Your cart is empty.</p>';
         } else {
             cartItems.forEach((item, index) => {
                 const totalPrice = parseFloat(item.price) * item.quantity;
@@ -150,7 +173,7 @@
                 cartItem.classList.add('cart-item');
                 cartItem.innerHTML = `
                     <span>${item.name}</span>
-                    <span>$${item.price}</span>
+                    <span>$${parseFloat(item.price).toFixed(2)}</span>
                     <div class="quantity-controls">
                         <button onclick="decrementQuantity(${index})">-</button>
                         <span>${item.quantity}</span>
@@ -182,14 +205,38 @@
     }
 
     function checkout() {
-        if (cartItems.length > 0) {
-            alert("Purchase has been successful!");
-            cartItems = [];
-            localStorage.removeItem('cart');
-            renderCart();
-        } else {
+        if (cartItems.length === 0) {
             alert("Your cart is empty!");
+            return;
         }
+
+        const customerName = localStorage.getItem("customer_name") || "Unknown Customer";
+
+        cartItems.forEach((item) => {
+            const purchaseDetails = {
+                customer_name: customerName,
+                service_name: item.name,
+                service_date: new Date().toISOString().split('T')[0],
+                cost: item.price * item.quantity,
+                status: "Pending",
+            };
+
+            fetch("/purchase", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(purchaseDetails),
+            })
+                .then(response => response.text())
+                .then(message => {
+                    console.log(message);
+                })
+                .catch(error => console.error("Error during checkout:", error));
+        });
+
+        alert("Purchase successful! Thank you.");
+        cartItems = [];
+        localStorage.removeItem('cart');
+        renderCart();
     }
 
     function updateCart() {
@@ -199,17 +246,15 @@
 
     renderCart();
 
-document.addEventListener("DOMContentLoaded", function() {
-fetch('../footer.html')
-.then(response => response.text())
-.then(data => {
-document.getElementById('footer-container').innerHTML = data;
-})
-.catch(error => console.error('Error loading footer:', error));
-});
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('../footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+    });
 </script>
-
-<script src="../script.js"></script>
 
 </body>
 </html>

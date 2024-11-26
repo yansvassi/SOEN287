@@ -81,57 +81,6 @@
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-
-    #addRowForm {
-      background-color: #f5f5f5;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-      width: 100%;
-      max-width: 800px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-gap: 20px;
-    }
-
-    .form-input label {
-      font-weight: bold;
-      margin-bottom: 5px;
-      color: #0f253d;
-    }
-
-    .form-input input {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
-      width: 100%;
-    }
-
-    .form-input input:focus {
-      border-color: #4a7b9b;
-      outline: none;
-    }
-
-    #addServiceBtn {
-      width: 100%;
-      padding: 10px;
-      background-color: #4a7b9b;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
-    #addServiceBtn:hover {
-      background-color: #264e65;
-    }
   </style>
 </head>
 <body>
@@ -154,7 +103,7 @@
   <h2>Services Availed by Customers</h2>
 
   <!-- Search Bar -->
-  <input type="text" id="searchBar" placeholder="Search...">
+  <input type="text" id="searchBar" placeholder="Search..." onkeyup="filterTable()">
 
   <!-- Services Table -->
   <table>
@@ -173,53 +122,28 @@
     </thead>
     <tbody id="availedServicesTable"></tbody>
   </table>
-
-  <!-- Add New Service Form -->
-  <div id="addRowForm">
-    <h3>Add New Service</h3>
-    <div class="form-grid">
-      <div class="form-input">
-        <label for="customerName">Customer Name:</label>
-        <input type="text" id="customerName" placeholder="Enter Customer Name">
-      </div>
-      <div class="form-input">
-        <label for="serviceName">Service:</label>
-        <input type="text" id="serviceName" placeholder="Enter Service Name">
-      </div>
-      <div class="form-input">
-        <label for="serviceDate">Date:</label>
-        <input type="date" id="serviceDate">
-      </div>
-      <div class="form-input">
-        <label for="serviceStatus">Status:</label>
-        <input type="text" id="serviceStatus" placeholder="Enter Status">
-      </div>
-      <div class="form-input">
-        <label for="serviceCost">Cost:</label>
-        <input type="number" id="serviceCost" placeholder="Enter Cost">
-      </div>
-    </div>
-    <button id="addServiceBtn">Add Service</button>
-  </div>
-
-  <button id="backToDashboard">Back to Dashboard</button>
 </div>
+
+<!-- Footer -->
+<div id="footer"></div>
 
 <script>
   // Fetch services and display them in the table
   function fetchServices() {
-    fetch("/services")
+    fetch("/services-availed")
             .then(response => response.json())
             .then(services => {
               const tableBody = document.getElementById("availedServicesTable");
-              tableBody.innerHTML = "";
+              tableBody.innerHTML = ""; // Clear existing rows
+
               services.forEach(service => {
+                const formattedDate = new Date(service.service_date).toISOString().split('T')[0];
                 const row = document.createElement("tr");
                 row.innerHTML = `
             <td>${service.id}</td>
             <td>${service.customer_name}</td>
             <td>${service.service_name}</td>
-            <td>${service.service_date}</td>
+            <td>${formattedDate}</td>
             <td>${service.status}</td>
             <td>${service.cost}</td>
             <td><button onclick="generatePDF(${service.id})">View</button></td>
@@ -232,59 +156,94 @@
             .catch(error => console.error("Error fetching services:", error));
   }
 
-  // Add a new service
-  document.getElementById("addServiceBtn").addEventListener("click", function () {
-    const newService = {
-      customer_name: document.getElementById("customerName").value,
-      service_name: document.getElementById("serviceName").value,
-      service_date: document.getElementById("serviceDate").value,
-      status: document.getElementById("serviceStatus").value || "Pending",
-      cost: document.getElementById("serviceCost").value,
-    };
-
-    fetch("/services", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newService),
-    })
-            .then(response => response.text())
-            .then(message => {
-              alert(message);
-              fetchServices();
-            })
-            .catch(error => console.error("Error adding service:", error));
-  });
-
   // Generate PDF for a service
-  function generatePDF(id) {
-    alert(`Generating PDF for service ID: ${id}`);
+  async function generatePDF(id) {
+    // Fetch service details by ID (optional: replace this with your own fetch logic)
+    const service = await fetchServiceDetailsById(id);
+
+    // Check if service details are found
+    if (!service) {
+      alert("Service not found!");
+      return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Add title
+    doc.setFontSize(18);
+    doc.text("Service Invoice", 105, 20, { align: "center" });
+
+    // Add service details
+    doc.setFontSize(12);
+    doc.text(`Service ID: ${service.id}`, 20, 40);
+    doc.text(`Customer Name: ${service.customer_name}`, 20, 50);
+    doc.text(`Service Name: ${service.service_name}`, 20, 60);
+    doc.text(`Service Date: ${service.service_date}`, 20, 70);
+    doc.text(`Status: ${service.status}`, 20, 80);
+    doc.text(`Cost: $${service.cost}`, 20, 90);
+
+    // Add footer
+    doc.setFontSize(10);
+    doc.text("Thank you for using our services!", 105, 130, { align: "center" });
+
+    // Save the PDF
+    doc.save(`Service_Invoice_${service.id}.pdf`);
   }
+
+  // Helper function to fetch service details by ID (replace this with your backend logic)
+  async function fetchServiceDetailsById(id) {
+    try {
+      const response = await fetch(`/services-availed/${id}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch service details");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching service details:", error);
+      return null;
+    }
+  }
+
 
   // Send a follow-up email
   function sendFollowUpEmail(customerName, serviceName) {
     alert(`Sending follow-up email to ${customerName} for service: ${serviceName}`);
+    // Implement email-sending logic here
+  }
+
+  // Filter table based on search input
+  function filterTable() {
+    const searchTerm = document.getElementById("searchBar").value.toLowerCase();
+    const rows = document.querySelectorAll("#availedServicesTable tr");
+
+    rows.forEach(row => {
+      const cells = Array.from(row.cells);
+      const matches = cells.some(cell => cell.textContent.toLowerCase().includes(searchTerm));
+      row.style.display = matches ? "" : "none";
+    });
   }
 
   // Toggle edit mode for a service
   function toggleEditMode(button) {
     const row = button.parentNode.parentNode;
     const isEditing = button.textContent === "Edit";
-    const cells = row.querySelectorAll("[contenteditable]");
+    const cells = row.querySelectorAll("td:not(:last-child)");
 
-    cells.forEach(cell => {
-      cell.contentEditable = isEditing;
-    });
+    if (isEditing) {
+      cells.forEach(cell => cell.contentEditable = true);
+      button.textContent = "Save";
+    } else {
+      const updatedData = {
+        id: cells[0].textContent.trim(),
+        customer_name: cells[1].textContent.trim(),
+        service_name: cells[2].textContent.trim(),
+        service_date: cells[3].textContent.trim(),
+        status: cells[4].textContent.trim(),
+        cost: cells[5].textContent.trim(),
+      };
 
-    button.textContent = isEditing ? "Save" : "Edit";
-
-    if (!isEditing) {
-      const id = cells[0].textContent.trim();
-      const updatedData = {};
-      row.querySelectorAll("[data-field]").forEach(cell => {
-        updatedData[cell.getAttribute("data-field")] = cell.textContent.trim();
-      });
-
-      fetch(`/services/${id}`, {
+      fetch(`/services-availed/${updatedData.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedData),
@@ -295,11 +254,15 @@
                 fetchServices();
               })
               .catch(error => console.error("Error updating service:", error));
+
+      cells.forEach(cell => cell.contentEditable = false);
+      button.textContent = "Edit";
     }
   }
 
   // Initialize the page
-  fetchServices();
+  document.addEventListener("DOMContentLoaded", function() {
+    fetchServices();
 
   // Back to Dashboard
   document.getElementById("backToDashboard").addEventListener("click", function () {

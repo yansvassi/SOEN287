@@ -124,53 +124,69 @@
 </div>
 
 <script>
-// Example services data
-const availedServices = [
-  { service: 'Regular Interior Cleaning', date: '2024-01-12', status: 'Completed', cost: '$100' },
-  { service: 'Comprehensive Cleaning', date: '2024-01-14', status: 'Cancelled', cost: '$150' },
-  { service: 'Deep Carpet Cleaning', date: '2024-01-16', status: 'Pending', cost: '$200' }
-];
 
-function displayAvailedServices(services) {
-  const availedServicesTable = document.getElementById('availedServicesTable');
-  availedServicesTable.innerHTML = '';
+  function displayAvailedServices(services) {
+    const availedServicesTable = document.getElementById('availedServicesTable');
+    availedServicesTable.innerHTML = '';
 
-  services.forEach((service, index) => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${service.service}</td>
-      <td>${service.date}</td>
-      <td>${service.status}</td>
-      <td>${service.cost}</td>
-      <td><button onclick="cancelService(${index})">Cancel</button></td>
-      <td><button onclick="generatePDF(${index})">View Invoice</button></td>
+    services.forEach((service, index) => {
+      const formattedDate = new Date(service.service_date).toISOString().split('T')[0];
 
-    `;
+      const row = document.createElement('tr');
+      row.innerHTML = `
+            <td>${service.service_name}</td>
+            <td>${formattedDate}</td>
+            <td>${service.status}</td>
+            <td>${service.cost}</td>
+            <td><button onclick="cancelService(${index})">Cancel</button></td>
+            <td><button onclick="generatePDF(${index})">View Invoice</button></td>
+        `;
 
-    availedServicesTable.appendChild(row);
-  });
-}
+      availedServicesTable.appendChild(row);
+    });
+  }
 
 // Cancel a service, with extra conditions
 function cancelService(index) {
   const service = availedServices[index];
 
-  if (service.status === 'Completed') {
-    alert('You cannot cancel this service as it is already completed');
-  } else if (service.status === 'Cancelled'){
-    alert('This service is already cancelled');
-  } else if (service.status === 'Pending'){
-    const confirmCancel = confirm('Are you sure you want to cancel this service?');
-    if(confirmCancel){
-      service.status = 'Cancelled'
-      displayAvailedServices(availedServices)
-    }
+  if (service.status === "Completed") {
+    alert("You cannot cancel this service as it is already completed.");
+    return;
+  } else if (service.status === "Cancelled") {
+    alert("This service is already cancelled.");
+    return;
+  }
 
+  const confirmCancel = confirm("Are you sure you want to cancel this service?");
+  if (confirmCancel) {
+    // Send cancellation request to the backend
+    fetch(`/services-availed/${service.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "Cancelled" }),
+    })
+            .then(response => response.text())
+            .then(message => {
+              alert(message);
+              service.status = "Cancelled";
+              displayAvailedServices(availedServices); // Refresh the table
+            })
+            .catch(error => console.error("Error cancelling service:", error));
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  displayAvailedServices(availedServices);
+
+document.addEventListener("DOMContentLoaded", function() {
+  const loggedInCustomerName = localStorage.getItem("customer_name");
+
+  // Fetch services for the logged-in client
+  fetch(`/client-services/${loggedInCustomerName}`)
+          .then(response => response.json())
+          .then(services => {
+            displayAvailedServices(services);
+          })
+          .catch(error => console.error("Error fetching client services:", error));
 });
 
 function generatePDF(index) {
