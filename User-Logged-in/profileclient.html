@@ -1,37 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Specifies the chanracter encoding for the HTML document-->
+    <!-- Specifies the character encoding for the HTML document -->
     <meta charset="UTF-8">
-    <!-- to esnure it is compatible with older versions of Interet Explorer -->
+    <!-- Ensures compatibility with older versions of Internet Explorer -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- This is vital for mobiel devices, to match the viewport width to math the device -->
+    <!-- Sets the viewport to match the device's width for mobile responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Many icons used in the file is from Boxicons -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <!-- Link to the CSS file names mpstyle.css -->
+    <!-- Boxicons library for icons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <!-- Link to the external CSS files -->
     <link rel="stylesheet" href="../mpstyle.css">
-    <!-- Link to the CSS file names mpstyle.css -->
     <link rel="stylesheet" href="../footerStyles.css">
-    <!-- Link to the CSS file names mpstyle.css -->
     <link rel="stylesheet" href="../profile.css">
-    <!-- Link to javascript named navbarscroll.js -->
-    <script src = "../navbarscroll.js"> </script>
-    <!-- Link to the CSS file names mpstyle.css -->
     <link rel="stylesheet" href="../MainPageStyle.css">
-    <!-- defines the title of the web page -->
-    <title> Client Profilel </title>
-
-
+    <!-- JavaScript for navbar scrolling -->
+    <script src="../navbarscroll.js"></script>
+    <!-- Defines the title of the web page -->
+    <title>Client Profile</title>
 </head>
 <body>
 
-    <!----------------------------- The Navigation Bar ----------------------------------->
-
-    <!-- Placeholder for the logged-in navbar -->
+    <!-- Navigation Bar -->
     <div id="logged-in-navbar"></div>
 
-    <!-- JavaScript to load the logged-in navbar -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             fetch('../User-Logged-in/loggedInNav.html')
@@ -43,135 +35,168 @@
         });
     </script>
 
-    <!----------------------------- Questions ----------------------------------->
+    <!-- Profile Section -->
     <div class="wrapper"> 
-      <div class="text-title"> 
-          <h1>Edit Profile</h1>
-      </div> 
-  
-      <div class="imgprofile-container">
-          <div class="specificimg-container">
-              <img src="../images/img_avatar2.png" alt="Avatar">
-          </div>
-  
-          <div class="questions-container">
-              <div class="btn"> 
-                  <button type="button" onclick="document.getElementById('imageUploader').click()">
-                      Change Photo
-                  </button>
-                  <input type="file" id="imageUploader" style="display:none" accept="image/*" onchange="updateProfileImage(event)">
-              </div>
-  
-              <div class="questions">
+        <div class="text-title"> 
+            <h1>Edit Profile</h1>
+        </div> 
+
+        <div class="imgprofile-container">
+            <div class="specificimg-container">
+                <img src="../images/img_avatar2.png" alt="Avatar">
+            </div>
+
+            <div class="questions-container">
+                <div class="btn"> 
+                    <button type="button" onclick="document.getElementById('imageUploader').click()">
+                        Change Photo
+                    </button>
+                    <input type="file" id="imageUploader" style="display:none" accept="image/*" onchange="updateProfileImage(event)">
+                </div>
+
+                <form class="questions" method="post" action="/User-Logged-in/editClientProfile" id="profileForm">
                   <h2>Personal Information</h2>
-                  <label for="fname">First Name:</label> <br>
-                  <input type="text" id="fname" name="fname" placeholder="John"> <br>
-  
-                  <label for="lname">Last Name:</label> <br>
-                  <input type="text" id="lname" name="lname" placeholder="Robert"> <br>
-  
-                  <label for="email">Email Address:</label> <br>
-                  <input type="text" id="email" name="email" placeholder="username1234@gmail.com"> <br>
-  
-                  <label for="address">Street Address:</label> <br>
-                  <input type="text" id="address" name="address" placeholder="123 Cherry Street"> <br>
-  
-                  <label for="city">City:</label> <br>
-                  <input type="text" id="city" name="city" placeholder="Montreal"> <br>
-  
-                  <label for="pt">Province/Territory:</label> <br>
-                  <input type="text" id="pt" name="pt" placeholder="Quebec"> <br>
-  
-                  <label for="pc">Postal Code:</label> <br>
-                  <input type="text" id="pc" name="pc" placeholder="123 ABC"> <br>
-  
-                  <label for="pn">Phone Number:</label> <br>
-                  <input type="text" id="pn" name="pn" placeholder="999-999-9999">
-              </div>
-  
-              <div class="payment">
-                  <h2>Add Payment Method</h2>
-                  <label for="card-number">Card Number:</label> <br>
-                  <input type="text" id="card-number" name="card-number"> <br>
-  
-                  <label for="expiry-date">Expiry Date:</label> <br>
-                  <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY"> <br>
-  
-                  <label for="card-name">Name on Card:</label> <br>
-                  <input type="text" id="card-name" name="card-name" placeholder="John Doe">
-              </div>
-  
-              <div class="btn save-btn">
-                  <button type="button" onclick="">
-                      Save Changes
-                  </button>
-              </div>
-          </div>
-      </div>
-  </div>
-  
-
-  <!----------------------------- Footer ----------------------------------->  
-
-  <!-- Footer -->
-<footer class="footer">
-  <div class="footer-container">
-    <div class="footer-column">
-      <h3>Admin Contact</h3>
-      <p id="adminName"> </p>
-      <p id="adminEmail"></p>
-      <p id="adminPhone"></p>
-      <p id="adminAddress"></p>
-      <p id="adminCity"></p>
-      <p id="adminProvince"></p>
-      <p id="adminPostalCode"></p>
+                  <label for="fname">First Name:</label><br>
+                  <input type="text" id="fname" name="fname" placeholder="John" disabled required><br>
+              
+                  <label for="lname">Last Name:</label><br>
+                  <input type="text" id="lname" name="lname" placeholder="Robert" disabled required><br>
+              
+                  <label for="email">Email Address:</label><br>
+                  <input type="email" id="email" name="email" placeholder="username1234@gmail.com" disabled required><br>
+              
+                  <label for="address">Street Address:</label><br>
+                  <input type="text" id="address" name="address" placeholder="123 Cherry Street" disabled required><br>
+              
+                  <label for="city">City:</label><br>
+                  <input type="text" id="city" name="city" placeholder="Montreal" disabled required><br>
+              
+                  <label for="pt">Province/Territory:</label><br>
+                  <input type="text" id="pt" name="pt" placeholder="Quebec" disabled required><br>
+              
+                  <label for="pc">Postal Code:</label><br>
+                  <input type="text" id="pc" name="pc" placeholder="123 ABC" disabled required><br>
+              
+                  <label for="pn">Phone Number:</label><br>
+                  <input type="tel" id="pn" name="pn" placeholder="999-999-9999" disabled required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"><br>
+              
+                  <div class="payment">
+                      <h2>Add Payment Method</h2>
+                      <label for="card-number">Card Number:</label><br>
+                      <input type="text" id="card-number" name="card-number" disabled required><br>
+              
+                      <label for="expiry-date">Expiry Date:</label><br>
+                      <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY" disabled required pattern="(0[1-9]|1[0-2])\/\d{2}"><br>
+              
+                      <label for="card-name">Name on Card:</label><br>
+                      <input type="text" id="card-name" name="card-name" placeholder="John Doe" disabled required>
+                  </div>
+              
+                  <div class="btn save-btn">
+                      <button type="button" id="editButton">Edit</button>
+                      <button type="submit" id="saveButton" disabled>Save Changes</button>
+                  </div>
+              </form>
+            </div>
+        </div>
     </div>
-    <div class="footer-column">
-      <h3>Customers</h3>
-      <ul>
-        <li><a href="#">Catalogs</a></li>
-        <li><a href="#">Do Not Sell My Info</a></li>
-      </ul>
-    </div>
-    <div class="footer-column">
-      <h3>Company</h3>
-      <ul>
-        <li><a href="view-only/about.html">About Us</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-credits">
-    <p>&copy; YourCompanyName</p>
-  </div>
-</footer>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-    console.log("YES!");
-    fetch("http://localhost:7013/admin-profile")
-.then((response) => {
-  console.log("Fetch response:", response);
-  return response.json();
-})
-.then((data) => {
-  console.log("Fetched data:", data)
-        if (data) {
-          document.getElementById("adminName").innerHTML = `Business Name: ${data.fname || "N/A"}`;
-          document.getElementById("adminEmail").innerHTML = `Email: ${data.email || "N/A"}`;
-          document.getElementById("adminPhone").innerHTML = `Phone: ${data.pn || "N/A"}`;
-          document.getElementById("adminAddress").innerHTML = `Address: ${data.address || "N/A"}`;
-          document.getElementById("adminCity").innerHTML = `City: ${data.city || "N/A"}`;
-          document.getElementById("adminProvince").innerHTML = `Province: ${data.pt || "N/A"}`;
-          document.getElementById("adminPostalCode").innerHTML = `Postal Code: ${data.pc || "N/A"}`;
-        } else {
-          console.error("Failed to fetch admin profile: No data returned.");
-        }
-      })
-      .catch((error) => console.error("Error fetching admin profile:", error));
-  });
-  </script>
-  
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Admin Contact</h3>
+                <p id="adminName"></p>
+                <p id="adminEmail"></p>
+                <p id="adminPhone"></p>
+                <p id="adminAddress"></p>
+                <p id="adminCity"></p>
+                <p id="adminProvince"></p>
+                <p id="adminPostalCode"></p>
+            </div>
+            <div class="footer-column">
+                <h3>Customers</h3>
+                <ul>
+                    <li><a href="#">Catalogs</a></li>
+                    <li><a href="#">Do Not Sell My Info</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="view-only/about.html">About Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-credits">
+            <p>&copy; YourCompanyName</p>
+        </div>
+    </footer>
 
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+    const editButton = document.getElementById("editButton");
+    const saveButton = document.getElementById("saveButton");
+    const formFields = document.querySelectorAll("#profileForm input");
+
+    // Disable all fields initially
+    formFields.forEach(field => field.disabled = true);
+
+    // Enable fields when "Edit" is clicked
+    editButton.addEventListener("click", () => {
+        formFields.forEach(field => field.disabled = false);
+        saveButton.disabled = false; // Enable "Save" button
+        editButton.disabled = true; // Disable "Edit" button while editing
+    });
+
+    // Handle form submission
+    const profileForm = document.getElementById("profileForm");
+    profileForm.addEventListener("submit", (e) => {
+        e.preventDefault(); // Prevent default form submission behavior
+
+        // Collect form data
+        const formData = new FormData(profileForm);
+
+        // Send data to the server
+        fetch("User-Logged-in/editClientProfile", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Profile updated successfully!");
+                // Disable fields and reset buttons after saving
+                formFields.forEach(field => field.disabled = true);
+                saveButton.disabled = true;
+                editButton.disabled = false;
+            } else {
+                alert("Error updating profile. Please try again.");
+            }
+        })
+        .catch(error => console.error("Error updating profile:", error));
+    });
+});
+
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("http://localhost:7013/admin-profile")
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        document.getElementById("adminName").textContent = `Business Name: ${data.fname || "N/A"}`;
+                        document.getElementById("adminEmail").textContent = `Email: ${data.email || "N/A"}`;
+                        document.getElementById("adminPhone").textContent = `Phone: ${data.pn || "N/A"}`;
+                        document.getElementById("adminAddress").textContent = `Address: ${data.address || "N/A"}`;
+                        document.getElementById("adminCity").textContent = `City: ${data.city || "N/A"}`;
+                        document.getElementById("adminProvince").textContent = `Province: ${data.pt || "N/A"}`;
+                        document.getElementById("adminPostalCode").textContent = `Postal Code: ${data.pc || "N/A"}`;
+                    } else {
+                        console.error("Failed to fetch admin profile: No data returned.");
+                    }
+                })
+                .catch(error => console.error("Error fetching admin profile:", error));
+        });
+    </script>
 </body>
+</html>

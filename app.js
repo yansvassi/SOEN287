@@ -2,8 +2,8 @@ const express = require("express");
 const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const path = require("path");
-
 const app = express();
+const session = require('express-session');
 const PORT = 7013;
 
 // Middleware
@@ -11,13 +11,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files like CSS and JS
 app.use(express.static(path.join(__dirname))); // Serve static files at root level
+// Session
+app.use(session({
+    secret: 'your_secret_key', // Replace with a strong secret key
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false } // Set `secure: true` if using HTTPS
+}));
 
 // Database connection
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "SOEN287project", // Replace with your database name
+    database: "SOEN287", // Replace with your database name
 });
 
 db.connect((err) => {
@@ -92,9 +99,10 @@ app.post("/addlogin", (req, res) => {
     const client = {
         Email: req.body.Email,
         Password: req.body.Password,
-        choice: req.body["login-type"],
+        choice: req.body["login-type"], // Role: 'admin' or 'client'
     };
 
+    // Validate required fields
     if (!client.Email || !client.Password || !client.choice) {
         return res.status(400).send("All fields are required.");
     }
@@ -112,22 +120,29 @@ app.post("/addlogin", (req, res) => {
 
         const user = results[0];
 
+        // Validate password
         if (user.Password !== client.Password) {
             return res.status(401).send("Incorrect password.");
         }
 
-        const fullName = `${user.Fname} ${user.Lname}`;
+        // Check role match
+        if (client.choice !== user.choice) {
+            return res.status(400).send("Invalid role specified.");
+        }
+
+        // Store the user's ID in the session
+        req.session.userId = user.id; // Save the user's unique ID
+        console.log("User ID saved in session:", req.session.userId);
 
         // Redirect based on user role
-        if (client.choice === "admin" && user.choice === "admin") {
+        if (user.choice === "admin") {
             return res.sendFile(path.join(__dirname, "BA-Logged-in/BAHome.html"));
-        } else if (client.choice === "client" && user.choice === "client") {
+        } else if (user.choice === "client") {
             return res.sendFile(path.join(__dirname, "User-Logged-in/HomeLoggedin.html"));
-        } else {
-            return res.status(400).send("Invalid role specified.");
         }
     });
 });
+
 
 app.post("/BA-Logged-in/editprofile", (req, res) => {
     
@@ -158,7 +173,7 @@ app.post("/BA-Logged-in/editprofile", (req, res) => {
         {
             const sql = "UPDATE AdminProfile SET address ? WHERE 1";
         }
-    if (ciy)
+    if (city)
         {
             const sql = "UPDATE AdminProfile SET city ? WHERE 1";
         }
@@ -184,8 +199,8 @@ app.post("/BA-Logged-in/editprofile", (req, res) => {
 
 
 
-app.get('/admin-profile', (req, res) => {
-    const query = 'SELECT fname, email, pn, address, city, pt, pc FROM AdminProfile LIMIT 1'; 
+app.get('/User-Logged-in/editClientProfile', (req, res) => {
+    const query = 'SELECT id, fname, email, pn, address, city, pt, pc FROM AdminProfile LIMIT 1'; 
   
     db.query(query, (err, results) => {
       if (err) {
@@ -197,87 +212,59 @@ app.get('/admin-profile', (req, res) => {
   });
 
   app.post("/User-Logged-in/editClientProfile", (req, res) => {
+    const userId = req.session.userId;
+  
+    if (!userId) {
+      return res.status(400).send("User ID not found in session. Please log in again.");
+    }
+  
     const info = {
-        fname: req.body.fname,
-        lname: req.body.lname,
-        email: req.body.email,
-        pn: req.body.pn,
-        address: req.body.address,
-        city: req.body.city,
-        pt: req.body.pt,
-        pc: req.body.pc,
-        card_number: req.body.card_number,
-        expiry_date: req.body.expiry_date,
-        card_name: req.body.card_name
+      id: userId,
+      fname: req.body.fname,
+      lname: req.body.lname,
+      email: req.body.email,
+      pn: req.body.pn,
+      address: req.body.address,
+      city: req.body.city,
+      pt: req.body.pt,
+      pc: req.body.pc,
+      card_number: req.body.card_number,
+      expiry_date: req.body.expiry_date,
+      card_name: req.body.card_name,
     };
-
-    let fields = [];
-    let values = [];
-
-
-    if (info.fname) {
-        fields.push("fname = ?");
-        values.push(info.fname);
-    }
-    if (info.lname) {
-        fields.push("lname = ?");
-        values.push(info.lname);
-    }
-    if (info.email) {
-        fields.push("email = ?");
-        values.push(info.email);
-    }
-    if (info.pn) {
-        fields.push("pn = ?");
-        values.push(info.pn);
-    }
-    if (info.address) {
-        fields.push("address = ?");
-        values.push(info.address);
-    }
-    if (info.city) {
-        fields.push("city = ?");
-        values.push(info.city);
-    }
-    if (info.pt) {
-        fields.push("pt = ?");
-        values.push(info.pt);
-    }
-    if (info.pc) {
-        fields.push("pc = ?");
-        values.push(info.pc);
-    }
-    if (info.card_number) {
-        fields.push("card_number = ?");
-        values.push(info.card_number);
-    }
-    if (info.expiry_date) {
-        fields.push("expiry_date = ?");
-        values.push(info.expiry_date);
-    }
-    if (info.card_name) {
-        fields.push("card_name = ?");
-        values.push(info.card_name);
-    }
-
- 
+  
+    // Collect fields and values dynamically
+    const fields = Object.keys(info).filter((key) => info[key]);
+    const values = fields.map((key) => info[key]);
+  
     if (fields.length === 0) {
-        return res.status(400).send("No fields provided to update.");
+      return res.status(400).send("No data provided to update.");
     }
-
-   
-    const sql = `UPDATE ClientProfile SET ${fields.join(", ")}`;
-
-
-    db.query(sql, values, (err, result) => {
-        if (err) {
-            console.error("Error updating client profile:", err);
-            return res.status(500).send("An error occurred while updating the client profile.");
-        } else {
-            return res.sendFile(path.join(__dirname, "User-Logged-in/profileclient.html")); // Adjust file path as needed
-        }
+  
+    // Add userId for WHERE clause
+    values.push(userId);
+  
+    // Construct SQL query
+    const sql = `
+      INSERT INTO ClientProfile (id, ${fields.join(", ")})
+      VALUES (?, ${fields.map(() => "?").join(", ")})
+      ON DUPLICATE KEY UPDATE ${fields.map((key) => `${key} = VALUES(${key})`).join(", ")}
+    `;
+  
+    db.query(sql, [userId, ...values], (err) => {
+      if (err) {
+        console.error("Error updating client profile:", err.message);
+        return res.status(500).send("Failed to update client profile.");
+      }
+      res.send("Profile updated successfully.");
     });
-});
+  });
+  
+  // Start the server
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+
 
 
 // Add a new service
