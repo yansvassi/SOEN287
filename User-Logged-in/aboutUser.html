@@ -112,34 +112,33 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <div class="about-container">
-  <h1>About Us</h1>
-
+  <h1 id="aboutTitle">About Us</h1>
   <div class="about-section">
-    <p>Welcome to our SOEN 287 Group Project website.</p>
+    <p id="aboutDescription">Welcome to our SOEN 287 Group Project website.</p>
 
     <div class="team-section">
-      <h2>Meet Our Team</h2>
-      <div class="team-members">
+      <h2 id="teamTitle">Meet Our Team</h2>
+      <div class="team-members" id="teamMembers">
         <div class="team-member">
-          <img src="/SOEN287/images/img_avatar2.png" alt="Team Member 1">
+          <img src="/images/img_avatar2.png" alt="Yana">
           <h3>Yana</h3>
           <p>Developer</p>
           <p><a href="mailto:yana.vassilyev@gmail.com">yana.vassilyev@gmail.com</a></p>
         </div>
         <div class="team-member">
-          <img src="/SOEN287/images/img_avatar2.png" alt="Team Member 2">
+          <img src="/images/img_avatar2.png" alt="Lucas">
           <h3>Lucas</h3>
           <p>Developer</p>
           <p><a href="mailto:lucas.pentlandhyde@gmail.com">lucas.pentlandhyde@gmail.com</a></p>
         </div>
         <div class="team-member">
-          <img src="/SOEN287/images/img_avatar2.png" alt="Team Member 3">
+          <img src="/images/img_avatar2.png" alt="Jorane-Tiana">
           <h3>Jorane-Tiana</h3>
           <p>Developer</p>
           <p><a href="mailto:jorane1234@gmail.com">jorane1234@gmail.com</a></p>
         </div>
         <div class="team-member">
-          <img src="/SOEN287/images/img_avatar2.png" alt="Team Member 4">
+          <img src="/images/img_avatar2.png" alt="Daniel">
           <h3>Daniel</h3>
           <p>Developer</p>
           <p><a href="mailto:daniel05.ayass@gmail.com">daniel05.ayass@gmail.com</a></p>
@@ -148,6 +147,35 @@ document.addEventListener("DOMContentLoaded", function() {
     </div>
   </div>
 </div>
+
+<script>
+  fetch('/api/get-about-content')
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById("aboutTitle").innerText = data.aboutTitle;
+        document.getElementById("aboutDescription").innerText = data.aboutDescription;
+        document.getElementById("teamTitle").innerText = data.teamTitle;
+
+        const teamMembersContainer = document.getElementById("teamMembers");
+        teamMembersContainer.innerHTML = ""; // Clear default content
+
+        data.teamMembers.forEach(member => {
+          const memberDiv = document.createElement("div");
+          memberDiv.className = "team-member";
+          memberDiv.innerHTML = `
+            <img src="/images/img_avatar2.png" alt="${member.name}">
+            <h3>${member.name}</h3>
+            <p>${member.role}</p>
+            <p><a href="mailto:${member.email}">${member.email}</a></p>
+          `;
+          teamMembersContainer.appendChild(memberDiv);
+        });
+      } else {
+        console.error("Failed to load content:", data.message);
+      }
+    });
+</script>
 
 <script>
   fetch('../footer.html')

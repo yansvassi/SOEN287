@@ -435,3 +435,50 @@ app.put("/services-availed/:id", (req, res) => {
         res.send("Entry updated successfully.");
     });
 });
+
+app.get("/api/get-about-content", (req, res) => {
+    console.log("Received request for /api/get-about-content");
+    const query = "SELECT aboutTitle, aboutDescription, teamTitle, teamMembers FROM AboutContent LIMIT 1";
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error("Error fetching About Us content:", err);
+            return res.status(500).json({ success: false, message: "Database error." });
+        }
+        if (results.length > 0) {
+            const content = results[0];
+            res.json({
+                success: true,
+                aboutTitle: content.aboutTitle,
+                aboutDescription: content.aboutDescription,
+                teamTitle: content.teamTitle,
+                teamMembers: JSON.parse(content.teamMembers),
+            });
+        } else {
+            res.status(404).json({ success: false, message: "About Us content not found." });
+        }
+    });
+});
+
+
+app.post("/api/update-about-content", (req, res) => {
+    const { aboutTitle, aboutDescription, teamTitle, teamMembers } = req.body;
+
+    if (!aboutTitle || !aboutDescription || !teamTitle || !teamMembers) {
+        return res.status(400).json({ success: false, message: "All fields are required." });
+    }
+
+    const query = `
+        UPDATE AboutContent
+        SET aboutTitle = ?, aboutDescription = ?, teamTitle = ?, teamMembers = ?
+    `;
+
+    db.query(query, [aboutTitle, aboutDescription, teamTitle, JSON.stringify(teamMembers)], (err) => {
+        if (err) {
+            console.error("Error updating About Us content:", err);
+            return res.status(500).json({ success: false, message: "Database error." });
+        }
+
+        res.json({ success: true, message: "About Us content updated successfully!" });
+    });
+});
+
