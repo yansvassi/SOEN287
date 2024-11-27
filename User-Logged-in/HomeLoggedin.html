@@ -107,7 +107,7 @@
     
       <script>
   document.addEventListener("DOMContentLoaded", function () {
-    fetch("http://localhost:7013/api/get-descriptions")
+    fetch("http://localhost:8080/api/get-descriptions")
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
@@ -133,7 +133,7 @@
         document.addEventListener("DOMContentLoaded", loadProducts);
 
 function loadProducts() {
-  fetch("http://localhost:7013/servicess")
+  fetch("http://localhost:8080/servicess")
     .then((response) => response.json())
     .then((products) => {
       const container = document.getElementById("product-container");
@@ -229,7 +229,7 @@ function loadProducts() {
 <script>
     document.addEventListener("DOMContentLoaded", function () {
     console.log("YES!");
-    fetch("http://localhost:7013/admin-profile")
+    fetch("http://localhost:8080/admin-profile")
 .then((response) => {
   console.log("Fetch response:", response);
   return response.json();

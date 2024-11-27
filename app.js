@@ -1,10 +1,10 @@
 const express = require("express");
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const path = require("path");
 const app = express();
 const session = require('express-session');
-const PORT = 7013;
+const PORT = 8080;
 
 // Middleware
 app.use(bodyParser.json());
@@ -23,7 +23,7 @@ app.use(session({
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
+    password: "new_password",
     database: "SOEN287", // Replace with your database name
 });
 
@@ -258,11 +258,6 @@ app.get('/User-Logged-in/editClientProfile', (req, res) => {
       }
       res.send("Profile updated successfully.");
     });
-  });
-  
-  // Start the server
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
   });
 
 

@@ -146,7 +146,7 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     // Fetch existing descriptions
-    fetch("http://localhost:7013/api/get-descriptions")
+    fetch("http://localhost:8080/api/get-descriptions")
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
@@ -171,7 +171,7 @@
         coreValuesText: document.getElementById("coreValuesText").innerText.trim(),
       };
 
-      fetch("http://localhost:7013/api/update-descriptions", {
+      fetch("http://localhost:8080/api/update-descriptions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(descriptions),
@@ -200,7 +200,7 @@
     document.addEventListener("DOMContentLoaded", loadProducts);
 
 function loadProducts() {
-fetch("http://localhost:7013/servicess")
+fetch("http://localhost:8080/servicess")
 .then((response) => response.json())
 .then((products) => {
   const container = document.getElementById("product-container");
@@ -269,7 +269,7 @@ fetch("http://localhost:7013/servicess")
 <script>
     document.addEventListener("DOMContentLoaded", function () {
     console.log("YES!");
-    fetch("http://localhost:7013/admin-profile")
+    fetch("http://localhost:8080/admin-profile")
 .then((response) => {
   console.log("Fetch response:", response);
   return response.json();
