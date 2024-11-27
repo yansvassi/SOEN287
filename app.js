@@ -24,8 +24,8 @@ app.use(session({
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
-    database: "SOEN287", // Replace with your database name
+    password: "new_password",
+    database: "SOEN287new", // Replace with your database name
 });
 
 db.connect((err) => {
@@ -158,23 +158,23 @@ app.post("/BA-Logged-in/editprofile", (req, res) => {
 
     if (fname) 
         {
-            const sql = "UPDATE AdminProfile SET fname ? WHERE 1";
+            const sqlUpdateFname = "UPDATE AdminProfile SET fname ? WHERE 1";
         }
     if (email) 
         {
-            const sql = "UPDATE AdminProfile SET email ? WHERE 1";
+            const sqlUdateEmail = "UPDATE AdminProfile SET email ? WHERE 1";
         }
     if (pn) 
         {
-            const sql = "UPDATE AdminProfile SET pn ? WHERE 1";
+            const sqlPn = "UPDATE AdminProfile SET pn ? WHERE 1";
         }
     if (address) 
         {
-            const sql = "UPDATE AdminProfile SET address ? WHERE 1";
+            const sqlUpdateAddress = "UPDATE AdminProfile SET address ? WHERE 1";
         }
     if (ciy)
         {
-            const sql = "UPDATE AdminProfile SET city ? WHERE 1";
+            const sqlupdateCity = "UPDATE AdminProfile SET city ? WHERE 1";
         }
 
     // Check if there are fields to update
@@ -232,64 +232,56 @@ app.get('/editClientProfile', (req, res) => {
   });
 });
 
-  app.post("/editClientProfile", (req, res) => {
-    const userId = req.session.userId;
-    console.log(userId);
+app.post("/editClientProfile", (req, res) => {
+  const userId = req.session.userId;
 
-    if (!userId) {
-        return res.status(400).send("User ID not found in session. Please log in again.");
-    }
+  if (!userId) {
+      return res.status(400).send("User ID not found in session. Please log in again.");
+  }
 
-    const info = {
-        ID: userId,
-        fname: req.body.fname,
-        lname: req.body.lname,
-        email: req.body.email,
-        pn: req.body.pn,
-        address: req.body.address,
-        city: req.body.city,
-        pt: req.body.pt,
-        pc: req.body.pc,
-        card_number: req.body.card_number,
-        expiry_date: req.body.expiry_date,
-        card_name: req.body.card_name,
-    };
+  const info = {
+      fname: req.body.fname,
+      lname: req.body.lname,
+      email: req.body.email,
+      pn: req.body.pn,
+      address: req.body.address,
+      city: req.body.city,
+      pt: req.body.pt,
+      pc: req.body.pc,
+      card_number: req.body.card_number,
+      expiry_date: req.body.expiry_date,
+      card_name: req.body.card_name,
+  };
 
-    // Collect fields and values dynamically
-    const fields = Object.keys(info).filter((key) => info[key] !== undefined && info[key] !== null);
-    const values = fields.map((key) => info[key]);
+  // Filter out undefined or null values
+  const fields = Object.keys(info).filter((key) => info[key] !== undefined && info[key] !== null);
+  const values = fields.map((key) => info[key]);
 
-    if (fields.length === 0) {
-        return res.status(400).send("No data provided to update.");
-    }
+  if (fields.length === 0) {
+      return res.status(400).send("No data provided to update.");
+  }
 
-    // Construct SQL query for UPDATE
-    const updateFields = fields.map((key) => `${key} = ?`).join(", ");
-    const sql = `
-        UPDATE ClientProfile
-        SET ${updateFields}
-        WHERE id = ?
-    `;
+  // Dynamically construct the SQL query for UPDATE
+  const updateFields = fields.map((key) => `${key} = ?`).join(", ");
+  const updateSql = `
+      UPDATE ClientProfile
+      SET ${updateFields}
+      WHERE id = ?
+  `;
 
-    // Add userId for WHERE clause
-    values.push(userId);
-  
-    // Construct SQL query
-    const sql = `
-      INSERT INTO ClientProfile (id, ${fields.join(", ")})
-      VALUES (?, ${fields.map(() => "?").join(", ")})
-      ON DUPLICATE KEY UPDATE ${fields.map((key) => `${key} = VALUES(${key})`).join(", ")}
-    `;
-  
-    db.query(sql, [userId, ...values], (err) => {
+  // Add userId to the values array for the WHERE clause
+  values.push(userId);
+
+  // Execute the UPDATE query
+  db.query(updateSql, values, (err) => {
       if (err) {
-        console.error("Error updating client profile:", err.message);
-        return res.status(500).send("Failed to update client profile.");
+          console.error("Error updating client profile:", err.message);
+          return res.status(500).send("Failed to update client profile.");
       }
       res.send("Profile updated successfully.");
-    });
   });
-  
+});
+
   // Start the server
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
@@ -462,6 +454,13 @@ app.get("/api/get-descriptions", (req, res) => {
     });
   }); 
 
-  app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}/view-only/Home.html`);
+  app.get("/db-info", (req, res) => {
+    const sql = "SELECT @@hostname AS hostname, @@port AS port;";
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error fetching database info:", err);
+            return res.status(500).send("Database error.");
+        }
+        res.json(results[0]);
+    });
 });
