@@ -11,19 +11,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files like CSS and JS
 app.use(express.static(path.join(__dirname))); // Serve static files at root level
+
 // Session
 app.use(session({
-    secret: 'your_secret_key', // Replace with a strong secret key
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false } // Set `secure: true` if using HTTPS
+  secret: 'key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {secure: false}
 }));
 
 // Database connection
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "new_password",
+    password: "",
     database: "SOEN287", // Replace with your database name
 });
 
@@ -44,11 +45,9 @@ app.post("/view-only/addclient", (req, res) => {
     const client = {
         Fname: req.body.Fname,
         Lname: req.body.Lname,
-        Email: req.body.Email, 
+        Email: req.body.Email,
         Password: req.body.Password,
         choice: req.body['login-type'],
-
-        
     };
 
     if (!client.Fname || !client.Lname || !client.Email || !client.Password || !client.choice) {
@@ -56,40 +55,36 @@ app.post("/view-only/addclient", (req, res) => {
     }
 
     const checkEmail = "SELECT * FROM `Register Informations` WHERE Email = ?";
-    db.query(checkEmail, client.Email, (err, results) => 
-    {
-        if (err)
-            {
-                console.error("Error checking email!");
-                return res.status(500).send("An error occurred while checking the email");
-            }
-            if (results.length > 0) {
-                // Email already exists
-                return res.status(400).send("This email is already registered. Please return to the main site and try again.");
-    }
-
-    const sql = "INSERT INTO `Register Informations` SET ?";
-    db.query(sql, client, (err, result) => {
+    db.query(checkEmail, client.Email, (err, results) => {
         if (err) {
-            console.error("Error inserting record:", err.message);
-            res.status(500).send("Could not insert new record!");
-        } else {
-            if (client.choice == "admin")
-                {
-                    res.sendFile(path.join(__dirname, "BA-Logged-in/BAHome.html"));
-
-                }
-
-            if (client.choice = "client")
-                {
-                    res.sendFile(path.join(__dirname, "User-Logged-in/HomeLoggedin.html"));
-                }
+            console.error("Error checking email!");
+            return res.status(500).send("An error occurred while checking the email");
         }
-    });
 
+        if (results.length > 0) {
+            // Email already exists
+            return res.status(400).json({ success: false, message: "This email is already registered. Please return to the main site and try again." });
+        }
+
+        const sql = "INSERT INTO `Register Informations` SET ?";
+        db.query(sql, client, (err, result) => {
+            if (err) {
+                console.error("Error inserting record:", err.message);
+                return res.status(500).json({ success: false, message: "Could not insert new record!" });
+            }
+
+            // Send JSON response instead of sending files
+            if (client.choice === "admin") {
+                return res.json({ success: true, redirectUrl: "/BA-Logged-in/BAHome.html" });
+            } else if (client.choice === "client") {
+                return res.json({ success: true, redirectUrl: "/User-Logged-in/HomeLoggedin.html" });
+            } else {
+                return res.status(400).json({ success: false, message: "Invalid role specified." });
+            }
+        });
     });
-    
-})
+});
+
 
 app.get("/addlogin", (req, res) => {
     res.send("This is the addlogin endpoint. Use POST to submit data.");
@@ -97,65 +92,69 @@ app.get("/addlogin", (req, res) => {
 
 app.post("/addlogin", (req, res) => {
     const client = {
+      
         Email: req.body.Email,
         Password: req.body.Password,
-        choice: req.body["login-type"], // Role: 'admin' or 'client'
+        choice: req.body["login-type"], 
     };
 
-    // Validate required fields
-    if (!client.Email || !client.Password || !client.choice) {
-        return res.status(400).send("All fields are required.");
-    }
+    console.log("BOOTY!");
 
     const checkEmail = "SELECT * FROM `Register Informations` WHERE Email = ?";
     db.query(checkEmail, [client.Email], (err, results) => {
         if (err) {
             console.error("Error checking email:", err.message);
-            return res.status(500).send("An error occurred while checking the email.");
+            return res.status(500).json({ success: false, message: "An error occurred while checking the email." });
         }
 
         if (results.length === 0) {
-            return res.status(401).send("Email not registered.");
+            return res.status(401).json({ success: false, message: "Email not registered." });
         }
 
         const user = results[0];
+      console.log("Fetched user:", user); // Log the fetched user object
+      req.session.userId = user.ID;
+      console.log("User ID saved in session:", req.session.userId);
+   
 
         // Validate password
         if (user.Password !== client.Password) {
-            return res.status(401).send("Incorrect password.");
+            return res.status(401).json({ success: false, message: "Incorrect password." });
         }
-
-        // Check role match
-        if (client.choice !== user.choice) {
-            return res.status(400).send("Invalid role specified.");
-        }
-
-        // Store the user's ID in the session
-        req.session.userId = user.id; // Save the user's unique ID
-        console.log("User ID saved in session:", req.session.userId);
 
         // Redirect based on user role
-        if (user.choice === "admin") {
-            return res.sendFile(path.join(__dirname, "BA-Logged-in/BAHome.html"));
-        } else if (user.choice === "client") {
-            return res.sendFile(path.join(__dirname, "User-Logged-in/HomeLoggedin.html"));
+        if (client.choice === "admin" && user.choice === "admin") {
+            return res.json({ success: true, redirectUrl: "/BA-Logged-in/BAHome.html", user: { fullName } });
+        } else if (client.choice === "client" && user.choice === "client") {
+            return res.json({ success: true, redirectUrl: "/User-Logged-in/HomeLoggedin.html", user: { fullName } });
+        } else {
+            return res.status(400).json({ success: false, message: "Invalid role specified." });
         }
     });
+});
+
+// Logout 
+app.get('/logout', (req,res) => {
+  req.session.destroy((err) => {
+    if(err){
+      return res.status(500).json({success:false});
+    }
+    res.redirect('/view-only/Home.html');
+  });
 });
 
 
 app.post("/BA-Logged-in/editprofile", (req, res) => {
     
-    const info = {
-        fname: fname.req.body,
-        email: email.req.body, 
-        pn: pn.req.body, 
-        address: address.req.body, 
-        city: city.req.body, 
-        pt: pt.req.body,
-        pc: pc.req.body
-
-    }
+  const info = {
+    fname: req.body.fname,
+    email: req.body.email,
+    pn: req.body.pn,
+    address: req.body.address,
+    city: req.body.city,
+    pt: req.body.pt,
+    pc: req.body.pc,
+}
 
     if (fname) 
         {
@@ -173,7 +172,7 @@ app.post("/BA-Logged-in/editprofile", (req, res) => {
         {
             const sql = "UPDATE AdminProfile SET address ? WHERE 1";
         }
-    if (city)
+    if (ciy)
         {
             const sql = "UPDATE AdminProfile SET city ? WHERE 1";
         }
@@ -197,50 +196,81 @@ app.post("/BA-Logged-in/editprofile", (req, res) => {
     });
 });
 
+app.get("/admin-profile", (req, res) => {
+  const query = "SELECT fname, email, pn, address, city, pt, pc FROM AdminProfile LIMIT 1";
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error fetching admin profile:", err.message);
+      return res.status(500).json({ success: false, message: "Database error." });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ success: false, message: "No admin profile found." });
+    }
+
+    res.json(results[0]); 
+  });
+});
 
 
-app.get('/User-Logged-in/editClientProfile', (req, res) => {
-    const query = 'SELECT id, fname, email, pn, address, city, pt, pc FROM AdminProfile LIMIT 1'; 
-  
-    db.query(query, (err, results) => {
+
+app.get('/editClientProfile', (req, res) => {
+  const query = 'SELECT ID, fname, lname, email, pn, address, city, pt, pc, card_number, expiry_date, card_name FROM ClientProfile WHERE id = ?';
+  const userId = req.session.userId;
+
+  if (!userId) {
+      return res.status(400).send("User ID not found in session. Please log in again.");
+  }
+
+  db.query(query, [userId], (err, results) => {
       if (err) {
-        console.error('Error fetching admin profile:', err.message);
-        return res.status(500).json({ error: 'Failed to fetch admin profile' });
+          console.error('Error fetching client profile:', err.message);
+          return res.status(500).json({ error: 'Failed to fetch client profile' });
       }
       res.json(results[0]); 
-    });
   });
+});
 
-  app.post("/User-Logged-in/editClientProfile", (req, res) => {
+  app.post("/editClientProfile", (req, res) => {
     const userId = req.session.userId;
-  
+    console.log(userId);
+
     if (!userId) {
-      return res.status(400).send("User ID not found in session. Please log in again.");
+        return res.status(400).send("User ID not found in session. Please log in again.");
     }
-  
+
     const info = {
-      id: userId,
-      fname: req.body.fname,
-      lname: req.body.lname,
-      email: req.body.email,
-      pn: req.body.pn,
-      address: req.body.address,
-      city: req.body.city,
-      pt: req.body.pt,
-      pc: req.body.pc,
-      card_number: req.body.card_number,
-      expiry_date: req.body.expiry_date,
-      card_name: req.body.card_name,
+        ID: userId,
+        fname: req.body.fname,
+        lname: req.body.lname,
+        email: req.body.email,
+        pn: req.body.pn,
+        address: req.body.address,
+        city: req.body.city,
+        pt: req.body.pt,
+        pc: req.body.pc,
+        card_number: req.body.card_number,
+        expiry_date: req.body.expiry_date,
+        card_name: req.body.card_name,
     };
-  
+
     // Collect fields and values dynamically
-    const fields = Object.keys(info).filter((key) => info[key]);
+    const fields = Object.keys(info).filter((key) => info[key] !== undefined && info[key] !== null);
     const values = fields.map((key) => info[key]);
-  
+
     if (fields.length === 0) {
-      return res.status(400).send("No data provided to update.");
+        return res.status(400).send("No data provided to update.");
     }
-  
+
+    // Construct SQL query for UPDATE
+    const updateFields = fields.map((key) => `${key} = ?`).join(", ");
+    const sql = `
+        UPDATE ClientProfile
+        SET ${updateFields}
+        WHERE id = ?
+    `;
+
     // Add userId for WHERE clause
     values.push(userId);
   
@@ -259,7 +289,11 @@ app.get('/User-Logged-in/editClientProfile', (req, res) => {
       res.send("Profile updated successfully.");
     });
   });
-
+  
+  // Start the server
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
 
 
 // Add a new service
@@ -307,10 +341,7 @@ app.get("/client", (req, res) => {
     res.sendFile(path.join(__dirname, "User-Logged-in/client_services.html"));
 });
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+
 
 
 //yana
@@ -407,7 +438,7 @@ app.get("/api/get-descriptions", (req, res) => {
         res.status(404).json({ success: false, message: "No descriptions found." });
       }
     });
-  });
+  }); 
   
   // Route to update descriptions
   app.post("/api/update-descriptions", (req, res) => {
@@ -429,6 +460,8 @@ app.get("/api/get-descriptions", (req, res) => {
   
       res.json({ success: true, message: "Descriptions updated successfully!" });
     });
-  });
+  }); 
 
-  
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}/view-only/Home.html`);
+});

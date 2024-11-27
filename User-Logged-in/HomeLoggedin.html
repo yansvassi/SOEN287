@@ -106,8 +106,13 @@
     </div>
     
       <script>
+<<<<<<< HEAD
   document.addEventListener("DOMContentLoaded", function () {
     fetch("http://localhost:8080/api/get-descriptions")
+=======
+   document.addEventListener("DOMContentLoaded", function () {
+    fetch("http://localhost:7013/api/get-descriptions")
+>>>>>>> b1327b1f8f117f54d4c78c07cf201df978166aca
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
@@ -120,7 +125,7 @@
         }
       })
       .catch((error) => console.error("Error fetching descriptions:", error));
-  });
+  }); 
 </script>
 
     </script>
@@ -130,7 +135,7 @@
       <div class="product_box" id="product1"></div>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", loadProducts);
+       document.addEventListener("DOMContentLoaded", loadProducts);
 
 function loadProducts() {
   fetch("http://localhost:8080/servicess")
@@ -159,8 +164,8 @@ function loadProducts() {
     })
     .catch((error) => {
       console.error("Error loading products:", error);
-    });
-}
+    }); 
+} 
     </script>
   </div>
 

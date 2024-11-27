@@ -54,7 +54,7 @@
                     <input type="file" id="imageUploader" style="display:none" accept="image/*" onchange="updateProfileImage(event)">
                 </div>
 
-                <form class="questions" method="post" action="/User-Logged-in/editClientProfile" id="profileForm">
+                <form class="questions" method="post" action="/editClientProfile" id="profileForm">
                   <h2>Personal Information</h2>
                   <label for="fname">First Name:</label><br>
                   <input type="text" id="fname" name="fname" placeholder="John" disabled required><br>
@@ -151,33 +151,30 @@
         editButton.disabled = true; // Disable "Edit" button while editing
     });
 
-    // Handle form submission
-    const profileForm = document.getElementById("profileForm");
-    profileForm.addEventListener("submit", (e) => {
-        e.preventDefault(); // Prevent default form submission behavior
-
-        // Collect form data
-        const formData = new FormData(profileForm);
-
-        // Send data to the server
-        fetch("User-Logged-in/editClientProfile", {
-            method: "POST",
-            body: formData
-        })
-        .then(response => {
-            if (response.ok) {
-                alert("Profile updated successfully!");
-                // Disable fields and reset buttons after saving
-                formFields.forEach(field => field.disabled = true);
-                saveButton.disabled = true;
-                editButton.disabled = false;
+    // Fetch data from the server and populate the form
+    fetch("http://localhost:7013/editClientProfile")
+        .then(response => response.json())
+        .then(data => {
+            if (data) {
+                document.getElementById("fname").value = data.fname || ""; 
+                document.getElementById("lname").value = data.lname || ""; 
+                document.getElementById("email").value = data.email || ""; 
+                document.getElementById("address").value = data.address || ""; 
+                document.getElementById("city").value = data.city || ""; 
+                document.getElementById("pt").value = data.pt || ""; 
+                document.getElementById("pc").value = data.pc || ""; 
+                document.getElementById("pn").value = data.pn || ""; 
+                document.getElementById("card-number").value = data.card_number || ""; 
+                document.getElementById("expiry-date").value = data.expiry_date || ""; 
+                document.getElementById("card-name").value = data.card_name || ""; 
             } else {
-                alert("Error updating profile. Please try again.");
+                console.error("Failed to fetch admin profile: No data returned.");
             }
         })
-        .catch(error => console.error("Error updating profile:", error));
-    });
+        .catch(error => console.error("Error fetching admin profile:", error));
 });
+
+
 
         document.addEventListener("DOMContentLoaded", function () {
             fetch("http://localhost:7013/admin-profile")
