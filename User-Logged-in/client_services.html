@@ -126,6 +126,7 @@
 <script>
 
   function displayAvailedServices(services) {
+    availedServices = services;
     const availedServicesTable = document.getElementById('availedServicesTable');
     availedServicesTable.innerHTML = '';
 
@@ -147,34 +148,34 @@
   }
 
 // Cancel a service, with extra conditions
-function cancelService(index) {
-  const service = availedServices[index];
+  function cancelService(index) {
+    const service = availedServices[index];
 
-  if (service.status === "Completed") {
-    alert("You cannot cancel this service as it is already completed.");
-    return;
-  } else if (service.status === "Cancelled") {
-    alert("This service is already cancelled.");
-    return;
-  }
+    if (service.status === "Completed") {
+      alert("You cannot cancel this service as it is already completed.");
+      return;
+    } else if (service.status === "Cancelled") {
+      alert("This service is already cancelled.");
+      return;
+    }
 
-  const confirmCancel = confirm("Are you sure you want to cancel this service?");
-  if (confirmCancel) {
-    // Send cancellation request to the backend
-    fetch(`/services-availed/${service.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: "Cancelled" }),
-    })
-            .then(response => response.text())
-            .then(message => {
-              alert(message);
-              service.status = "Cancelled";
-              displayAvailedServices(availedServices); // Refresh the table
-            })
-            .catch(error => console.error("Error cancelling service:", error));
+    const confirmCancel = confirm("Are you sure you want to cancel this service?");
+    if (confirmCancel) {
+      // Send cancellation request to the backend
+      fetch(`/services-availed/${service.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "Cancelled" }),
+      })
+              .then(response => response.text())
+              .then(message => {
+                alert(message);
+                service.status = "Cancelled";
+                displayAvailedServices(availedServices); // Refresh the table
+              })
+              .catch(error => console.error("Error cancelling service:", error));
+    }
   }
-}
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -189,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function() {
           .catch(error => console.error("Error fetching client services:", error));
 });
 
-function generatePDF(index) {
+  function generatePDF(index) {
     const service = availedServices[index];
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -198,18 +199,18 @@ function generatePDF(index) {
     doc.text('Service Invoice', 10, 10);
 
     doc.setFontSize(12);
-    doc.text(`Service: ${service.service}`, 10, 40);
-    doc.text(`Date: ${service.date}`, 10, 50);
+    doc.text(`Service: ${service.service_name}`, 10, 40);
+    doc.text(`Date: ${new Date(service.service_date).toISOString().split('T')[0]}`, 10, 50);
     doc.text(`Status: ${service.status}`, 10, 60);
     doc.text(`Cost: ${service.cost}`, 10, 70);
 
-    doc.save(`${service.customer}_Invoice.pdf`);
+    doc.save(`${service.customer_name}_Invoice.pdf`);
   }
 
-const backToDashboardBtn = document.getElementById('backToDashboard');
-backToDashboardBtn.addEventListener('click', function() {
-  window.location.href = 'User-dashboard.html';
-});
+  const backToDashboardBtn = document.getElementById('backToDashboard');
+  backToDashboardBtn.addEventListener('click', function() {
+    window.location.href = 'User-dashboard.html';
+  });
 </script>
 
 <!----------------------------- Footer ----------------------------------->

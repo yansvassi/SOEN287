@@ -153,10 +153,17 @@
         }
 
         const customerName = localStorage.getItem("customer_name") || "Unknown Customer";
+        const customerEmail = localStorage.getItem("customer_email");
+
+        if (!customerEmail) {
+            alert("Please log in before checking out.");
+            return;
+        }
 
         cartItems.forEach((item) => {
             const purchaseDetails = {
                 customer_name: customerName,
+                customer_email: customerEmail,
                 service_name: item.name,
                 service_date: new Date().toISOString().split('T')[0],
                 cost: item.price * item.quantity,

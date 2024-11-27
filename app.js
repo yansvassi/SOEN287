@@ -37,11 +37,9 @@ app.post("/view-only/addclient", (req, res) => {
     const client = {
         Fname: req.body.Fname,
         Lname: req.body.Lname,
-        Email: req.body.Email, 
+        Email: req.body.Email,
         Password: req.body.Password,
         choice: req.body['login-type'],
-
-        
     };
 
     if (!client.Fname || !client.Lname || !client.Email || !client.Password || !client.choice) {
@@ -49,40 +47,36 @@ app.post("/view-only/addclient", (req, res) => {
     }
 
     const checkEmail = "SELECT * FROM `Register Informations` WHERE Email = ?";
-    db.query(checkEmail, client.Email, (err, results) => 
-    {
-        if (err)
-            {
-                console.error("Error checking email!");
-                return res.status(500).send("An error occurred while checking the email");
-            }
-            if (results.length > 0) {
-                // Email already exists
-                return res.status(400).send("This email is already registered. Please return to the main site and try again.");
-    }
-
-    const sql = "INSERT INTO `Register Informations` SET ?";
-    db.query(sql, client, (err, result) => {
+    db.query(checkEmail, client.Email, (err, results) => {
         if (err) {
-            console.error("Error inserting record:", err.message);
-            res.status(500).send("Could not insert new record!");
-        } else {
-            if (client.choice == "admin")
-                {
-                    res.sendFile(path.join(__dirname, "BA-Logged-in/BAHome.html"));
-
-                }
-
-            if (client.choice = "client")
-                {
-                    res.sendFile(path.join(__dirname, "User-Logged-in/HomeLoggedin.html"));
-                }
+            console.error("Error checking email!");
+            return res.status(500).send("An error occurred while checking the email");
         }
-    });
 
+        if (results.length > 0) {
+            // Email already exists
+            return res.status(400).json({ success: false, message: "This email is already registered. Please return to the main site and try again." });
+        }
+
+        const sql = "INSERT INTO `Register Informations` SET ?";
+        db.query(sql, client, (err, result) => {
+            if (err) {
+                console.error("Error inserting record:", err.message);
+                return res.status(500).json({ success: false, message: "Could not insert new record!" });
+            }
+
+            // Send JSON response instead of sending files
+            if (client.choice === "admin") {
+                return res.json({ success: true, redirectUrl: "/BA-Logged-in/BAHome.html" });
+            } else if (client.choice === "client") {
+                return res.json({ success: true, redirectUrl: "/User-Logged-in/HomeLoggedin.html" });
+            } else {
+                return res.status(400).json({ success: false, message: "Invalid role specified." });
+            }
+        });
     });
-    
-})
+});
+
 
 app.get("/addlogin", (req, res) => {
     res.send("This is the addlogin endpoint. Use POST to submit data.");
@@ -96,38 +90,39 @@ app.post("/addlogin", (req, res) => {
     };
 
     if (!client.Email || !client.Password || !client.choice) {
-        return res.status(400).send("All fields are required.");
+        return res.status(400).json({ success: false, message: "All fields are required." });
     }
 
     const checkEmail = "SELECT * FROM `Register Informations` WHERE Email = ?";
     db.query(checkEmail, [client.Email], (err, results) => {
         if (err) {
             console.error("Error checking email:", err.message);
-            return res.status(500).send("An error occurred while checking the email.");
+            return res.status(500).json({ success: false, message: "An error occurred while checking the email." });
         }
 
         if (results.length === 0) {
-            return res.status(401).send("Email not registered.");
+            return res.status(401).json({ success: false, message: "Email not registered." });
         }
 
         const user = results[0];
 
         if (user.Password !== client.Password) {
-            return res.status(401).send("Incorrect password.");
+            return res.status(401).json({ success: false, message: "Incorrect password." });
         }
 
         const fullName = `${user.Fname} ${user.Lname}`;
 
         // Redirect based on user role
         if (client.choice === "admin" && user.choice === "admin") {
-            return res.sendFile(path.join(__dirname, "BA-Logged-in/BAHome.html"));
+            return res.json({ success: true, redirectUrl: "/BA-Logged-in/BAHome.html", user: { fullName } });
         } else if (client.choice === "client" && user.choice === "client") {
-            return res.sendFile(path.join(__dirname, "User-Logged-in/HomeLoggedin.html"));
+            return res.json({ success: true, redirectUrl: "/User-Logged-in/HomeLoggedin.html", user: { fullName } });
         } else {
-            return res.status(400).send("Invalid role specified.");
+            return res.status(400).json({ success: false, message: "Invalid role specified." });
         }
     });
 });
+
 
 app.post("/BA-Logged-in/editprofile", (req, res) => {
     

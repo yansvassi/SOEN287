@@ -16,87 +16,85 @@
 </head>
 
 <body>
+<!----------------------------- Form Box ----------------------------------->
+<div class="form-box">
 
+    <!------------------- Login Form -------------------------->
+    <div class="wrapper"></div>
+    <form class="login-container" id="login" method="post" action="/addlogin">
+        <div class="top">
+            <span>Don't have an account? <a href="/view-only/Register.html">Register</a></span>
+            <header>Login</header>
+        </div>
+        <div class="input-box">
+            <input type="text" class="input-field" name="Email" placeholder="Email" required>
+            <i class="bx bx-user"></i>
+        </div>
+        <div class="input-box">
+            <input type="password" class="input-field" name="Password" placeholder="Password" required>
+            <i class="bx bx-lock-alt"></i>
+        </div>
+        <div class="admin-client">
+            <input type="radio" id="register-admin" name="login-type" value="admin" required>
+            <label for="register-admin" class="BA-label">Business Administrator</label>
+            <input type="radio" id="register-client" name="login-type" value="client" required>
+            <label for="register-client" class="client-label">Customer</label>
+        </div>
+        <div class="input-box">
+            <input type="submit" class="submit" value="Sign In">
+        </div>
+    </form>
 
-
-    <!----------------------------- Form Box ----------------------------------->
-    <div class="form-box">
-
-        <!------------------- Login Form -------------------------->
-        <div class="wrapper"></div>
-        <form class="login-container" id="login" method = "post" action = "/addlogin">
-            <div class="top">
-                <span>Don't have an account? <a href="/view-only/Register.html">Register</a></span>
-                <header>Login</header>
-            </div>
+    <!------------------- Registration Form -------------------------->
+    <div class="register-container" id="register">
+        <div class="top">
+            <span>Have an account? <a href="#" onclick="login()">Login</a></span>
+            <header>Register</header>
+        </div>
+        <div class="two-forms">
             <div class="input-box">
-                <input type="text" class="input-field" name = "Email" placeholder="Email">
+                <input type="text" class="input-field" placeholder="First Name">
                 <i class="bx bx-user"></i>
             </div>
             <div class="input-box">
-                <input type="password" class="input-field" name = "Password" placeholder="Password">
-                <i class="bx bx-lock-alt"></i>
+                <input type="text" class="input-field" placeholder="Last Name">
+                <i class="bx bx-user"></i>
             </div>
-            <div class = "admin-client">
-                <input type="radio" id="register-admin" name="login-type" value="admin" required>
-                <label for="register-admin" class="BA-label">Business Administrator</label>
-                <input type="radio" id="register-client" name="login-type" value="client" required>
-                <label for="register-client" class="client-label">Customer</label>
+        </div>
+        <div class="input-box">
+            <input type="text" class="input-field" placeholder="Email">
+            <i class="bx bx-envelope"></i>
+        </div>
+        <div class="input-box">
+            <input type="password" class="input-field" placeholder="Password">
+            <i class="bx bx-lock-alt"></i>
+        </div>
+        <div class="admin-client">
+            <input type="radio" id="login-admin" name="login-type" required>
+            <label for="login-client" class="BA-label">Business Administrator</label>
+            <input type="radio" id="login-client" name="login-type" required>
+            <label for="login-client" class="client-label">Customer</label>
+        </div>
+        <div class="input-box">
+            <input type="submit" class="submit" value="Register">
+        </div>
+        <div class="two-col">
+            <div class="one">
+                <input type="checkbox" id="register-check">
+                <label for="register-check"> Remember Me</label>
             </div>
-            <div class="input-box">
-                <input type="submit" class="submit" value="Sign In">
-            </div>
-        </form>
-
-
-        <!------------------- Registration Form -------------------------->
-        <div class="register-container" id="register">
-            <div class="top">
-                <span>Have an account? <a href="#" onclick="login()">Login</a></span>
-                <header>Register</header>
-            </div>
-            <div class="two-forms">
-                <div class="input-box">
-                    <input type="text" class="input-field" placeholder="First Name">
-                    <i class="bx bx-user"></i>
-                </div>
-                <div class="input-box">
-                    <input type="text" class="input-field" placeholder="Last Name">
-                    <i class="bx bx-user"></i>
-                </div>
-            </div>
-            <div class="input-box">
-                <input type="text" class="input-field" placeholder="Email">
-                <i class="bx bx-envelope"></i>
-            </div>
-            <div class="input-box">
-                <input type="password" class="input-field" placeholder="Password">
-                <i class="bx bx-lock-alt"></i>
-            </div>
-            <div class = "admin-client">
-                <input type = "radio" id = "login-admin" name = "login-type" required > <label for="login-client" class = "BA-label" > Business Administrator </label>
-                <input type = "radio" id = "login-client" name = "login-type" required > <label for="login-client" class = "client-label"> Customer </label>
-            </div>
-            <div class="input-box">
-                <input type="submit" class="submit" value="Register">
-            </div>
-            <div class="two-col">
-                <div class="one">
-                    <input type="checkbox" id="register-check">
-                    <label for="register-check"> Remember Me</label>
-                </div>
-                <div class="two">
-                    <label><a href="#">Terms & conditions</a></label>
-                </div>
+            <div class="two">
+                <label><a href="#">Terms & conditions</a></label>
             </div>
         </div>
     </div>
+</div>
 
 <!-- JavaScript functions -->
 <script>
     function myMenuFunction() {
         var i = document.getElementById("navMenu");
-        if(i.className === "nav-menu") {
+        if (i.className === "nav-menu") {
             i.className += " responsive";
         } else {
             i.className = "nav-menu";
@@ -111,8 +109,8 @@
     function login() {
         x.style.left = "4px";
         y.style.right = "-520px";
-        a.className += " white-btn";
-        b.className = "btn";
+        if (a) a.className += " white-btn";
+        if (b) b.className = "btn";
         x.style.opacity = 1;
         y.style.opacity = 0;
     }
@@ -120,11 +118,55 @@
     function register() {
         x.style.left = "-510px";
         y.style.right = "5px";
-        a.className = "btn";
-        b.className += " white-btn";
+        if (a) a.className = "btn";
+        if (b) b.className += " white-btn";
         x.style.opacity = 0;
         y.style.opacity = 1;
     }
+
+    // Mockup login function to simulate login (you'd replace this with actual login API call)
+    document.querySelector("#login").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const Email = document.querySelector("input[name='Email']").value;
+        const Password = document.querySelector("input[name='Password']").value;
+        const loginType = document.querySelector("input[name='login-type']:checked").value;
+
+        console.log("Attempting login with email:", Email);
+
+        if (Email && Password) {
+            fetch("/addlogin", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ Email, Password, "login-type": loginType }),
+            })
+                .then(response => {
+                    console.log("Received response status:", response.status);
+                    if (response.headers.get("content-type")?.includes("application/json")) {
+                        return response.json();
+                    } else {
+                        throw new Error(`Unexpected response format: ${response.statusText}`);
+                    }
+                })
+                .then(data => {
+                    console.log("Received data:", data);
+                    if (data.success) {
+                        localStorage.setItem("customer_name", data.user.fullName);
+                        localStorage.setItem("customer_email", Email);
+
+                        window.location.href = data.redirectUrl; // Redirect to the correct page
+                    } else {
+                        alert(data.message || "Invalid email or password");
+                    }
+                })
+                .catch(error => {
+                    console.error('There was a problem with the login request:', error);
+                    alert(`An error occurred during login: ${error.message}`);
+                });
+        } else {
+            alert("Please fill in both email and password.");
+        }
+    });
 </script>
 
 </body>
