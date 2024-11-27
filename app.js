@@ -11,12 +11,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files like CSS and JS
 app.use(express.static(path.join(__dirname))); // Serve static files at root level
+
 // Session
 app.use(session({
-    secret: 'your_secret_key', // Replace with a strong secret key
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false } // Set `secure: true` if using HTTPS
+  secret: 'key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {secure: false}
 }));
 
 // Database connection
@@ -97,15 +98,13 @@ app.get("/addlogin", (req, res) => {
 
 app.post("/addlogin", (req, res) => {
     const client = {
+      
         Email: req.body.Email,
         Password: req.body.Password,
-        choice: req.body["login-type"], // Role: 'admin' or 'client'
+        choice: req.body["login-type"], 
     };
 
-    // Validate required fields
-    if (!client.Email || !client.Password || !client.choice) {
-        return res.status(400).send("All fields are required.");
-    }
+    console.log("BOOTY!");
 
     const checkEmail = "SELECT * FROM `Register Informations` WHERE Email = ?";
     db.query(checkEmail, [client.Email], (err, results) => {
@@ -119,6 +118,10 @@ app.post("/addlogin", (req, res) => {
         }
 
         const user = results[0];
+      console.log("Fetched user:", user); // Log the fetched user object
+      req.session.userId = user.ID;
+      console.log("User ID saved in session:", req.session.userId);
+   
 
         // Validate password
         if (user.Password !== client.Password) {
@@ -130,10 +133,6 @@ app.post("/addlogin", (req, res) => {
             return res.status(400).send("Invalid role specified.");
         }
 
-        // Store the user's ID in the session
-        req.session.userId = user.id; // Save the user's unique ID
-        console.log("User ID saved in session:", req.session.userId);
-
         // Redirect based on user role
         if (user.choice === "admin") {
             return res.sendFile(path.join(__dirname, "BA-Logged-in/BAHome.html"));
@@ -143,19 +142,28 @@ app.post("/addlogin", (req, res) => {
     });
 });
 
+// Logout 
+app.get('/logout', (req,res) => {
+  req.session.destroy((err) => {
+    if(err){
+      return res.status(500).json({success:false});
+    }
+    res.redirect('/view-only/Home.html');
+  });
+});
+
 
 app.post("/BA-Logged-in/editprofile", (req, res) => {
     
-    const info = {
-        fname: fname.req.body,
-        email: email.req.body, 
-        pn: pn.req.body, 
-        address: address.req.body, 
-        city: city.req.body, 
-        pt: pt.req.body,
-        pc: pc.req.body
-
-    }
+  const info = {
+    fname: req.body.fname,
+    email: req.body.email,
+    pn: req.body.pn,
+    address: req.body.address,
+    city: req.body.city,
+    pt: req.body.pt,
+    pc: req.body.pc,
+}
 
     if (fname) 
         {
@@ -197,74 +205,94 @@ app.post("/BA-Logged-in/editprofile", (req, res) => {
     });
 });
 
+app.get("/admin-profile", (req, res) => {
+  const query = "SELECT fname, email, pn, address, city, pt, pc FROM AdminProfile LIMIT 1";
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error fetching admin profile:", err.message);
+      return res.status(500).json({ success: false, message: "Database error." });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ success: false, message: "No admin profile found." });
+    }
+
+    res.json(results[0]); 
+  });
+});
 
 
-app.get('/User-Logged-in/editClientProfile', (req, res) => {
-    const query = 'SELECT id, fname, email, pn, address, city, pt, pc FROM AdminProfile LIMIT 1'; 
-  
-    db.query(query, (err, results) => {
+
+app.get('/editClientProfile', (req, res) => {
+  const query = 'SELECT ID, fname, lname, email, pn, address, city, pt, pc, card_number, expiry_date, card_name FROM ClientProfile WHERE id = ?';
+  const userId = req.session.userId;
+
+  if (!userId) {
+      return res.status(400).send("User ID not found in session. Please log in again.");
+  }
+
+  db.query(query, [userId], (err, results) => {
       if (err) {
-        console.error('Error fetching admin profile:', err.message);
-        return res.status(500).json({ error: 'Failed to fetch admin profile' });
+          console.error('Error fetching client profile:', err.message);
+          return res.status(500).json({ error: 'Failed to fetch client profile' });
       }
       res.json(results[0]); 
-    });
   });
+});
 
-  app.post("/User-Logged-in/editClientProfile", (req, res) => {
+  app.post("/editClientProfile", (req, res) => {
     const userId = req.session.userId;
-  
+    console.log(userId);
+
     if (!userId) {
-      return res.status(400).send("User ID not found in session. Please log in again.");
+        return res.status(400).send("User ID not found in session. Please log in again.");
     }
-  
+
     const info = {
-      id: userId,
-      fname: req.body.fname,
-      lname: req.body.lname,
-      email: req.body.email,
-      pn: req.body.pn,
-      address: req.body.address,
-      city: req.body.city,
-      pt: req.body.pt,
-      pc: req.body.pc,
-      card_number: req.body.card_number,
-      expiry_date: req.body.expiry_date,
-      card_name: req.body.card_name,
+        ID: userId,
+        fname: req.body.fname,
+        lname: req.body.lname,
+        email: req.body.email,
+        pn: req.body.pn,
+        address: req.body.address,
+        city: req.body.city,
+        pt: req.body.pt,
+        pc: req.body.pc,
+        card_number: req.body.card_number,
+        expiry_date: req.body.expiry_date,
+        card_name: req.body.card_name,
     };
-  
+
     // Collect fields and values dynamically
-    const fields = Object.keys(info).filter((key) => info[key]);
+    const fields = Object.keys(info).filter((key) => info[key] !== undefined && info[key] !== null);
     const values = fields.map((key) => info[key]);
-  
+
     if (fields.length === 0) {
-      return res.status(400).send("No data provided to update.");
+        return res.status(400).send("No data provided to update.");
     }
-  
+
+    // Construct SQL query for UPDATE
+    const updateFields = fields.map((key) => `${key} = ?`).join(", ");
+    const sql = `
+        UPDATE ClientProfile
+        SET ${updateFields}
+        WHERE id = ?
+    `;
+
     // Add userId for WHERE clause
     values.push(userId);
-  
-    // Construct SQL query
-    const sql = `
-      INSERT INTO ClientProfile (id, ${fields.join(", ")})
-      VALUES (?, ${fields.map(() => "?").join(", ")})
-      ON DUPLICATE KEY UPDATE ${fields.map((key) => `${key} = VALUES(${key})`).join(", ")}
-    `;
-  
-    db.query(sql, [userId, ...values], (err) => {
-      if (err) {
-        console.error("Error updating client profile:", err.message);
-        return res.status(500).send("Failed to update client profile.");
-      }
-      res.send("Profile updated successfully.");
-    });
-  });
-  
-  // Start the server
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
 
+    // Execute the query
+    db.query(sql, values, (err) => {
+        if (err) {
+            console.error("Error updating client profile:", err.message);
+            return res.status(500).send("Failed to update client profile.");
+        }
+        else {
+          return res.sendFile(path.join(__dirname, "User-Logged-in/profileclient.html")); }
+    });
+});
 
 
 // Add a new service
@@ -312,10 +340,7 @@ app.get("/client", (req, res) => {
     res.sendFile(path.join(__dirname, "User-Logged-in/client_services.html"));
 });
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+
 
 
 //yana
@@ -412,7 +437,7 @@ app.get("/api/get-descriptions", (req, res) => {
         res.status(404).json({ success: false, message: "No descriptions found." });
       }
     });
-  });
+  }); 
   
   // Route to update descriptions
   app.post("/api/update-descriptions", (req, res) => {
@@ -434,6 +459,8 @@ app.get("/api/get-descriptions", (req, res) => {
   
       res.json({ success: true, message: "Descriptions updated successfully!" });
     });
-  });
+  }); 
 
-  
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}/view-only/Home.html`);
+});
