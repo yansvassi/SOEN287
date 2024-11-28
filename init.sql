@@ -27,7 +27,7 @@ CREATE TABLE Descriptions (
     coreValuesText TEXT NOT NULL             -- Text for the core values section
 );
 
- INSERT INTO Descriptions (welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText) VALUES ('Default Title', 'Default Slogan', 'Default Core Values Title', 'Default Core Values Text');
+INSERT INTO Descriptions (welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText) VALUES ('Default Title', 'Default Slogan', 'Default Core Values Title', 'Default Core Values Text');
 
 CREATE TABLE `Register Informations` (
     ID INT AUTO_INCREMENT PRIMARY KEY,

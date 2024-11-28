@@ -27,7 +27,7 @@ app.use(
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "new_password", //Changed to personal code
+    password: "root", //Changed to personal code
     database: "SOEN287new", // Replace with your database name
 });
 
@@ -449,7 +449,8 @@ app.get("/api/get-descriptions", (req, res) => {
   
   app.post("/api/update-descriptions", (req, res) => {
     const { welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText } = req.body;
-  
+    console.log("Received data:", req.body);
+
     if (!welcomeTitle || !welcomeSlogan || !coreValuesTitle || !coreValuesText) {
       return res.status(400).json({ success: false, message: "All fields are required." });
     }
@@ -486,6 +487,41 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/view-only/Home.html"));
 });
 
+
+
+
+app.delete("/api/services/:productId", (req, res) => {
+  const productId = req.params.productId;
+
+  // Validate productId
+  if (!productId || isNaN(productId)) {
+    return res.status(400).json({ success: false, message: "Invalid product ID." });
+  }
+
+  const query = "DELETE FROM service WHERE id = ?";
+  db.query(query, [productId], (err, result) => {
+    if (err) {
+      console.error("Error deleting product:", err.message);
+      return res.status(500).json({ success: false, message: "Database error." });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ success: false, message: "Product not found." });
+    }
+
+    res.json({ success: true, message: "Product deleted successfully." });
+  });
+});
+
+
+
+
+
+
+
+
+
+
 // API: Get About Us Page
 app.get("/api/get-about", (req, res) => {
   const query = "SELECT * FROM AboutContent WHERE id = 1";
@@ -500,12 +536,18 @@ app.get("/api/get-about", (req, res) => {
     }
 
     const aboutContent = results[0];
-    // Parse the teamMembers JSON string into an object
-    aboutContent.teamMembers = JSON.parse(aboutContent.teamMembers);
+    try {
+      aboutContent.teamMembers = JSON.parse(aboutContent.teamMembers);
+    } catch (parseError) {
+      console.error("Error parsing teamMembers JSON:", parseError.message);
+      return res.status(500).json({ success: false, message: "Invalid JSON in teamMembers." });
+    }
 
     res.json({ success: true, aboutContent });
   });
 });
+
+
 
 // API: Update About Us Page
 app.post("/api/update-about", (req, res) => {

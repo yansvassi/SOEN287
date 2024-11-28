@@ -266,24 +266,39 @@
   });
 
   removeButton.addEventListener("click", function () {
-  const productId = productBox.getAttribute("data-id"); // Ensure this exists
+  const productId = productBox.getAttribute("data-id"); // Ensure productBox has this attribute
 
-  fetch(`http://localhost:8080/servicess/${productId}`, {
+  if (!productId) {
+    alert("Product ID not found.");
+    return;
+  }
+
+  fetch(`http://localhost:8080/api/services/${productId}`, {
     method: "DELETE",
+    headers: {
+      "Content-Type": "application/json", // Specify the content type
+    },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then((data) => {
+      console.log("Server response:", data);
       if (data.success) {
-        productBox.remove(); // Remove the product card
+        productBox.remove(); // Remove the product card from the DOM
       } else {
         alert("Failed to remove service: " + data.message);
       }
     })
     .catch((error) => {
-      console.error("Error:", error);
+      console.error("Error while deleting the product:", error);
       alert("An error occurred while removing the service.");
     });
 });
+
 
 }
 

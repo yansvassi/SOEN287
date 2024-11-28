@@ -92,65 +92,6 @@
   </div>
 </form>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const editButton = document.getElementById("toggleEditModeBtn");
-    const saveButton = document.getElementById("saveChangesBtn");
-    let editMode = false;
-
-    // Fetch existing descriptions
-    fetch("http://localhost:8080/api/get-descriptions")
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          document.getElementById("welcomeTitle").innerText = data.data.welcomeTitle;
-          document.getElementById("welcomeSlogan").innerText = data.data.welcomeSlogan;
-          document.getElementById("coreValuesTitle").innerText = data.data.coreValuesTitle;
-          document.getElementById("coreValuesText").innerText = data.data.coreValuesText;
-        } else {
-          console.error("Failed to fetch descriptions:", data.message);
-        }
-      })
-      .catch(error => console.error("Error fetching descriptions:", error));
-
-    // Toggle edit mode
-    editButton.addEventListener("click", () => {
-      editMode = !editMode;
-      document.querySelectorAll("[contenteditable]").forEach(element => {
-        element.contentEditable = editMode ? "true" : "false";
-        element.style.border = editMode ? "2px dashed #4a7b9b" : "none";
-      });
-      editButton.textContent = editMode ? "Disable Edit Mode" : "Enable Edit Mode";
-    });
-
-    // Save changes
-    saveButton.addEventListener("click", event => {
-      event.preventDefault();
-
-      const descriptions = {
-        welcomeTitle: document.getElementById("welcomeTitle").innerText.trim(),
-        welcomeSlogan: document.getElementById("welcomeSlogan").innerText.trim(),
-        coreValuesTitle: document.getElementById("coreValuesTitle").innerText.trim(),
-        coreValuesText: document.getElementById("coreValuesText").innerText.trim(),
-      };
-
-      fetch("http://localhost:8080/api/update-descriptions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(descriptions),
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            alert("Descriptions updated successfully!");
-          } else {
-            alert("Failed to update descriptions.");
-          }
-        })
-        .catch(error => console.error("Error updating descriptions:", error));
-    });
-  });
-</script>
 
 <!-- Product Section -->
 <div class="container" id="product-container">
@@ -238,4 +179,65 @@
 </script>
 
 </body>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const editButton = document.getElementById("toggleEditModeBtn");
+    const saveButton = document.getElementById("saveChangesBtn");
+    let editMode = false;
+
+    // Fetch existing descriptions
+    fetch("http://localhost:8080/api/get-descriptions")
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById("welcomeTitle").innerText = data.data.welcomeTitle;
+          document.getElementById("welcomeSlogan").innerText = data.data.welcomeSlogan;
+          document.getElementById("coreValuesTitle").innerText = data.data.coreValuesTitle;
+          document.getElementById("coreValuesText").innerText = data.data.coreValuesText;
+        } else {
+          console.error("Failed to fetch descriptions:", data.message);
+        }
+      })
+      .catch(error => console.error("Error fetching descriptions:", error));
+
+    // Toggle edit mode
+    editButton.addEventListener("click", () => {
+      editMode = !editMode;
+      document.querySelectorAll("[contenteditable]").forEach(element => {
+        element.contentEditable = editMode ? "true" : "false";
+        element.style.border = editMode ? "2px dashed #4a7b9b" : "none";
+      });
+      editButton.textContent = editMode ? "Disable Edit Mode" : "Enable Edit Mode";
+    });
+
+    // Save changes
+    saveButton.addEventListener("click", event => {
+      event.preventDefault();
+
+      const descriptions = {
+        welcomeTitle: document.getElementById("welcomeTitle").innerText.trim(),
+        welcomeSlogan: document.getElementById("welcomeSlogan").innerText.trim(),
+        coreValuesTitle: document.getElementById("coreValuesTitle").innerText.trim(),
+        coreValuesText: document.getElementById("coreValuesText").innerText.trim(),
+      };
+
+      fetch("http://localhost:8080/api/update-descriptions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(descriptions),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert("Descriptions updated successfully!");
+          } else {
+            alert("Failed to update descriptions.");
+          }
+        })
+        .catch(error => console.error("Error updating descriptions:", error));
+    });
+  });
+</script>
+
 </html>
