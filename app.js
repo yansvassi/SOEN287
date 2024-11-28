@@ -456,17 +456,25 @@ app.get("/api/get-descriptions", (req, res) => {
     const query = `
       UPDATE Descriptions
       SET welcomeTitle = ?, welcomeSlogan = ?, coreValuesTitle = ?, coreValuesText = ?
-      WHERE id = 1`;
+      WHERE id = 1
+    `;
   
-    db.query(query, [welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText], (err) => {
+    db.query(query, [welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText], (err, results) => {
       if (err) {
-        console.error("Error updating descriptions:", err);
+        console.error("Error updating descriptions:", err.message);
         return res.status(500).json({ success: false, message: "Database error." });
       }
   
-      res.json({ success: true, message: "Descriptions updated successfully!" });
+      if (results.affectedRows > 0) {
+        res.json({ success: true, message: "Descriptions updated successfully!" });
+      } else {
+        res.status(404).json({ success: false, message: "No rows updated. Check the database entry." });
+      }
     });
-  });  
+  });
+  
+  
+
 
 
   app.get("/db-info", (req, res) => {

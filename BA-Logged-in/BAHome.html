@@ -125,30 +125,36 @@
 
     // Save changes
     saveButton.addEventListener("click", event => {
-      event.preventDefault();
+  event.preventDefault(); // Prevent form submission
 
-      const descriptions = {
-        welcomeTitle: document.getElementById("welcomeTitle").innerText.trim(),
-        welcomeSlogan: document.getElementById("welcomeSlogan").innerText.trim(),
-        coreValuesTitle: document.getElementById("coreValuesTitle").innerText.trim(),
-        coreValuesText: document.getElementById("coreValuesText").innerText.trim(),
-      };
+  // Gather the updated descriptions
+  const descriptions = {
+    welcomeTitle: document.getElementById("welcomeTitle").innerText.trim(),
+    welcomeSlogan: document.getElementById("welcomeSlogan").innerText.trim(),
+    coreValuesTitle: document.getElementById("coreValuesTitle").innerText.trim(),
+    coreValuesText: document.getElementById("coreValuesText").innerText.trim(),
+  };
 
-      fetch("http://localhost:8080/api/update-descriptions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(descriptions),
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            alert("Descriptions updated successfully!");
-          } else {
-            alert("Failed to update descriptions.");
-          }
-        })
-        .catch(error => console.error("Error updating descriptions:", error));
-    });
+  console.log("Descriptions to be sent:", descriptions); // Debugging
+
+  // Send the data to the server
+  fetch("http://localhost:8080/api/update-descriptions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(descriptions),
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Server Response:", data); // Debugging
+      if (data.success) {
+        alert("Descriptions updated successfully!");
+      } else {
+        alert("Failed to update descriptions.");
+      }
+    })
+    .catch(error => console.error("Error updating descriptions:", error));
+});
+
   });
 </script>
 
