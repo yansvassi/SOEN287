@@ -1,105 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Specifies the character encoding for the HTML document -->
     <meta charset="UTF-8">
-    <!-- Ensures compatibility with older versions of Internet Explorer -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Sets the viewport to match the device's width for mobile responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Boxicons library for icons -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <!-- Link to the external CSS files -->
     <link rel="stylesheet" href="../mpstyle.css">
     <link rel="stylesheet" href="../footerStyles.css">
     <link rel="stylesheet" href="../profile.css">
     <link rel="stylesheet" href="../MainPageStyle.css">
-    <!-- JavaScript for navbar scrolling -->
     <script src="../navbarscroll.js"></script>
-    <!-- Defines the title of the web page -->
     <title>Client Profile</title>
 </head>
 <body>
 
-    <!-- Navigation Bar -->
-    <div id="logged-in-navbar"></div>
+<!-- Navigation Bar -->
+<div id="logged-in-navbar"></div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch('../User-Logged-in/loggedInNav.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('logged-in-navbar').innerHTML = data;
-                })
-                .catch(error => console.error('Error loading logged-in navbar:', error));
-        });
-    </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('../User-Logged-in/loggedInNav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('logged-in-navbar').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading logged-in navbar:', error));
+    });
+</script>
 
-    <!-- Profile Section -->
-    <div class="wrapper"> 
-        <div class="text-title"> 
-            <h1>Edit Profile</h1>
-        </div> 
+<!-- Profile Section -->
+<div class="wrapper">
+    <div class="text-title">
+        <h1>Edit Profile</h1>
+    </div>
 
-        <div class="imgprofile-container">
-            <div class="specificimg-container">
-                <img src="../images/img_avatar2.png" alt="Avatar">
+    <div class="imgprofile-container">
+        <div class="specificimg-container">
+            <img src="../images/img_avatar2.png" alt="Avatar">
+        </div>
+
+        <div class="questions-container">
+            <div class="btn">
+                <button type="button" onclick="document.getElementById('imageUploader').click()">
+                    Change Photo
+                </button>
+                <input type="file" id="imageUploader" style="display:none" accept="image/*" onchange="updateProfileImage(event)">
             </div>
 
-            <div class="questions-container">
-                <div class="btn"> 
-                    <button type="button" onclick="document.getElementById('imageUploader').click()">
-                        Change Photo
-                    </button>
-                    <input type="file" id="imageUploader" style="display:none" accept="image/*" onchange="updateProfileImage(event)">
+            <form class="questions" method="post" action="/editClientProfile" id="profileForm">
+                <h2>Personal Information</h2>
+                <label for="fname">First Name:</label><br>
+                <input type="text" id="fname" name="fname" placeholder="John" required><br>
+
+                <label for="lname">Last Name:</label><br>
+                <input type="text" id="lname" name="lname" placeholder="Robert" required><br>
+
+                <label for="email">Email Address:</label><br>
+                <input type="email" id="email" name="email" placeholder="username1234@gmail.com" required><br>
+
+                <label for="address">Street Address:</label><br>
+                <input type="text" id="address" name="address" placeholder="123 Cherry Street" required><br>
+
+                <label for="city">City:</label><br>
+                <input type="text" id="city" name="city" placeholder="Montreal" required><br>
+
+                <label for="pt">Province/Territory:</label><br>
+                <input type="text" id="pt" name="pt" placeholder="Quebec" required><br>
+
+                <label for="pc">Postal Code:</label><br>
+                <input type="text" id="pc" name="pc" placeholder="123 ABC" required><br>
+
+                <label for="pn">Phone Number:</label><br>
+                <input type="tel" id="pn" name="pn" placeholder="999-999-9999" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"><br>
+
+                <div class="payment">
+                    <h2>Add Payment Method</h2>
+                    <label for="card-number">Card Number:</label><br>
+                    <input type="text" id="card-number" name="card_number" required><br>
+
+                    <label for="expiry-date">Expiry Date:</label><br>
+                    <input type="text" id="expiry-date" name="expiry_date" placeholder="MM/YY" required pattern="(0[1-9]|1[0-2])\/\d{2}"><br>
+
+                    <label for="card-name">Name on Card:</label><br>
+                    <input type="text" id="card-name" name="card_name" placeholder="John Doe" required>
                 </div>
 
-                <form class="questions" method="post" action="/editClientProfile" id="profileForm">
-                  <h2>Personal Information</h2>
-                  <label for="fname">First Name:</label><br>
-                  <input type="text" id="fname" name="fname" placeholder="John" disabled required><br>
-              
-                  <label for="lname">Last Name:</label><br>
-                  <input type="text" id="lname" name="lname" placeholder="Robert" disabled required><br>
-              
-                  <label for="email">Email Address:</label><br>
-                  <input type="email" id="email" name="email" placeholder="username1234@gmail.com" disabled required><br>
-              
-                  <label for="address">Street Address:</label><br>
-                  <input type="text" id="address" name="address" placeholder="123 Cherry Street" disabled required><br>
-              
-                  <label for="city">City:</label><br>
-                  <input type="text" id="city" name="city" placeholder="Montreal" disabled required><br>
-              
-                  <label for="pt">Province/Territory:</label><br>
-                  <input type="text" id="pt" name="pt" placeholder="Quebec" disabled required><br>
-              
-                  <label for="pc">Postal Code:</label><br>
-                  <input type="text" id="pc" name="pc" placeholder="123 ABC" disabled required><br>
-              
-                  <label for="pn">Phone Number:</label><br>
-                  <input type="tel" id="pn" name="pn" placeholder="999-999-9999" disabled required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"><br>
-              
-                  <div class="payment">
-                      <h2>Add Payment Method</h2>
-                      <label for="card-number">Card Number:</label><br>
-                      <input type="text" id="card-number" name="card-number" disabled required><br>
-              
-                      <label for="expiry-date">Expiry Date:</label><br>
-                      <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY" disabled required pattern="(0[1-9]|1[0-2])\/\d{2}"><br>
-              
-                      <label for="card-name">Name on Card:</label><br>
-                      <input type="text" id="card-name" name="card-name" placeholder="John Doe" disabled required>
-                  </div>
-              
-                  <div class="btn save-btn">
-                      <button type="button" id="editButton">Edit</button>
-                      <button type="submit" id="saveButton" disabled>Save Changes</button>
-                  </div>
-              </form>
-            </div>
+                <div class="btn save-btn">
+                    <button type="button" id="editButton">Edit</button>
+                    <button type="submit" id="saveButton" disabled>Save Changes</button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
 <!-- Footer -->
 <footer class="footer">
@@ -133,66 +126,46 @@
     <div class="footer-credits">
         <p>&copy; YourCompanyName</p>
     </div>
-  </footer>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-    const editButton = document.getElementById("editButton");
-    const saveButton = document.getElementById("saveButton");
-    const formFields = document.querySelectorAll("#profileForm input");
+</footer>
 
-    // Disable all fields initially
-    formFields.forEach(field => field.disabled = true);
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const editButton = document.getElementById("editButton");
+        const saveButton = document.getElementById("saveButton");
+        const formFields = document.querySelectorAll("#profileForm input");
 
-    // Enable fields when "Edit" is clicked
-    editButton.addEventListener("click", () => {
-        formFields.forEach(field => field.disabled = false);
-        saveButton.disabled = false; // Enable "Save" button
-        editButton.disabled = true; // Disable "Edit" button while editing
-    });
+        // Disable all fields initially
+        formFields.forEach(field => field.disabled = true);
 
-    // Fetch data from the server and populate the form
-    fetch("http://localhost:7013/editClientProfile")
-        .then(response => response.json())
-        .then(data => {
-            if (data) {
-                document.getElementById("fname").value = data.fname || ""; 
-                document.getElementById("lname").value = data.lname || ""; 
-                document.getElementById("email").value = data.email || ""; 
-                document.getElementById("address").value = data.address || ""; 
-                document.getElementById("city").value = data.city || ""; 
-                document.getElementById("pt").value = data.pt || ""; 
-                document.getElementById("pc").value = data.pc || ""; 
-                document.getElementById("pn").value = data.pn || ""; 
-                document.getElementById("card-number").value = data.card_number || ""; 
-                document.getElementById("expiry-date").value = data.expiry_date || ""; 
-                document.getElementById("card-name").value = data.card_name || ""; 
-            } else {
-                console.error("Failed to fetch admin profile: No data returned.");
-            }
-        })
-        .catch(error => console.error("Error fetching admin profile:", error));
-});
-
-
-
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch("http://localhost:7013/admin-profile")
-                .then(response => response.json())
-                .then(data => {
-                    if (data) {
-                        document.getElementById("adminName").textContent = `Business Name: ${data.fname || "N/A"}`;
-                        document.getElementById("adminEmail").textContent = `Email: ${data.email || "N/A"}`;
-                        document.getElementById("adminPhone").textContent = `Phone: ${data.pn || "N/A"}`;
-                        document.getElementById("adminAddress").textContent = `Address: ${data.address || "N/A"}`;
-                        document.getElementById("adminCity").textContent = `City: ${data.city || "N/A"}`;
-                        document.getElementById("adminProvince").textContent = `Province: ${data.pt || "N/A"}`;
-                        document.getElementById("adminPostalCode").textContent = `Postal Code: ${data.pc || "N/A"}`;
-                    } else {
-                        console.error("Failed to fetch admin profile: No data returned.");
-                    }
-                })
-                .catch(error => console.error("Error fetching admin profile:", error));
+        // Enable fields when "Edit" is clicked
+        editButton.addEventListener("click", () => {
+            formFields.forEach(field => field.disabled = false);
+            saveButton.disabled = false; // Enable "Save" button
+            editButton.disabled = true; // Disable "Edit" button while editing
         });
-    </script>
+
+        // Fetch data from the server and populate the form
+        fetch("http://localhost:7013/editClientProfile")
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    document.getElementById("fname").value = data.fname || "";
+                    document.getElementById("lname").value = data.lname || "";
+                    document.getElementById("email").value = data.email || "";
+                    document.getElementById("address").value = data.address || "";
+                    document.getElementById("city").value = data.city || "";
+                    document.getElementById("pt").value = data.pt || "";
+                    document.getElementById("pc").value = data.pc || "";
+                    document.getElementById("pn").value = data.pn || "";
+                    document.getElementById("card-number").value = data.card_number || "";
+                    document.getElementById("expiry-date").value = data.expiry_date || "";
+                    document.getElementById("card-name").value = data.card_name || "";
+                } else {
+                    console.error("Failed to fetch client profile: No data returned.");
+                }
+            })
+            .catch(error => console.error("Error fetching client profile:", error));
+    });
+</script>
 </body>
 </html>

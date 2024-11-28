@@ -2,6 +2,7 @@ const express = require("express");
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const path = require("path");
+const session = require("express-session");
 
 const app = express();
 const PORT = 7013;
@@ -12,12 +13,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files like CSS and JS
 app.use(express.static(path.join(__dirname))); // Serve static files at root level
 
+app.use(session({
+    secret: 'key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {secure: false}
+}));
+
 // Database connection
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "new_password",
-    database: "SOEN287new", // Replace with your database name
+    password: "",
+    database: "SOEN287project", // Replace with your database name
 });
 
 db.connect((err) => {
@@ -105,6 +113,10 @@ app.post("/addlogin", (req, res) => {
         }
 
         const user = results[0];
+
+        console.log("Fetched user:", user); // Log the fetched user object
+        req.session.userId = user.id;
+        console.log("User ID saved in session:", req.session.userId);
 
         if (user.Password !== client.Password) {
             return res.status(401).json({ success: false, message: "Incorrect password." });
@@ -471,6 +483,81 @@ app.post("/api/update-about-content", (req, res) => {
         res.json({ success: true, message: "About Us content updated successfully!" });
     });
 });
+
+// Fetch Client Profile - GET request
+app.get('/editClientProfile', (req, res) => {
+    const query = 'SELECT ID, fname, lname, email, pn, address, city, pt, pc, card_number, expiry_date, card_name FROM ClientProfile WHERE id = ?';
+    const userId = req.session.userId;
+
+    // Check if userId exists in session
+    if (!userId) {
+        return res.status(400).send("User ID not found in session. Please log in again.");
+    }
+
+    // Execute SQL query to fetch client profile
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('Error fetching client profile:', err.message);
+            return res.status(500).json({ error: 'Failed to fetch client profile' });
+        }
+        res.json(results[0]);
+    });
+});
+
+// Update Client Profile - POST request
+app.post("/editClientProfile", (req, res) => {
+    const userId = req.session.userId;
+
+    if (!userId) {
+        return res.status(400).send("User ID not found in session. Please log in again.");
+    }
+
+    // Extract fields to update
+    const info = {
+        fname: req.body.fname,
+        lname: req.body.lname,
+        email: req.body.email,
+        pn: req.body.pn,
+        address: req.body.address,
+        city: req.body.city,
+        pt: req.body.pt,
+        pc: req.body.pc,
+        card_number: req.body.card_number,
+        expiry_date: req.body.expiry_date,
+        card_name: req.body.card_name,
+    };
+
+    // Filter fields that have valid values (not undefined or null)
+    const fields = Object.keys(info).filter((key) => info[key] !== undefined && info[key] !== null);
+    const values = fields.map((key) => info[key]);
+
+    if (fields.length === 0) {
+        return res.status(400).send("No data provided to update.");
+    }
+
+    // Construct SQL query for UPDATE
+    const updateFields = fields.map((key) => `${key} = ?`).join(", ");
+    const sql = `
+        UPDATE ClientProfile
+        SET ${updateFields}
+        WHERE id = ?
+    `;
+
+    // Add userId for WHERE clause
+    values.push(userId);
+
+    // Execute the query to update client profile
+    db.query(sql, values, (err) => {
+        if (err) {
+            console.error("Error updating client profile:", err.message);
+            return res.status(500).send("Failed to update client profile.");
+        } else {
+            return res.sendFile(path.join(__dirname, "User-Logged-in/profileclient.html"));
+        }
+    });
+});
+
+
 
 app.get("/admin-profile", (req, res) => {
     const sql = "SELECT fname, email, pn, address, city, pt, pc FROM AdminProfile WHERE id = 1";
