@@ -275,6 +275,7 @@
     .then((data) => {
       if (data.success) {
         productBox.remove(); // Remove the product card
+        alert("Service removed successfully!");
       } else {
         alert("Failed to remove service: " + data.message);
       }

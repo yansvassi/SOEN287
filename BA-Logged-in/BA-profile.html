@@ -12,15 +12,15 @@
 
     <style>
 
-    .content-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-        margin-top: 120px;
-        color: #0f253d;
-        font-size: 24px;
-      }
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin-top: 120px;
+            color: #0f253d;
+            font-size: 24px;
+        }
 
     </style>
 </head>
@@ -41,9 +41,9 @@
 
 <!-- Profile Editing Section -->
 <div class="content-wrapper">
-    <div class = title > 
-    <h1>Edit Business Profile  </h1>
-</div>
+    <div class = title >
+        <h1>Edit Business Profile  </h1>
+    </div>
 
     <div class="imgprofile-container">
         <div class="specificimg-container">
@@ -70,12 +70,12 @@
             <input type="text" id="pt" name="pt" placeholder="Province/Territory"> <br>
             <label for="pc">Postal Code:</label> <br>
             <input type="text" id="pc" name="pc" placeholder="A1A 1A1"> <br>
-        </div>
-
-        <div class="btn save-btn">
-            <button type="submit" id="saveChangesBtn">Save Changes</button>
-        </div>
     </div>
+
+    <div class="btn save-btn">
+        <button type="submit" id="saveChangesBtn">Save Changes</button>
+    </div>
+</div>
 </form>
 
 <div id="message-container" style="margin-top: 20px; font-size: 20px;"></div>
@@ -83,60 +83,60 @@
 <!-- Footer -->
 <footer class="footer">
     <div class="footer-container">
-      <div class="footer-column">
-        <h3>Admin Contact</h3>
-        <p id="adminName"> </p>
-        <p id="adminEmail"></p>
-        <p id="adminPhone"></p>
-        <p id="adminAddress"></p>
-        <p id="adminCity"></p>
-        <p id="adminProvince"></p>
-        <p id="adminPostalCode"></p>
-      </div>
-      <div class="footer-column">
-        <h3>Customers</h3>
-        <ul>
-          <li><a href="#">Catalogs</a></li>
-          <li><a href="#">Do Not Sell My Info</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <h3>Company</h3>
-        <ul>
-          <li><a href="view-only/about.html">About Us</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms</a></li>
-        </ul>
-      </div>
+        <div class="footer-column">
+            <h3>Admin Contact</h3>
+            <p id="adminName"> </p>
+            <p id="adminEmail"></p>
+            <p id="adminPhone"></p>
+            <p id="adminAddress"></p>
+            <p id="adminCity"></p>
+            <p id="adminProvince"></p>
+            <p id="adminPostalCode"></p>
+        </div>
+        <div class="footer-column">
+            <h3>Customers</h3>
+            <ul>
+                <li><a href="#">Catalogs</a></li>
+                <li><a href="#">Do Not Sell My Info</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul>
+                <li><a href="view-only/about.html">About Us</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms</a></li>
+            </ul>
+        </div>
     </div>
     <div class="footer-credits">
-      <p>&copy; YourCompanyName</p>
+        <p>&copy; YourCompanyName</p>
     </div>
-  </footer>
+</footer>
 
 <script>
-      document.addEventListener("DOMContentLoaded", function () {
-      console.log("YES!");
-      fetch("http://localhost:8080/admin-profile")
-  .then((response) => {
-    console.log("Fetch response:", response);
-    return response.json();
-  })
-  .then((data) => {
-    console.log("Fetched data:", data)
-          if (data) {
-            document.getElementById("adminName").innerHTML = `Business Name: ${data.fname || "N/A"}`;
-            document.getElementById("adminEmail").innerHTML = `Email: ${data.email || "N/A"}`;
-            document.getElementById("adminPhone").innerHTML = `Phone: ${data.pn || "N/A"}`;
-            document.getElementById("adminAddress").innerHTML = `Address: ${data.address || "N/A"}`;
-            document.getElementById("adminCity").innerHTML = `City: ${data.city || "N/A"}`;
-            document.getElementById("adminProvince").innerHTML = `Province: ${data.pt || "N/A"}`;
-            document.getElementById("adminPostalCode").innerHTML = `Postal Code: ${data.pc || "N/A"}`;
-          } else {
-            console.error("Failed to fetch admin profile: No data returned.");
-          }
-        })
-        .catch((error) => console.error("Error fetching admin profile:", error));
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("YES!");
+        fetch("http://localhost:8080/admin-profile")
+            .then((response) => {
+                console.log("Fetch response:", response);
+                return response.json();
+            })
+            .then((data) => {
+                console.log("Fetched data:", data)
+                if (data) {
+                    document.getElementById("adminName").innerHTML = `Business Name: ${data.fname || "N/A"}`;
+                    document.getElementById("adminEmail").innerHTML = `Email: ${data.email || "N/A"}`;
+                    document.getElementById("adminPhone").innerHTML = `Phone: ${data.pn || "N/A"}`;
+                    document.getElementById("adminAddress").innerHTML = `Address: ${data.address || "N/A"}`;
+                    document.getElementById("adminCity").innerHTML = `City: ${data.city || "N/A"}`;
+                    document.getElementById("adminProvince").innerHTML = `Province: ${data.pt || "N/A"}`;
+                    document.getElementById("adminPostalCode").innerHTML = `Postal Code: ${data.pc || "N/A"}`;
+                } else {
+                    console.error("Failed to fetch admin profile: No data returned.");
+                }
+            })
+            .catch((error) => console.error("Error fetching admin profile:", error));
     });
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -173,43 +173,43 @@
 </script>
 
 <script>
-document.getElementById("editProfileForm").addEventListener("submit", function (event) {
-    event.preventDefault(); // Prevent the default form submission
+    document.getElementById("editProfileForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the default form submission
 
-    const formData = new FormData(this); // Gather form data
-    const data = Object.fromEntries(formData.entries()); // Convert to JSON-friendly object
+        const formData = new FormData(this); // Gather form data
+        const data = Object.fromEntries(formData.entries()); // Convert to JSON-friendly object
 
-    // Send an AJAX request to the server
-    fetch("/BA-Logged-in/editprofile", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-    .then((response) => {
-        // Check if the response is OK
-        if (!response.ok) {
-            // Attempt to extract error message from the response body
-            return response.text().then((errorMessage) => {
-                throw new Error(errorMessage || "Failed to update profile");
+        // Send an AJAX request to the server
+        fetch("/BA-Logged-in/editprofile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => {
+                // Check if the response is OK
+                if (!response.ok) {
+                    // Attempt to extract error message from the response body
+                    return response.text().then((errorMessage) => {
+                        throw new Error(errorMessage || "Failed to update profile");
+                    });
+                }
+                return response.text(); // Handle plain text response for success
+            })
+            .then((message) => {
+                // Display the plain text success message
+                const messageContainer = document.getElementById("message-container");
+                messageContainer.style.color = "green";
+                messageContainer.textContent = message;
+            })
+            .catch((error) => {
+                // Display a more descriptive error message
+                const messageContainer = document.getElementById("message-container");
+                messageContainer.style.color = "red";
+                messageContainer.textContent = `Error: ${error.message}`;
             });
-        }
-        return response.text(); // Handle plain text response for success
-    })
-    .then((message) => {
-        // Display the plain text success message
-        const messageContainer = document.getElementById("message-container");
-        messageContainer.style.color = "green";
-        messageContainer.textContent = message;
-    })
-    .catch((error) => {
-        // Display a more descriptive error message
-        const messageContainer = document.getElementById("message-container");
-        messageContainer.style.color = "red";
-        messageContainer.textContent = `Error: ${error.message}`;
     });
-});
 
 
 </script>

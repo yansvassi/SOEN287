@@ -1,10 +1,10 @@
 const express = require("express");
-const mysql = require("mysql2");
+const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const path = require("path");
+
 const app = express();
-const session = require("express-session");
-const PORT = 8080;
+const PORT = 7013;
 
 // Middleware
 app.use(bodyParser.json());
@@ -12,23 +12,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files like CSS and JS
 app.use(express.static(path.join(__dirname))); // Serve static files at root level
 
-// Session
-app.use(
-  session({
-    secret: "key",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  })
-);
-
-
 // Database connection
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "new_password", //Changed to personal code
-    database: "SOEN287new", // Replace with your database name
+    password: "",
+    database: "SOEN287project", // Replace with your database name
 });
 
 db.connect((err) => {
@@ -38,9 +27,6 @@ db.connect((err) => {
         console.log("Connected to the database.");
     }
 });
-
-
-
 
 app.get("/view-only/addclient", (req, res) => {
     res.send("This is the addclient endpoint. Use POST to submit data.");
@@ -98,13 +84,14 @@ app.get("/addlogin", (req, res) => {
 
 app.post("/addlogin", (req, res) => {
     const client = {
-      
         Email: req.body.Email,
         Password: req.body.Password,
-        choice: req.body["login-type"], 
+        choice: req.body["login-type"],
     };
 
-    console.log("BOOTY!");
+    if (!client.Email || !client.Password || !client.choice) {
+        return res.status(400).json({ success: false, message: "All fields are required." });
+    }
 
     const checkEmail = "SELECT * FROM `Register Informations` WHERE Email = ?";
     db.query(checkEmail, [client.Email], (err, results) => {
@@ -118,18 +105,13 @@ app.post("/addlogin", (req, res) => {
         }
 
         const user = results[0];
-      console.log("Fetched user:", user); // Log the fetched user object
-      req.session.userId = user.ID;
-      console.log("User ID saved in session:", req.session.userId);
-   
 
-        // Validate password
         if (user.Password !== client.Password) {
             return res.status(401).json({ success: false, message: "Incorrect password." });
         }
 
         const fullName = `${user.Fname} ${user.Lname}`;
-        
+
         // Redirect based on user role
         if (client.choice === "admin" && user.choice === "admin") {
             return res.json({ success: true, redirectUrl: "/BA-Logged-in/BAHome.html", user: { fullName } });
@@ -141,166 +123,51 @@ app.post("/addlogin", (req, res) => {
     });
 });
 
-// Logout 
-app.get('/logout', (req,res) => {
-  req.session.destroy((err) => {
-    if(err){
-      return res.status(500).json({success:false});
-    }
-    res.redirect('/view-only/Home.html');
-  });
-});
-
-
 app.post("/BA-Logged-in/editprofile", (req, res) => {
-  // Extract the provided information, using "N/A" as a fallback
-  const info = {
-      fname: req.body.fname,
-      email: req.body.email,
-      pn: req.body.pn,
-      address: req.body.address,
-      city: req.body.city,
-      pt: req.body.pt,
-      pc: req.body.pc,
-  };
+    // Extract the provided information, using "N/A" as a fallback
+    const info = {
+        fname: req.body.fname,
+        email: req.body.email,
+        pn: req.body.pn,
+        address: req.body.address,
+        city: req.body.city,
+        pt: req.body.pt,
+        pc: req.body.pc,
+    };
 
-  // Ensure all fields are provided
-  const missingFields = Object.keys(info).filter((key) => info[key] == null || info[key].trim() === "");
-  if (missingFields.length > 0) {
-      return res.status(400).send(`Missing fields: ${missingFields.join(", ")}`);
-  }
+    // Ensure all fields are provided
+    const missingFields = Object.keys(info).filter((key) => info[key] == null || info[key].trim() === "");
+    if (missingFields.length > 0) {
+        return res.status(400).send(`Missing fields: ${missingFields.join(", ")}`);
+    }
 
-  // Build the SQL query for insert or update
-  const fields = Object.keys(info);
-  const values = Object.values(info);
-  const updateFields = fields.map((key) => `${key} = VALUES(${key})`).join(", ");
+    // Build the SQL query for insert or update
+    const fields = Object.keys(info);
+    const values = Object.values(info);
+    const updateFields = fields.map((key) => `${key} = VALUES(${key})`).join(", ");
 
-  const sql = `
+    const sql = `
       INSERT INTO AdminProfile (${fields.join(", ")})
       VALUES (${fields.map(() => "?").join(", ")})
       ON DUPLICATE KEY UPDATE ${updateFields}
   `;
 
-  console.log("SQL Query:", sql);
-  console.log("Values:", values);
+    console.log("SQL Query:", sql);
+    console.log("Values:", values);
 
-  // Execute the query
-  db.query(sql, values, (err, result) => {
-      if (err) {
-          console.error("Error updating or inserting profile:", err.message);
-          return res.status(500).send("Failed to update profile.");
-      }
+    // Execute the query
+    db.query(sql, [...values, ...values], (err, result) => {
+        if (err) {
+            console.error("Error updating or inserting profile:", err.message);
+            return res.status(500).send("Failed to update profile.");
+        }
 
-      console.log("Query result:", result);
-      res.send("Profile updated successfully.");
-  });
+        console.log("Query result:", result);
+        res.send("Profile updated successfully.");
+    });
 });
 
 
-
-
-
-app.get("/admin-profile", (req, res) => {
-  const sql = "SELECT fname, email, pn, address, city, pt, pc FROM AdminProfile WHERE id = 1";
-
-  db.query(sql, (err, results) => {
-      if (err) {
-          console.error("Error fetching admin profile:", err.message);
-          return res.status(500).json({ success: false, message: "Database error." });
-      }
-
-      if (results.length === 0) {
-          return res.status(404).json({ success: false, message: "No admin profile found." });
-      }
-
-      // Send the admin profile as JSON
-      res.json({
-          success: true,
-          fname: results[0].fname,
-          email: results[0].email,
-          pn: results[0].pn,
-          address: results[0].address,
-          city: results[0].city,
-          pt: results[0].pt,
-          pc: results[0].pc
-      });
-  });
-});
-
-
-
-
-app.get('/editClientProfile', (req, res) => {
-  const query = 'SELECT ID, fname, lname, email, pn, address, city, pt, pc, card_number, expiry_date, card_name FROM ClientProfile WHERE id = ?';
-  const userId = req.session.userId;
-
-  if (!userId) {
-      return res.status(400).send("User ID not found in session. Please log in again.");
-  }
-
-  db.query(query, [userId], (err, results) => {
-      if (err) {
-          console.error('Error fetching client profile:', err.message);
-          return res.status(500).json({ error: 'Failed to fetch client profile' });
-      }
-      res.json(results[0]); 
-  });
-});
-
-app.post("/editClientProfile", (req, res) => {
-  const userId = req.session.userId;
-
-  if (!userId) {
-      return res.status(400).send("User ID not found in session. Please log in again.");
-  }
-
-  const info = {
-      fname: req.body.fname,
-      lname: req.body.lname,
-      email: req.body.email,
-      pn: req.body.pn,
-      address: req.body.address,
-      city: req.body.city,
-      pt: req.body.pt,
-      pc: req.body.pc,
-      card_number: req.body.card_number,
-      expiry_date: req.body.expiry_date,
-      card_name: req.body.card_name,
-  };
-
-  // Filter out undefined or null values
-  const fields = Object.keys(info).filter((key) => info[key] !== undefined && info[key] !== null);
-  const values = fields.map((key) => info[key]);
-
-  if (fields.length === 0) {
-      return res.status(400).send("No data provided to update.");
-  }
-
-  // Dynamically construct the SQL query for UPDATE
-  const updateFields = fields.map((key) => `${key} = ?`).join(", ");
-  const updateSql = `
-      UPDATE ClientProfile
-      SET ${updateFields}
-      WHERE id = ?
-  `;
-
-  // Add userId to the values array for the WHERE clause
-  values.push(userId);
-
-  // Execute the UPDATE query
-  db.query(updateSql, values, (err) => {
-      if (err) {
-          console.error("Error updating client profile:", err.message);
-          return res.status(500).send("Failed to update client profile.");
-      }
-      res.send("Profile updated successfully.");
-  });
-});
-
-  // Start the server
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
 
 
 // Add a new service
@@ -348,7 +215,10 @@ app.get("/client", (req, res) => {
     res.sendFile(path.join(__dirname, "User-Logged-in/client_services.html"));
 });
 
-
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
 
 
 //yana
@@ -408,7 +278,7 @@ app.put("/servicess/:id", (req, res) => {
 });
 
 // Route: Delete a service
-app.delete("/services/:id", (req, res) => {
+app.delete("/servicess/:id", (req, res) => {
   const { id } = req.params;
 
   console.log(`Received delete request for ID: ${id}`); // Debug log
@@ -429,6 +299,7 @@ app.delete("/services/:id", (req, res) => {
 });
 
 // Route to fetch descriptions
+// Route to fetch descriptions
 app.get("/api/get-descriptions", (req, res) => {
     const query = "SELECT * FROM Descriptions LIMIT 1";
   
@@ -444,8 +315,9 @@ app.get("/api/get-descriptions", (req, res) => {
         res.status(404).json({ success: false, message: "No descriptions found." });
       }
     });
-  }); 
+  });
   
+  // Route to update descriptions
   app.post("/api/update-descriptions", (req, res) => {
     const { welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText } = req.body;
   
@@ -455,91 +327,167 @@ app.get("/api/get-descriptions", (req, res) => {
   
     const query = `
       UPDATE Descriptions
-      SET welcomeTitle = ?, welcomeSlogan = ?, coreValuesTitle = ?, coreValuesText = ?
-      WHERE id = 1
-    `;
+      SET welcomeTitle = ?, welcomeSlogan = ?, coreValuesTitle = ?, coreValuesText = ?`;
   
-    db.query(query, [welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText], (err, results) => {
+    db.query(query, [welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText], (err) => {
       if (err) {
-        console.error("Error updating descriptions:", err.message);
+        console.error("Error updating descriptions:", err);
         return res.status(500).json({ success: false, message: "Database error." });
       }
   
-      if (results.affectedRows > 0) {
-        res.json({ success: true, message: "Descriptions updated successfully!" });
-      } else {
-        res.status(404).json({ success: false, message: "No rows updated. Check the database entry." });
-      }
+      res.json({ success: true, message: "Descriptions updated successfully!" });
     });
   });
-  
-  
 
 
-
-  app.get("/db-info", (req, res) => {
-    const sql = "SELECT @@hostname AS hostname, @@port AS port;";
-    db.query(sql, (err, results) => {
+app.post("/purchase", (req, res) => {
+    const { customer_name, service_name, service_date, cost, status } = req.body;
+    if (!customer_name || !service_name || !service_date || !cost) {
+        return res.status(400).send("All fields are required.");
+    }
+    // Insert into Services Availed table
+    const availedQuery = "INSERT INTO `Services Availed` (customer_name, service_name, service_date, cost, status) VALUES (?, ?, ?, ?, ?)";
+    db.query(availedQuery, [customer_name, service_name, service_date, cost, status || "Pending"], (err) => {
         if (err) {
-            console.error("Error fetching database info:", err);
-            return res.status(500).send("Database error.");
+            console.error("Error adding to Services Availed:", err);
+            return res.status(500).send("Failed to add to Services Availed.");
+        }
+        res.status(200).send("Purchase recorded successfully.");
+    });
+});
+app.get("/services-availed", (req, res) => {
+    const query = "SELECT * FROM `Services Availed`";
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error("Error fetching data from Services Availed:", err);
+            return res.status(500).json({ success: false, message: "Database error." });
+        }
+        res.json(results);
+    });
+});
+app.get("/services-availed/:id", (req, res) => {
+    const id = req.params.id;
+    const query = `
+        SELECT id, customer_name, service_name, service_date, status, cost
+        FROM \`Services Availed\`
+        WHERE id = ?
+    `;
+    db.query(query, [id], (err, results) => {
+        if (err) {
+            console.error("Error fetching service details:", err);
+            return res.status(500).json({ success: false, message: "Database error." });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ success: false, message: "Service not found." });
         }
         res.json(results[0]);
     });
 });
 
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/view-only/Home.html"));
+app.get("/client-services/:customer_name", (req, res) => {
+    const customerName = req.params.customer_name;
+    const query = `
+        SELECT id, service_name, DATE_FORMAT(service_date, '%Y-%m-%d') AS service_date, status, cost
+        FROM \`Services Availed\`
+        WHERE customer_name = ?
+    `;
+    db.query(query, [customerName], (err, results) => {
+        if (err) {
+            console.error("Error fetching client services:", err);
+            return res.status(500).json({ success: false, message: "Database error." });
+        }
+        console.log("Fetched services:", results); // Debugging: Log the results
+        res.json(results);
+    });
 });
 
-// API: Get About Us Page
-app.get("/api/get-about", (req, res) => {
-  const query = "SELECT * FROM AboutContent WHERE id = 1";
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error("Error fetching about content:", err.message);
-      return res.status(500).json({ success: false, message: "Database error." });
-    }
+app.put("/services-availed/:id", (req, res) => {
+    const id = req.params.id;
+    const updatedData = req.body;
 
-    if (results.length === 0) {
-      return res.status(404).json({ success: false, message: "No about content found." });
-    }
+    const query = `
+        UPDATE \`Services Availed\`
+        SET ?
+        WHERE id = ?
+    `;
+    db.query(query, [updatedData, id], (err) => {
+        if (err) {
+            console.error("Error updating Services Availed:", err);
+            return res.status(500).send("Failed to update entry in Services Availed.");
+        }
+        res.send("Entry updated successfully.");
+    });
+});
 
-    const aboutContent = results[0];
-    aboutContent.teamMembers = JSON.parse(aboutContent.teamMembers); // Parse JSON
-    console.log("Fetched About Content:", aboutContent); // Add this for debugging
-    res.json({ success: true, aboutContent });
-  });
+app.get("/api/get-about-content", (req, res) => {
+    console.log("Received request for /api/get-about-content");
+    const query = "SELECT aboutTitle, aboutDescription, teamTitle, teamMembers FROM AboutContent LIMIT 1";
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error("Error fetching About Us content:", err);
+            return res.status(500).json({ success: false, message: "Database error." });
+        }
+        if (results.length > 0) {
+            const content = results[0];
+            res.json({
+                success: true,
+                aboutTitle: content.aboutTitle,
+                aboutDescription: content.aboutDescription,
+                teamTitle: content.teamTitle,
+                teamMembers: JSON.parse(content.teamMembers),
+            });
+        } else {
+            res.status(404).json({ success: false, message: "About Us content not found." });
+        }
+    });
 });
 
 
-// API: Update About Us Page
-app.post("/api/update-about", (req, res) => {
-  const { aboutTitle, aboutDescription, teamTitle, teamMembers } = req.body;
+app.post("/api/update-about-content", (req, res) => {
+    const { aboutTitle, aboutDescription, teamTitle, teamMembers } = req.body;
 
-  if (!aboutTitle || !aboutDescription || !teamTitle || !teamMembers) {
-    return res.status(400).json({ success: false, message: "All fields are required." });
-  }
-
-  const query = `
-    UPDATE AboutContent
-    SET aboutTitle = ?, aboutDescription = ?, teamTitle = ?, teamMembers = ?
-    WHERE id = 1
-  `;
-
-  // Convert the teamMembers object to a JSON string
-  const teamMembersJSON = JSON.stringify(teamMembers);
-
-  db.query(query, [aboutTitle, aboutDescription, teamTitle, teamMembersJSON], (err) => {
-    if (err) {
-      console.error("Error updating about content:", err.message);
-      return res.status(500).json({ success: false, message: "Database error." });
+    if (!aboutTitle || !aboutDescription || !teamTitle || !teamMembers) {
+        return res.status(400).json({ success: false, message: "All fields are required." });
     }
 
-    res.json({ success: true, message: "About page updated successfully!" });
-  });
+    const query = `
+        UPDATE AboutContent
+        SET aboutTitle = ?, aboutDescription = ?, teamTitle = ?, teamMembers = ?
+    `;
+
+    db.query(query, [aboutTitle, aboutDescription, teamTitle, JSON.stringify(teamMembers)], (err) => {
+        if (err) {
+            console.error("Error updating About Us content:", err);
+            return res.status(500).json({ success: false, message: "Database error." });
+        }
+
+        res.json({ success: true, message: "About Us content updated successfully!" });
+    });
 });
 
+app.get("/admin-profile", (req, res) => {
+    const sql = "SELECT fname, email, pn, address, city, pt, pc FROM AdminProfile WHERE id = 1";
 
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error fetching admin profile:", err.message);
+            return res.status(500).json({ success: false, message: "Database error." });
+        }
 
+        if (results.length === 0) {
+            return res.status(404).json({ success: false, message: "No admin profile found." });
+        }
+
+        // Send the admin profile as JSON
+        res.json({
+            success: true,
+            fname: results[0].fname,
+            email: results[0].email,
+            pn: results[0].pn,
+            address: results[0].address,
+            city: results[0].city,
+            pt: results[0].pt,
+            pc: results[0].pc
+        });
+    });
+});

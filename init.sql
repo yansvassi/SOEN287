@@ -1,8 +1,8 @@
-CREATE DATABASE IF NOT EXISTS SOEN287new;
+CREATE DATABASE IF NOT EXISTS SOEN287;
 
-USE SOEN287new;
+USE SOEN287;
 
-CREATE TABLE IF NOT EXISTS services (
+CREATE TABLE IF NOT EXISTS services availed (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_name VARCHAR(100),
     service_name VARCHAR(100),
@@ -13,11 +13,12 @@ CREATE TABLE IF NOT EXISTS services (
 
 CREATE TABLE IF NOT EXISTS AboutContent (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  aboutTitle VARCHAR(255) NOT NULL,      
-  aboutDescription TEXT NOT NULL,         
-  teamTitle VARCHAR(255) NOT NULL,        
-  teamMembers JSON NOT NULL               
+  aboutTitle VARCHAR(255) NOT NULL,
+  aboutDescription TEXT NOT NULL,
+  teamTitle VARCHAR(255) NOT NULL,
+  teamMembers JSON NOT NULL
 );
+
 
 CREATE TABLE Descriptions (
     id INT AUTO_INCREMENT PRIMARY KEY,       -- Unique identifier for the row
@@ -26,8 +27,6 @@ CREATE TABLE Descriptions (
     coreValuesTitle VARCHAR(255) NOT NULL,   -- Title for the core values section
     coreValuesText TEXT NOT NULL             -- Text for the core values section
 );
-
- INSERT INTO Descriptions (welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText) VALUES ('Default Title', 'Default Slogan', 'Default Core Values Title', 'Default Core Values Text');
 
 CREATE TABLE `Register Informations` (
     ID INT AUTO_INCREMENT PRIMARY KEY,
@@ -42,7 +41,7 @@ CREATE TABLE AdminProfile (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fname VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    pn VARCHAR(50), -- Phone number
+    pn VARCHAR(15), -- Phone number
     address VARCHAR(255),
     city VARCHAR(100),
     pt VARCHAR(50), -- Province or territory
@@ -86,4 +85,3 @@ VALUES (
     {"name": "Daniel", "role": "Developer", "email": "daniel05.ayass@gmail.com"}
   ]'
 );
-
