@@ -104,25 +104,51 @@
         <img src="../images/Welcomeimage1.jpg" alt="Welcome Image">
       </div>
     </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Fetch existing descriptions
+        fetch("http://localhost:7013/api/get-descriptions")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              document.getElementById("welcomeTitle").innerText = data.data.welcomeTitle;
+              document.getElementById("welcomeSlogan").innerText = data.data.welcomeSlogan;
+              document.getElementById("coreValuesTitle").innerText = data.data.coreValuesTitle;
+              document.getElementById("coreValuesText").innerText = data.data.coreValuesText;
+            } else {
+              console.error("Failed to fetch descriptions:", data.message);
+            }
+          })
+          .catch((error) => console.error("Error fetching descriptions:", error));
     
-      <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    fetch("http://localhost:8080/api/get-descriptions")
-
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          document.getElementById("welcomeTitle").innerText = data.data.welcomeTitle;
-          document.getElementById("welcomeSlogan").innerText = data.data.welcomeSlogan;
-          document.getElementById("coreValuesTitle").innerText = data.data.coreValuesTitle;
-          document.getElementById("coreValuesText").innerText = data.data.coreValuesText;
-        } else {
-          console.error("Failed to fetch descriptions:", data.message);
-        }
-      })
-      .catch((error) => console.error("Error fetching descriptions:", error));
-  }); 
-</script>
+        // Update descriptions on form submit
+        document.getElementById("updateDescriptionsForm").addEventListener("submit", function (event) {
+          event.preventDefault();
+    
+          const descriptions = {
+            welcomeTitle: document.getElementById("welcomeTitle").innerText.trim(),
+            welcomeSlogan: document.getElementById("welcomeSlogan").innerText.trim(),
+            coreValuesTitle: document.getElementById("coreValuesTitle").innerText.trim(),
+            coreValuesText: document.getElementById("coreValuesText").innerText.trim(),
+          };
+    
+          fetch("http://localhost:7013/api/update-descriptions", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(descriptions),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert("Descriptions updated successfully!");
+              } else {
+                alert("Failed to update descriptions.");
+              }
+            })
+            .catch((error) => console.error("Error updating descriptions:", error));
+        });
+      });
+    </script>
 
     </script>
     
@@ -134,7 +160,7 @@
        document.addEventListener("DOMContentLoaded", loadProducts);
 
 function loadProducts() {
-  fetch("http://localhost:8080/servicess")
+  fetch("http://localhost:7013/servicess")
     .then((response) => response.json())
     .then((products) => {
       const container = document.getElementById("product-container");
@@ -165,31 +191,6 @@ function loadProducts() {
     </script>
   </div>
 
-  <!----------------------------- Satisfaction ----------------------------------->
-
-  <div class="Satisfaction-text">
-    <h1>We’ve got you covered</h1>
-    <div class="item">
-        <i class='bx bx-home'></i>
-        <p><b>Experienced Staff</b> – all teams are highly experienced & trained on our checklists and protocols</p>
-    </div>
-    <div class="item">
-        <i class='bx bx-hard-hat'></i>
-        <p><b>Fully Equipped</b> – we come fully equipped with all products and equipment</p>
-    </div>
-    <div class="item">
-        <i class='bx bx-list-check'></i>
-        <p><b>Premium Quality</b> – our 76-point checklist delivers the same premium cleaning every single time</p>
-    </div>
-    <div class="item">
-        <i class='bx bxs-check-shield'></i>
-        <p><b>Guaranteed Satisfaction</b> – all packages are backed by our guarantee of quality</p>
-    </div>
-    <div class="item">
-        <i class='bx bxs-objects-vertical-bottom'></i>
-        <p><b>Insured & Vetted</b> – all team members have been police checked, thoroughly vetted, and insured.</p>
-    </div>
-</div>
 
   <!----------------------------- Footer ----------------------------------->
 
@@ -230,7 +231,7 @@ function loadProducts() {
 <script>
     document.addEventListener("DOMContentLoaded", function () {
     console.log("YES!");
-    fetch("http://localhost:8080/admin-profile")
+    fetch("http://localhost:7013/admin-profile")
 .then((response) => {
   console.log("Fetch response:", response);
   return response.json();

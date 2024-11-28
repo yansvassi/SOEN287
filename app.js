@@ -1,5 +1,5 @@
 const express = require("express");
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const path = require("path");
 
@@ -16,8 +16,8 @@ app.use(express.static(path.join(__dirname))); // Serve static files at root lev
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
-    database: "SOEN287project", // Replace with your database name
+    password: "new_password",
+    database: "SOEN287new", // Replace with your database name
 });
 
 db.connect((err) => {

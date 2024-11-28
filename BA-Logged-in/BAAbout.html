@@ -171,7 +171,7 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     // Fetch About Us Content
-    fetch("http://localhost:8080/api/get-about")
+    fetch("http://localhost:7013/api/get-about")
       .then(response => response.json())
       .then(data => {
         if (data.success) {
@@ -219,7 +219,7 @@
         teamMembers: teamMembers,
       };
 
-      fetch("http://localhost:8080/api/update-about", {
+      fetch("http://localhost:7013/api/update-about", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(aboutContent),
