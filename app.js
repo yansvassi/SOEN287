@@ -3,7 +3,7 @@ const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const path = require("path");
 const app = express();
-const session = require('express-session');
+const session = require("express-session");
 const PORT = 8080;
 
 // Middleware
@@ -13,12 +13,15 @@ app.use(express.static(path.join(__dirname, "public"))); // Serve static files l
 app.use(express.static(path.join(__dirname))); // Serve static files at root level
 
 // Session
-app.use(session({
-  secret: 'key',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {secure: false}
-}));
+app.use(
+  session({
+    secret: "key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
+);
+
 
 // Database connection
 const db = mysql.createConnection({
@@ -455,3 +458,52 @@ app.get("/api/get-descriptions", (req, res) => {
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/view-only/Home.html"));
 });
+
+// API: Get About Us Page
+app.get("/api/get-about", (req, res) => {
+  const query = "SELECT * FROM AboutContent WHERE id = 1";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error fetching about content:", err.message);
+      return res.status(500).json({ success: false, message: "Database error." });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ success: false, message: "No about content found." });
+    }
+
+    const aboutContent = results[0];
+    // Parse the teamMembers JSON string into an object
+    aboutContent.teamMembers = JSON.parse(aboutContent.teamMembers);
+
+    res.json({ success: true, aboutContent });
+  });
+});
+
+// API: Update About Us Page
+app.post("/api/update-about", (req, res) => {
+  const { aboutTitle, aboutDescription, teamTitle, teamMembers } = req.body;
+
+  if (!aboutTitle || !aboutDescription || !teamTitle || !teamMembers) {
+    return res.status(400).json({ success: false, message: "All fields are required." });
+  }
+
+  const query = `
+    UPDATE AboutContent
+    SET aboutTitle = ?, aboutDescription = ?, teamTitle = ?, teamMembers = ?
+    WHERE id = 1
+  `;
+
+  // Convert the teamMembers object to a JSON string
+  const teamMembersJSON = JSON.stringify(teamMembers);
+
+  db.query(query, [aboutTitle, aboutDescription, teamTitle, teamMembersJSON], (err) => {
+    if (err) {
+      console.error("Error updating about content:", err.message);
+      return res.status(500).json({ success: false, message: "Database error." });
+    }
+
+    res.json({ success: true, message: "About page updated successfully!" });
+  });
+});
+

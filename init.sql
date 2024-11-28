@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS AboutContent (
   teamMembers JSON NOT NULL               
 );
 
-
 CREATE TABLE Descriptions (
     id INT AUTO_INCREMENT PRIMARY KEY,       -- Unique identifier for the row
     welcomeTitle VARCHAR(255) NOT NULL,      -- Title for the welcome section
@@ -27,6 +26,8 @@ CREATE TABLE Descriptions (
     coreValuesTitle VARCHAR(255) NOT NULL,   -- Title for the core values section
     coreValuesText TEXT NOT NULL             -- Text for the core values section
 );
+
+ INSERT INTO Descriptions (welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText) VALUES ('Default Title', 'Default Slogan', 'Default Core Values Title', 'Default Core Values Text');
 
 CREATE TABLE `Register Informations` (
     ID INT AUTO_INCREMENT PRIMARY KEY,
