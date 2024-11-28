@@ -106,13 +106,9 @@
     </div>
     
       <script>
-<<<<<<< HEAD
   document.addEventListener("DOMContentLoaded", function () {
     fetch("http://localhost:8080/api/get-descriptions")
-=======
-   document.addEventListener("DOMContentLoaded", function () {
-    fetch("http://localhost:7013/api/get-descriptions")
->>>>>>> b1327b1f8f117f54d4c78c07cf201df978166aca
+
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {

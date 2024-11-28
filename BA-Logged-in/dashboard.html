@@ -309,7 +309,7 @@
           productBox.innerHTML = `
             <br>
             <a href="#" class="product-name">${product.Title}</a>
-            <p class="product-price">$${price.toFixed(2)}</p>
+            <p class="product-price">$${parseFloat(product.Price).toFixed(2)}</p>
             <p class="service-details">${product.Description}</p>
             <div class="btn-group">
               <button class="edit-product-btn btn">Edit</button>
