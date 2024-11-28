@@ -147,9 +147,17 @@ app.post("/BA-Logged-in/editprofile", (req, res) => {
     const updateFields = fields.map((key) => `${key} = VALUES(${key})`).join(", ");
 
     const sql = `
-      INSERT INTO AdminProfile (${fields.join(", ")})
-      VALUES (${fields.map(() => "?").join(", ")})
-      ON DUPLICATE KEY UPDATE ${updateFields}
+    INSERT INTO AdminProfile (id, fname, email, pn, address, city, pt, pc)
+    VALUES (1, ?, ?, ?, ?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE 
+      fname = VALUES(fname), 
+      email = VALUES(email), 
+      pn = VALUES(pn), 
+      address = VALUES(address), 
+      city = VALUES(city), 
+      pt = VALUES(pt), 
+      pc = VALUES(pc)
+    
   `;
 
     console.log("SQL Query:", sql);
