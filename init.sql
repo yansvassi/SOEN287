@@ -86,3 +86,4 @@ VALUES (
     {"name": "Daniel", "role": "Developer", "email": "daniel05.ayass@gmail.com"}
   ]'
 );
+

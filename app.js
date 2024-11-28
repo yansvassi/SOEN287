@@ -429,7 +429,6 @@ app.delete("/services/:id", (req, res) => {
 });
 
 // Route to fetch descriptions
-// Route to fetch descriptions
 app.get("/api/get-descriptions", (req, res) => {
     const query = "SELECT * FROM Descriptions LIMIT 1";
   
@@ -500,12 +499,12 @@ app.get("/api/get-about", (req, res) => {
     }
 
     const aboutContent = results[0];
-    // Parse the teamMembers JSON string into an object
-    aboutContent.teamMembers = JSON.parse(aboutContent.teamMembers);
-
+    aboutContent.teamMembers = JSON.parse(aboutContent.teamMembers); // Parse JSON
+    console.log("Fetched About Content:", aboutContent); // Add this for debugging
     res.json({ success: true, aboutContent });
   });
 });
+
 
 // API: Update About Us Page
 app.post("/api/update-about", (req, res) => {
@@ -533,4 +532,6 @@ app.post("/api/update-about", (req, res) => {
     res.json({ success: true, message: "About page updated successfully!" });
   });
 });
+
+
 

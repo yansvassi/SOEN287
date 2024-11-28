@@ -84,16 +84,6 @@
       font-size: 14px;
     }
 
-    .team-member a {
-      font-size: 12px;
-      color: #2e95e6;
-      text-decoration: none;
-    }
-
-    .team-member a:hover {
-      text-decoration: underline;
-    }
-
     .save-button {
       display: block;
       margin: 20px auto;
@@ -107,6 +97,7 @@
 
     .save-button:hover {
       background-color: #345e81;
+      color: white;
     }
   </style>
 </head>
@@ -134,34 +125,13 @@
 
     <div class="team-section">
       <h2 class="editable" contenteditable="true" id="teamTitle">Meet Our Team</h2>
-      <div class="team-members">
-        <div class="team-member">
-          <img src="/images/img_avatar2.png" alt="Team Member 1">
-          <h3 class="editable" contenteditable="true" id="teamMember1Name">Yana</h3>
-          <p class="editable" contenteditable="true" id="teamMember1Role">Developer</p>
-          <p class="editable" contenteditable="true" id="teamMember1Email"><a href="mailto:yana.vassilyev@gmail.com">yana.vassilyev@gmail.com</a></p>
-        </div>
-        <div class="team-member">
-          <img src="/images/img_avatar2.png" alt="Team Member 2">
-          <h3 class="editable" contenteditable="true" id="teamMember2Name">Lucas</h3>
-          <p class="editable" contenteditable="true" id="teamMember2Role">Developer</p>
-          <p class="editable" contenteditable="true" id="teamMember2Email"><a href="mailto:lucas.pentlandhyde@gmail.com">lucas.pentlandhyde@gmail.com</a></p>
-        </div>
-        <div class="team-member">
-          <img src="/images/img_avatar2.png" alt="Team Member 3">
-          <h3 class="editable" contenteditable="true" id="teamMember3Name">Jorane-Tiana</h3>
-          <p class="editable" contenteditable="true" id="teamMember3Role">Developer</p>
-          <p class="editable" contenteditable="true" id="teamMember3Email"><a href="mailto:jorane1234@gmail.com">jorane1234@gmail.com</a></p>
-        </div>
-        <div class="team-member">
-          <img src="/images/img_avatar2.png" alt="Team Member 4">
-          <h3 class="editable" contenteditable="true" id="teamMember4Name">Daniel</h3>
-          <p class="editable" contenteditable="true" id="teamMember4Role">Developer</p>
-          <p class="editable" contenteditable="true" id="teamMember4Email"><a href="mailto:daniel05.ayass@gmail.com">daniel05.ayass@gmail.com</a></p>
-        </div>
+      <div class="team-members" id="teamMembers">
+        <!-- Team members will be dynamically populated -->
       </div>
     </div>
   </div>
+
+  <button id="saveAboutPage" class="save-button">Save Changes</button>
 </div>
 
 <!-- Footer -->
@@ -199,29 +169,74 @@
 </footer>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-    console.log("YES!");
-    fetch("http://localhost:8080/admin-profile")
-.then((response) => {
-  console.log("Fetch response:", response);
-  return response.json();
-})
-.then((data) => {
-  console.log("Fetched data:", data)
-        if (data) {
-          document.getElementById("adminName").innerHTML = `Business Name: ${data.fname || "N/A"}`;
-          document.getElementById("adminEmail").innerHTML = `Email: ${data.email || "N/A"}`;
-          document.getElementById("adminPhone").innerHTML = `Phone: ${data.pn || "N/A"}`;
-          document.getElementById("adminAddress").innerHTML = `Address: ${data.address || "N/A"}`;
-          document.getElementById("adminCity").innerHTML = `City: ${data.city || "N/A"}`;
-          document.getElementById("adminProvince").innerHTML = `Province: ${data.pt || "N/A"}`;
-          document.getElementById("adminPostalCode").innerHTML = `Postal Code: ${data.pc || "N/A"}`;
+  document.addEventListener("DOMContentLoaded", function () {
+    // Fetch About Us Content
+    fetch("http://localhost:8080/api/get-about")
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          const aboutContent = data.aboutContent;
+
+          // Populate main fields
+          document.getElementById("aboutTitle").innerText = aboutContent.aboutTitle;
+          document.getElementById("aboutDescription").innerText = aboutContent.aboutDescription;
+          document.getElementById("teamTitle").innerText = aboutContent.teamTitle;
+
+          // Populate team members
+          const teamMembersContainer = document.getElementById("teamMembers");
+          teamMembersContainer.innerHTML = ""; // Clear existing content
+          aboutContent.teamMembers.forEach(member => {
+            const memberDiv = document.createElement("div");
+            memberDiv.classList.add("team-member");
+            memberDiv.innerHTML = `
+              <img src="/images/img_avatar2.png" alt="${member.name}">
+              <h3 class="editable" contenteditable="true">${member.name}</h3>
+              <p class="editable" contenteditable="true">${member.role}</p>
+              <p class="editable" contenteditable="true">${member.email}</p>
+            `;
+            teamMembersContainer.appendChild(memberDiv);
+          });
         } else {
-          console.error("Failed to fetch admin profile: No data returned.");
+          console.error("Failed to fetch about content.");
         }
       })
-      .catch((error) => console.error("Error fetching admin profile:", error));
+      .catch(error => console.error("Error fetching about content:", error));
+
+    // Save Changes
+    document.getElementById("saveAboutPage").addEventListener("click", () => {
+      const teamMembers = Array.from(document.querySelectorAll(".team-member")).map(memberDiv => {
+        return {
+          name: memberDiv.querySelector("h3").innerText.trim(),
+          role: memberDiv.querySelector("p:nth-child(2)").innerText.trim(),
+          email: memberDiv.querySelector("p:nth-child(3)").innerText.trim(),
+        };
+      });
+
+      const aboutContent = {
+        aboutTitle: document.getElementById("aboutTitle").innerText.trim(),
+        aboutDescription: document.getElementById("aboutDescription").innerText.trim(),
+        teamTitle: document.getElementById("teamTitle").innerText.trim(),
+        teamMembers: teamMembers,
+      };
+
+      fetch("http://localhost:8080/api/update-about", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(aboutContent),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert("About page updated successfully!");
+          } else {
+            alert("Failed to update about page.");
+          }
+        })
+        .catch(error => console.error("Error updating about content:", error));
+    });
   });
+
+  
 </script>
 
 </body>
