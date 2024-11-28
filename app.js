@@ -153,6 +153,7 @@ app.get('/logout', (req,res) => {
 
 
 app.post("/BA-Logged-in/editprofile", (req, res) => {
+  // Extract the provided information, using "N/A" as a fallback
   const info = {
       fname: req.body.fname,
       email: req.body.email,
@@ -163,43 +164,69 @@ app.post("/BA-Logged-in/editprofile", (req, res) => {
       pc: req.body.pc,
   };
 
-  const fields = Object.keys(info).filter((key) => info[key] !== undefined && info[key] !== null);
-  const values = fields.map((key) => info[key]);
-
-  if (fields.length === 0) {
-      return res.status(400).send("No fields to update.");
+  // Ensure all fields are provided
+  const missingFields = Object.keys(info).filter((key) => info[key] == null || info[key].trim() === "");
+  if (missingFields.length > 0) {
+      return res.status(400).send(`Missing fields: ${missingFields.join(", ")}`);
   }
 
-  const updateFields = fields.map((key) => `${key} = ?`).join(", ");
-  const sql = `UPDATE AdminProfile SET ${updateFields} WHERE id = 1`;
+  // Build the SQL query for insert or update
+  const fields = Object.keys(info);
+  const values = Object.values(info);
+  const updateFields = fields.map((key) => `${key} = VALUES(${key})`).join(", ");
 
+  const sql = `
+      INSERT INTO AdminProfile (${fields.join(", ")})
+      VALUES (${fields.map(() => "?").join(", ")})
+      ON DUPLICATE KEY UPDATE ${updateFields}
+  `;
+
+  console.log("SQL Query:", sql);
+  console.log("Values:", values);
+
+  // Execute the query
   db.query(sql, values, (err, result) => {
       if (err) {
-          console.error("Error updating profile:", err.message);
+          console.error("Error updating or inserting profile:", err.message);
           return res.status(500).send("Failed to update profile.");
       }
-      res.send("Profile updated successfully.  edit ");
+
+      console.log("Query result:", result);
+      res.send("Profile updated successfully.");
   });
 });
+
+
 
 
 
 app.get("/admin-profile", (req, res) => {
-  const query = "SELECT fname, email, pn, address, city, pt, pc FROM AdminProfile LIMIT 1";
+  const sql = "SELECT fname, email, pn, address, city, pt, pc FROM AdminProfile WHERE id = 1";
 
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error("Error fetching admin profile:", err.message);
-      return res.status(500).json({ success: false, message: "Database error." });
-    }
+  db.query(sql, (err, results) => {
+      if (err) {
+          console.error("Error fetching admin profile:", err.message);
+          return res.status(500).json({ success: false, message: "Database error." });
+      }
 
-    if (results.length === 0) {
-      return res.status(404).json({ success: false, message: "No admin profile found." });
-    }
+      if (results.length === 0) {
+          return res.status(404).json({ success: false, message: "No admin profile found." });
+      }
 
-    res.json(results[0]); 
+      // Send the admin profile as JSON
+      res.json({
+          success: true,
+          fname: results[0].fname,
+          email: results[0].email,
+          pn: results[0].pn,
+          address: results[0].address,
+          city: results[0].city,
+          pt: results[0].pt,
+          pc: results[0].pc
+      });
   });
 });
+
 
 
 

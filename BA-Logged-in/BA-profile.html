@@ -186,25 +186,29 @@ document.getElementById("editProfileForm").addEventListener("submit", function (
             "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
+      })
+    .then((response) => {
+        // Check if the response is OK
+        if (!response.ok) {
+            // Attempt to extract error message from the response body
+            return response.text().then((errorMessage) => {
+                throw new Error(errorMessage || "Failed to update profile");
+            });
+        }
+        return response.text(); // Handle plain text response for success
     })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Failed to update profile");
-            }
-            return response.text(); // Handle plain text response
-        })
-        .then((message) => {
-            // Display the plain text response
-            const messageContainer = document.getElementById("message-container");
-            messageContainer.style.color = "green";
-            messageContainer.textContent = message;
-        })
-        .catch((error) => {
-            // Display an error message
-            const messageContainer = document.getElementById("message-container");
-            messageContainer.style.color = "red";
-            messageContainer.textContent = `An error occurred: ${error.message}`;
-        });
+    .then((message) => {
+        // Display the plain text success message
+        const messageContainer = document.getElementById("message-container");
+        messageContainer.style.color = "green";
+        messageContainer.textContent = message;
+    })
+    .catch((error) => {
+        // Display a more descriptive error message
+        const messageContainer = document.getElementById("message-container");
+        messageContainer.style.color = "red";
+        messageContainer.textContent = `Error: ${error.message}`;
+    });
 });
 
 

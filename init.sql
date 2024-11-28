@@ -42,7 +42,7 @@ CREATE TABLE AdminProfile (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fname VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    pn VARCHAR(15), -- Phone number
+    pn VARCHAR(50), -- Phone number
     address VARCHAR(255),
     city VARCHAR(100),
     pt VARCHAR(50), -- Province or territory
