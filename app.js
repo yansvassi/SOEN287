@@ -24,7 +24,7 @@ app.use(session({
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "root", //Changed to personal code
+    password: "new_password", //Changed to personal code
     database: "SOEN287new", // Replace with your database name
 });
 
@@ -417,7 +417,6 @@ app.get("/api/get-descriptions", (req, res) => {
     });
   }); 
   
-  // Route to update descriptions
   app.post("/api/update-descriptions", (req, res) => {
     const { welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText } = req.body;
   
@@ -427,7 +426,8 @@ app.get("/api/get-descriptions", (req, res) => {
   
     const query = `
       UPDATE Descriptions
-      SET welcomeTitle = ?, welcomeSlogan = ?, coreValuesTitle = ?, coreValuesText = ?`;
+      SET welcomeTitle = ?, welcomeSlogan = ?, coreValuesTitle = ?, coreValuesText = ?
+      WHERE id = 1`;
   
     db.query(query, [welcomeTitle, welcomeSlogan, coreValuesTitle, coreValuesText], (err) => {
       if (err) {
@@ -437,7 +437,8 @@ app.get("/api/get-descriptions", (req, res) => {
   
       res.json({ success: true, message: "Descriptions updated successfully!" });
     });
-  }); 
+  });  
+
 
   app.get("/db-info", (req, res) => {
     const sql = "SELECT @@hostname AS hostname, @@port AS port;";

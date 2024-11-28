@@ -193,6 +193,7 @@ body, html {
   cursor: pointer;
   transition: background-color 0.3s ease;
   font-size: 14px;
+  padding: 10px 20px;
 }
 
 .btn:hover {
