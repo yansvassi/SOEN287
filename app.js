@@ -157,7 +157,6 @@ app.post("/BA-Logged-in/editprofile", (req, res) => {
       city = VALUES(city), 
       pt = VALUES(pt), 
       pc = VALUES(pc)
-    
   `;
 
     console.log("SQL Query:", sql);
