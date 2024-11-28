@@ -54,7 +54,7 @@
             <button type="button" id="changePhotoBtn">Change Photo</button>
         </div>
 
-        <form class="questions" action = "/BA-Logged-in/editprofile" method = "post">
+        <form class="questions" id="editProfileForm"  action = "/BA-Logged-in/editprofile" method = "post">
             <h2>Business Information</h2> <br>
             <label for="fname">Business Name:</label> <br>
             <input type="text" id="fname" name="fname" placeholder="YourCompanyName"> <br>
@@ -77,6 +77,8 @@
         </div>
     </div>
 </form>
+
+<div id="message-container" style="margin-top: 20px; font-size: 20px;"></div>
 
 <!-- Footer -->
 <footer class="footer">
@@ -169,6 +171,45 @@
         }
     });
 </script>
+
+<script>
+document.getElementById("editProfileForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    const formData = new FormData(this); // Gather form data
+    const data = Object.fromEntries(formData.entries()); // Convert to JSON-friendly object
+
+    // Send an AJAX request to the server
+    fetch("/BA-Logged-in/editprofile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Failed to update profile");
+            }
+            return response.text(); // Handle plain text response
+        })
+        .then((message) => {
+            // Display the plain text response
+            const messageContainer = document.getElementById("message-container");
+            messageContainer.style.color = "green";
+            messageContainer.textContent = message;
+        })
+        .catch((error) => {
+            // Display an error message
+            const messageContainer = document.getElementById("message-container");
+            messageContainer.style.color = "red";
+            messageContainer.textContent = `An error occurred: ${error.message}`;
+        });
+});
+
+
+</script>
+
 
 </body>
 </html>

@@ -302,19 +302,25 @@
         const productBox = document.createElement("div");
         productBox.classList.add("product_box");
         productBox.setAttribute("data-id", product.id); // Use `id` from the database
-        productBox.innerHTML = `
-          <br>
-          <a href="#" class="product-name">${product.Title}</a>
-          <p class="product-price">$${product.Price.toFixed(2)}</p>
-          <p class="service-details">${product.Description}</p>
-          <div class="btn-group">
-            <button class="edit-product-btn btn">Edit</button>
-            <button class="remove-product-btn btn">Remove</button>
-          </div>
-        `;
-        container.appendChild(productBox);
-        attachEventListeners(productBox); // Attach edit/remove functionality
-      });
+        
+        // Ensure price is a number or fallback to 0
+        const price = typeof product.Price === "number" ? product.Price : 0;
+
+          productBox.innerHTML = `
+            <br>
+            <a href="#" class="product-name">${product.Title}</a>
+            <p class="product-price">$${price.toFixed(2)}</p>
+            <p class="service-details">${product.Description}</p>
+            <div class="btn-group">
+              <button class="edit-product-btn btn">Edit</button>
+              <button class="remove-product-btn btn">Remove</button>
+            </div>
+          `;
+          container.appendChild(productBox);
+          attachEventListeners(productBox); // Attach edit/remove functionality
+        });
+      
+  
     })
     .catch((error) => {
       console.error("Error loading products:", error);

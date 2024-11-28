@@ -24,7 +24,7 @@ app.use(session({
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "new_password",
+    password: "root", //Changed to personal code
     database: "SOEN287new", // Replace with your database name
 });
 
@@ -35,6 +35,9 @@ db.connect((err) => {
         console.log("Connected to the database.");
     }
 });
+
+
+
 
 app.get("/view-only/addclient", (req, res) => {
     res.send("This is the addclient endpoint. Use POST to submit data.");
@@ -122,6 +125,8 @@ app.post("/addlogin", (req, res) => {
             return res.status(401).json({ success: false, message: "Incorrect password." });
         }
 
+        const fullName = `${user.Fname} ${user.Lname}`;
+        
         // Redirect based on user role
         if (client.choice === "admin" && user.choice === "admin") {
             return res.json({ success: true, redirectUrl: "/BA-Logged-in/BAHome.html", user: { fullName } });
@@ -145,56 +150,36 @@ app.get('/logout', (req,res) => {
 
 
 app.post("/BA-Logged-in/editprofile", (req, res) => {
-    
   const info = {
-    fname: req.body.fname,
-    email: req.body.email,
-    pn: req.body.pn,
-    address: req.body.address,
-    city: req.body.city,
-    pt: req.body.pt,
-    pc: req.body.pc,
-}
+      fname: req.body.fname,
+      email: req.body.email,
+      pn: req.body.pn,
+      address: req.body.address,
+      city: req.body.city,
+      pt: req.body.pt,
+      pc: req.body.pc,
+  };
 
-    if (fname) 
-        {
-            const sqlUpdateFname = "UPDATE AdminProfile SET fname ? WHERE 1";
-        }
-    if (email) 
-        {
-            const sqlUdateEmail = "UPDATE AdminProfile SET email ? WHERE 1";
-        }
-    if (pn) 
-        {
-            const sqlPn = "UPDATE AdminProfile SET pn ? WHERE 1";
-        }
-    if (address) 
-        {
-            const sqlUpdateAddress = "UPDATE AdminProfile SET address ? WHERE 1";
-        }
-    if (ciy)
-        {
-            const sqlupdateCity = "UPDATE AdminProfile SET city ? WHERE 1";
-        }
+  const fields = Object.keys(info).filter((key) => info[key] !== undefined && info[key] !== null);
+  const values = fields.map((key) => info[key]);
 
-    // Check if there are fields to update
-    if (updates.length === 0) {
-        return res.status(400).send("No fields to update.");
-    }
+  if (fields.length === 0) {
+      return res.status(400).send("No fields to update.");
+  }
 
-    // Construct the SQL query
-    const sql = "UPDATE AdminProfile SET ";
+  const updateFields = fields.map((key) => `${key} = ?`).join(", ");
+  const sql = `UPDATE AdminProfile SET ${updateFields} WHERE id = 1`;
 
-    // Execute the query
-    db.query(sql, values, (err, result) => {
-        if (err) {
-            console.error("Error updating profile:", err.message);
-            return res.status(500).send("An error occurred while updating the profile.");
-        }
-        else {
-        return res.sendFile(path.join(__dirname, "BA-Logged-in/BA-profile.html")); }
-    });
+  db.query(sql, values, (err, result) => {
+      if (err) {
+          console.error("Error updating profile:", err.message);
+          return res.status(500).send("Failed to update profile.");
+      }
+      res.send("Profile updated successfully.  edit ");
+  });
 });
+
+
 
 app.get("/admin-profile", (req, res) => {
   const query = "SELECT fname, email, pn, address, city, pt, pc FROM AdminProfile LIMIT 1";
@@ -463,4 +448,9 @@ app.get("/api/get-descriptions", (req, res) => {
         }
         res.json(results[0]);
     });
+});
+
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/view-only/Home.html"));
 });

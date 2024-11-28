@@ -294,64 +294,64 @@ fetch("http://localhost:8080/servicess")
 
 <!-- JavaScript to Toggle Edit Mode, Save Changes, and Load from localStorage -->
 <script>
-  // const editButton = document.getElementById("toggleEditModeBtn");
-  // const imageUploader = document.getElementById("imageUploader");
-  // let editMode = false;
+  const editButton = document.getElementById("toggleEditModeBtn");
+  const imageUploader = document.getElementById("imageUploader");
+  let editMode = false;
 
-  // // Load saved content from localStorage
-  // function loadSavedContent() {
-  //   document.querySelectorAll("[contenteditable]").forEach((element) => {
-  //     const savedContent = localStorage.getItem(element.id);
-  //     if (savedContent) {
-  //       element.innerHTML = savedContent;
-  //     }
-  //   });
+  // Load saved content from localStorage
+  function loadSavedContent() {
+    document.querySelectorAll("[contenteditable]").forEach((element) => {
+      const savedContent = localStorage.getItem(element.id);
+      if (savedContent) {
+        element.innerHTML = savedContent;
+      }
+    });
 
-  //   const savedFrontImage = localStorage.getItem('frontImage');
-  //   if (savedFrontImage) {
-  //     document.getElementById('frontImage').src = savedFrontImage;
-  //   }
+    const savedFrontImage = localStorage.getItem('frontImage');
+    if (savedFrontImage) {
+      document.getElementById('frontImage').src = savedFrontImage;
+    }
 
-  //   const savedWelcomeImage = localStorage.getItem('welcomeImage');
-  //   if (savedWelcomeImage) {
-  //     document.getElementById('welcomeImage').src = savedWelcomeImage;
-  //   }
-  // }
+    const savedWelcomeImage = localStorage.getItem('welcomeImage');
+    if (savedWelcomeImage) {
+      document.getElementById('welcomeImage').src = savedWelcomeImage;
+    }
+  }
 
-  // // Save changes to localStorage
-  // function saveContent(element) {
-  //   localStorage.setItem(element.id, element.innerHTML);
-  // }
+  // Save changes to localStorage
+  function saveContent(element) {
+    localStorage.setItem(element.id, element.innerHTML);
+  }
 
-  // function saveImage(id, src) {
-  //   localStorage.setItem(id, src);
-  // }
+  function saveImage(id, src) {
+    localStorage.setItem(id, src);
+  }
 
-  // // Initialize the page by loading any saved content
-  // document.addEventListener("DOMContentLoaded", function() {
-  //   loadSavedContent();
-  // });
+  // Initialize the page by loading any saved content
+  document.addEventListener("DOMContentLoaded", function() {
+    loadSavedContent();
+  });
 
-  // Function to toggle edit mode
-  // editButton.addEventListener("click", () => {
-  //   editMode = !editMode;
+  //Function to toggle edit mode
+  editButton.addEventListener("click", () => {
+    editMode = !editMode;
 
-  //   document.querySelectorAll("[contenteditable]").forEach((element) => {
-  //     element.contentEditable = editMode ? "true" : "false";
-  //   });
+    document.querySelectorAll("[contenteditable]").forEach((element) => {
+      element.contentEditable = editMode ? "true" : "false";
+    });
 
-  //   document.querySelectorAll(".editable").forEach((element) => {
-  //     element.style.border = editMode ? "2px dashed #4a7b9b" : "none";
-  //     element.style.backgroundColor = editMode ? "#f0f8ff" : "transparent";
+    document.querySelectorAll(".editable").forEach((element) => {
+      element.style.border = editMode ? "2px dashed #4a7b9b" : "none";
+      element.style.backgroundColor = editMode ? "#f0f8ff" : "transparent";
 
-  //     // Save changes when exiting edit mode
-  //     if (!editMode) {
-  //       saveContent(element);
-  //     }
-  //   });
+      // Save changes when exiting edit mode
+      if (!editMode) {
+        saveContent(element);
+      }
+    });
 
-  //   editButton.textContent = editMode ? "Disable Edit Mode" : "Enable Edit Mode";
-  // });
+    editButton.textContent = editMode ? "Disable Edit Mode" : "Enable Edit Mode";
+  });
 
   // Function to open file selector and replace images
   function replaceImage(imageElement) {
